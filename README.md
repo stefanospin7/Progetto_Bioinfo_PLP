@@ -1,7 +1,8 @@
 # Progetto_Bioinfo_PLP
 Questa repository sarà usata per managing di un progetto universitario di gruppo di Bioinformatica (TOR VERGATA).
+
 Attualmente il codice è stato totalmente steso da Manfredo Aristide Fraccola.
-Questo progetto ha come target estrapolare dati statistici riguardanti Covid-19 in Italia e in altri paesi secondo criteri che sono ancora da decidere.
+Questo progetto ha come target quello di estrapolare dati statistici riguardanti Covid-19 in Italia e in altri paesi secondo criteri che sono ancora da decidere tramite python e librerie.
 
 Per collaborare al progetto e usufruire del codice è necessario isntallare:
 -pyton 
@@ -10,14 +11,33 @@ Per collaborare al progetto e usufruire del codice è necessario isntallare:
 -plotly (pip install plotly da terminale)
 
 
-Dataset:
+************* Dataset: **************
+
+
 https://github.com/pcm-dpc/COVID-19
-https://github.com/italia/covid19-opendata-vaccini						
+https://github.com/italia/covid19-opendata-vaccini				
+
+
+************* Link utili: ************
 
 
 
 
-Al momento oltre al file "read me" è presente il file "main" scritto in python 
+
+(This is How I Create Dazzling Dashboards Purely in Python)
+https://towardsdatascience.com/plotly-dashboards-in-python-28a3bb83702c
+
+
+
+(Dati COVID-19 Italia)
+https://github.com/pcm-dpc/COVID-19
+
+
+
+
+
+
+Al momento oltre al file "read me" è presente il file "main" scritto in python.
 
 
 
