@@ -9,3 +9,6 @@
 #-pandas (pip install pandas)
 #-plotly (pip install plotly)
 #-git (sudo apt install git-all o anche apt-get install git)
+
+
+#Al momento oltre al file "read me" è presente il file "main" scritto in python 
