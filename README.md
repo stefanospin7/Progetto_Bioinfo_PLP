@@ -6,6 +6,6 @@
 #Per collaborare al progetto è necessario isntallare:
 #-pyton
 #-pip
-#-pandas
-#-plotly
-#-git 
+#-pandas (pip install pandas)
+#-plotly (pip install plotly)
+#-git (sudo apt install git-all o anche apt-get install git)
