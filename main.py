@@ -1,5 +1,3 @@
-
-
 """
 Esame PLP
 Docente: Prof. Daniele Pasquini
@@ -53,10 +51,13 @@ for n in indirizzi:
     i = i + 1
 # ho concatenato in un data frame pandas gli elementi della lista data[]
 df = pd.concat(data)
+df.to_csv('datiCovid.csv', index=False)
 #print(df)
 # visualizzo una colonna del dataframe in grafico su dash
-fig = px.line(df, x="data", y="totale_ospedalizzati", title="Ricoverati COVID")
-fig.show()
+#fig = px.line(df, x="data", y="totale_ospedalizzati", title="Ricoverati COVID")
+#fig.show()
+
+
 
 
 
