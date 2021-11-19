@@ -5,7 +5,7 @@ Pull data from database and export an aggregated .cvs file
 import pandas as pd
 # pacchetto datetime per utilizzo e manipolaizione date
 from datetime import timedelta, date
-# pacchetto plotly.espress per visualizzazione grafici
+# pacchetto plotly.express per visualizzazione grafici
 import plotly.express as px
 
 # definisco procedura range di date
@@ -15,7 +15,7 @@ def daterange(start_date, end_date):
 
 # definisco data di inizio e fine dell'analisi dati
 start_date = date(2021, 3, 1)
-end_date = date(2021, 11, 10)
+end_date = date.today()
 
 # inizializzo e popolo lista di indirizzi url dei file cvs su git-hub
 indirizzi = []
@@ -45,7 +45,7 @@ for n in indirizzi:
     i = i + 1
 # ho concatenato in un data frame pandas gli elementi della lista data[]
 df = pd.concat(data)
-df.to_csv('datiCovid.csv', index=False)
+df.to_csv('data/datiCovid.csv', index=False)
 #print(df)
 # visualizzo una colonna del dataframe in grafico su dash
 #fig = px.line(df, x="data", y="totale_ospedalizzati", title="Ricoverati COVID")
