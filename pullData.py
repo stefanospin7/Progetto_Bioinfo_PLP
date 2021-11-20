@@ -14,7 +14,7 @@ def daterange(start_date, end_date):
         yield start_date + timedelta(n)
 
 # definisco data di inizio e fine dell'analisi dati
-start_date = date(2021, 3, 1)
+start_date = date(2020, 4, 1)
 end_date = date.today()
 
 # inizializzo e popolo lista di indirizzi url dei file cvs su git-hub
