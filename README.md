@@ -9,6 +9,8 @@ Per collaborare al progetto e usufruire del codice è necessario isntallare:
 -pip https://www.youtube.com/watch?v=dpQEs6tE1XU&ab_channel=ProgrammingKnowledge2
 -pandas (pip install pandas da terminale) 
 -plotly (pip install plotly da terminale)
+-dash core-components
+-dash html-components
 
 
 ************* Dataset: **************
@@ -20,12 +22,15 @@ https://github.com/italia/covid19-opendata-vaccini
 
 ************* Link utili: ************
 
-
-
-
-
 (This is How I Create Dazzling Dashboards Purely in Python)
 https://towardsdatascience.com/plotly-dashboards-in-python-28a3bb83702c
+
+Tableau - software per analisi dati suggerito dal prof
+Licenza studenti gratuita
+https://www.tableau.com/it-it
+
+Tutorial tabpy: api per connessione python e Tableau server (?)
+https://towardsdatascience.com/tabpy-combining-python-and-tableau-511b10da8175
 
 
 
