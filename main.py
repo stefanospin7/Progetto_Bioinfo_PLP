@@ -1,42 +1,26 @@
-
-
 """
 Esame PLP
 Docente: Prof. Daniele Pasquini
 Gruppo 1
 Titolo: Analisi dati Covid/Vaccinazioni
-Prova 0.1:
+Prova 0.2:
 - importazione cvs da git hub
 - visualizzazione grafico su dash
 """
 # pacchetto pandas per leggere e scrivere csv da url
 import pandas as pd
-# pacchetto datetime per utilizzo e manipolaizione date
-from datetime import timedelta, date
-# pacchetto plotly.espress per visualizzazione grafici
+
+# pacchetti dash e plotly per visualizzazione
+import dash
+from dash import html
+from dash import dcc
+import plotly.graph_objects as go
 import plotly.express as px
 
-# definisco procedura range di date
-def daterange(start_date, end_date):
-    for n in range(int((end_date - start_date).days)):
-        yield start_date + timedelta(n)
+app = dash.Dash()
 
-# definisco data di inizio e fine dell'analisi dati
-start_date = date(2021, 3, 1)
-end_date = date(2021, 11, 10)
-
-# inizializzo e popolo lista di indirizzi url dei file cvs su git-hub
-indirizzi = []
-for n in daterange(start_date, end_date):
-    indirizzi.append(("https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-andamento-nazionale/dpc-covid19-ita-andamento-nazionale-" + n.strftime("%Y%m%d") + ".csv"))
-#print(indirizzi)
-# inizializzo e popolo dataframe tramite pandas selezionando specifiche colonne dei file cvs
-data = []
-i = 0
-for n in indirizzi:
-    data.append(
-        pd.read_csv(
-            indirizzi[i],
+df = pd.read_csv(
+            'data/datiCovid.csv',
             # index_col='data',
             parse_dates=['data'],
             # header=0,
@@ -44,19 +28,56 @@ for n in indirizzi:
             # sep='\t'           Tab-separated value file.
             # quotechar="'",        # single quote allowed as quote character
             # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
-            usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
+            # usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
             # Only load the three columns specified.
             # parse_dates=['data'],  # Intepret the birth_date column as a date
             # skiprows=1,         # Skip the first 10 rows of the file
             # na_values=['.', '??']       # Take any '.' or '??' values as NA
-        ))
-    i = i + 1
-# ho concatenato in un data frame pandas gli elementi della lista data[]
-df = pd.concat(data)
-#print(df)
-# visualizzo una colonna del dataframe in grafico su dash
-fig = px.line(df, x="data", y="totale_ospedalizzati", title="Ricoverati COVID")
-fig.show()
+        )
+
+dfVax = pd.read_csv(
+            'https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv',
+            # index_col='data',
+            parse_dates=['data_somministrazione'],
+            # header=0,
+            # relative python path to subdirectory
+            # sep='\t'           Tab-separated value file.
+            # quotechar="'",        # single quote allowed as quote character
+            # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
+            # usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
+            # Only load the three columns specified.
+            # parse_dates=['data'],  # Intepret the birth_date column as a date
+            # skiprows=1,         # Skip the first 10 rows of the file
+            # na_values=['.', '??']       # Take any '.' or '??' values as NA
+        )
+
+
+fig = go.Figure()
+# Create and style traces
+fig.add_trace(go.Scatter(x=df.data, y=df.totale_ospedalizzati, name='totale_ospedalizzati',
+                         ))
+fig.add_trace(go.Scatter(x=df.data, y=df.ricoverati_con_sintomi, name='ricoverati_con_sintomi',
+                         ))
+fig.add_trace(go.Scatter(x=df.data, y=df.terapia_intensiva, name='terapia_intensiva',
+                         ))
+fig.add_trace(go.Scatter(x=dfVax.data_somministrazione, y=dfVax.prima_dose, name='prima_dose',
+                         ))
+start_date = "2021-03-26"
+end_date = "2021-10-18"
+
+fig.update_xaxes(type="date", range=[start_date, end_date])
+
+app.layout = html.Div(id = 'parent', children = [
+    html.H1(id = 'title', children = 'Esame PLP'),
+    html.H2(id = 'docente', children = 'Docente: Prof. Daniele Pasquini'),
+    html.H3(id = '', children = 'Gruppo 1'),
+    html.H2(id = '', children = 'Titolo: Analisi dati Covid/Vaccinazioni'),
+
+    dcc.Graph(id = 'bar_plot', figure = fig)
+    ])
+
+if __name__ == '__main__':
+    app.run_server()
 
 
 
