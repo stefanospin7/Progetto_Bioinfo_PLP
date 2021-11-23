@@ -21,7 +21,29 @@ from dash import html
 external_stylesheets = ['https://fonts.googleapis.com/css?family=Tangerine']
 
 app = dash.Dash(__name__,
-                external_stylesheets=external_stylesheets)
+                external_stylesheets=external_stylesheets,
+                title="PLP Project 1 - Bioinformatica Tor Vergata",
+                meta_tags=[
+                    # A description of the app, used by e.g.
+                    # search engines when displaying search results.
+                    {
+                        'property': 'og:site_name',
+                        'content': 'San Roque 2014 Pollos',
+                    },
+                    # A description of the app, used by e.g.
+                    # search engines when displaying search results.
+                    {
+                        'property': 'og:title',
+                        'content': 'PLP Project 1 - Bioinformatica Tor Vergata',
+                    },
+                    # A description of the app, used by e.g.
+                    # search engines when displaying search results.
+                    {
+                        'property': 'og:description',
+                        'content': 'PLP Project 1 - Bioinformatica Tor Vergata',
+                    }
+                ]
+                )
 
 df = pd.read_csv(
     'data/datiCovid.csv',
@@ -71,7 +93,6 @@ end_date = "2021-10-18"
 fig.update_xaxes(type="date", range=[start_date, end_date])
 
 server = app.server
-app.title = "PLP Project 1 - Bioinformatica Tor Vergata"
 
 app.layout = html.Div(id='parent', children=[
     html.Div(id='header', className='out-container', children=[
@@ -85,7 +106,7 @@ app.layout = html.Div(id='parent', children=[
     html.Div(className='container', children=[
         dcc.Graph(id='bar_plot', figure=fig),
     ]),
-    html.Div(id ='image', className='out-container', children=[
+    html.Div(id='image', className='out-container', children=[
         html.Img(src='https://i.ibb.co/8zkNZTT/7VE.gif')
     ])
 ])
