@@ -76,7 +76,7 @@ app.layout = html.Div(id='parent', children=[
     html.H3(id='', children='Gruppo 1'),
     html.H2(id='', children='Titolo: Analisi dati Covid/Vaccinazioni'),
     dcc.Graph(id='bar_plot', figure=fig),
-    #html.Img(src='https://i.ibb.co/8zkNZTT/7VE.gif')
+    html.Img(src='https://i.ibb.co/8zkNZTT/7VE.gif')
 ])
 
 
