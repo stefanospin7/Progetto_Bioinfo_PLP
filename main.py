@@ -28,7 +28,7 @@ app = dash.Dash(__name__,
                     # search engines when displaying search results.
                     {
                         'property': 'og:site_name',
-                        'content': 'San Roque 2014 Pollos',
+                        'content': 'PLP Project 1 - Bioinformatica Tor Vergata',
                     },
                     # A description of the app, used by e.g.
                     # search engines when displaying search results.
