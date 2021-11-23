@@ -9,6 +9,8 @@ Prova 0.2:
 """
 
 # pacchetti dash e plotly per visualizzazione
+import base64
+
 import dash
 # pacchetto pandas per leggere e scrivere csv da url
 import pandas as pd
@@ -73,8 +75,8 @@ app.layout = html.Div(id='parent', children=[
     html.H2(id='docente', children='Docente: Prof. Daniele Pasquini'),
     html.H3(id='', children='Gruppo 1'),
     html.H2(id='', children='Titolo: Analisi dati Covid/Vaccinazioni'),
-
-    dcc.Graph(id='bar_plot', figure=fig)
+    dcc.Graph(id='bar_plot', figure=fig),
+    html.Img(src='animated.gif')
 ])
 
 
