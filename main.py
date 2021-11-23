@@ -9,8 +9,8 @@ Prova 0.2:
 """
 
 # pacchetti dash e plotly per visualizzazione
-import base64
 
+import os
 import dash
 # pacchetto pandas per leggere e scrivere csv da url
 import pandas as pd
@@ -19,7 +19,7 @@ from dash import dcc
 from dash import html
 
 app = dash.Dash()
-
+BASE_PATH = os.path.dirname(__file__)
 df = pd.read_csv(
     'data/datiCovid.csv',
     # index_col='data',
@@ -76,7 +76,7 @@ app.layout = html.Div(id='parent', children=[
     html.H3(id='', children='Gruppo 1'),
     html.H2(id='', children='Titolo: Analisi dati Covid/Vaccinazioni'),
     dcc.Graph(id='bar_plot', figure=fig),
-    html.Img(src='animated.gif')
+    html.Img(src=BASE_PATH + '/animated.gif')
 ])
 
 
