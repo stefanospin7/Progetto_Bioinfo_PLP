@@ -66,6 +66,7 @@ end_date = "2021-10-18"
 fig.update_xaxes(type="date", range=[start_date, end_date])
 
 server = app.server
+app.title = "PLP Project 1 - Bioinformatica Tor Vergata"
 
 app.layout = html.Div(id='parent', children=[
     html.H1(id='title', children='Esame PLP'),
