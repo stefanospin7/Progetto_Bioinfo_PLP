@@ -9,7 +9,7 @@ Prova 0.2:
 """
 
 
-"""
+
 # pacchetto pandas per leggere e scrivere csv da url
 import pandas as pd
 
@@ -70,6 +70,8 @@ end_date = "2021-10-18"
 
 fig.update_xaxes(type="date", range=[start_date, end_date])
 
+server = app.server
+
 app.layout = html.Div(id = 'parent', children = [
     html.H1(id = 'title', children = 'Esame PLP'),
     html.H2(id = 'docente', children = 'Docente: Prof. Daniele Pasquini'),
@@ -79,19 +81,11 @@ app.layout = html.Div(id = 'parent', children = [
     dcc.Graph(id = 'bar_plot', figure = fig)
     ])
 
+@app.callback(dash.dependencies.Output('display-value', 'children'),
+              [dash.dependencies.Input('dropdown', 'value')])
+def display_value(value):
+    return 'You have selected "{}"'.format(value)
+
+
 if __name__ == '__main__':
-    def app(environ, start_response):
-        data = b"Hello, World!\n"
-        start_response("200 OK", [
-            ("Content-Type", "text/plain"),
-            ("Content-Length", str(len(data)))
-        ])
-        return iter([data])
-    app.run_server()"""
-
-
-
-
-
-
-
+    app.run_server(debug=True)
