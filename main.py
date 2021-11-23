@@ -34,7 +34,7 @@ app = dash.Dash(__name__,
                     # search engines when displaying search results.
                     {
                         'property': 'og:title',
-                        'content': 'PLP Project 1 - Bioinformatica Tor Vergata',
+                        'content': 'Progetto di analisi dati Covid-19 e Vaccinazioni',
                     },
                     # A description of the app, used by e.g.
                     # search engines when displaying search results.
