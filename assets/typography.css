@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300;400;900&display=swap');
+
+body {
+    font-family: 'Source Code Pro', serif;
+}
+
+h1 {
+    font-weight: 400;
+}
+
+h3 {
+    font-weight: 200;
+}
+
+h2 {
+    font-weight: 300;
+}
+
+h3 {
+    font-weight: 400;
+}

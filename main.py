@@ -18,7 +18,10 @@ import plotly.graph_objects as go
 from dash import dcc
 from dash import html
 
-app = dash.Dash()
+external_stylesheets = ['https://fonts.googleapis.com/css?family=Tangerine']
+
+app = dash.Dash(__name__,
+                external_stylesheets=external_stylesheets)
 
 df = pd.read_csv(
     'data/datiCovid.csv',
@@ -71,12 +74,20 @@ server = app.server
 app.title = "PLP Project 1 - Bioinformatica Tor Vergata"
 
 app.layout = html.Div(id='parent', children=[
-    html.H1(id='title', children='Esame PLP'),
-    html.H2(id='docente', children='Docente: Prof. Daniele Pasquini'),
-    html.H3(id='', children='Gruppo 1'),
-    html.H2(id='', children='Titolo: Analisi dati Covid/Vaccinazioni'),
-    dcc.Graph(id='bar_plot', figure=fig),
-    html.Img(src='https://i.ibb.co/8zkNZTT/7VE.gif')
+    html.Div(id='header', className='out-container', children=[
+        html.Div(className='container', children=[
+            html.H1(id='title', children='Esame PLP'),
+            html.H2(id='docente', children='Docente: Prof. Daniele Pasquini'),
+            html.H3(id='', children='Gruppo 1'),
+            html.H2(id='', children='Titolo: Analisi dati Covid/Vaccinazioni'),
+        ])
+    ]),
+    html.Div(className='container', children=[
+        dcc.Graph(id='bar_plot', figure=fig),
+    ]),
+    html.Div(id ='image', className='out-container', children=[
+        html.Img(src='https://i.ibb.co/8zkNZTT/7VE.gif')
+    ])
 ])
 
 
