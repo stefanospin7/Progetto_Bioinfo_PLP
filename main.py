@@ -7,6 +7,9 @@ Prova 0.2:
 - importazione cvs da git hub
 - visualizzazione grafico su dash
 """
+
+
+"""
 # pacchetto pandas per leggere e scrivere csv da url
 import pandas as pd
 
@@ -75,9 +78,17 @@ app.layout = html.Div(id = 'parent', children = [
 
     dcc.Graph(id = 'bar_plot', figure = fig)
     ])
-
+"""
 if __name__ == '__main__':
-    app.run_server()
+    def app(environ, start_response):
+        data = b"Hello, World!\n"
+        start_response("200 OK", [
+            ("Content-Type", "text/plain"),
+            ("Content-Length", str(len(data)))
+        ])
+        return iter([data])
+    """app.run_server()"""
+
 
 
 
