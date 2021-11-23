@@ -8,52 +8,47 @@ Prova 0.2:
 - visualizzazione grafico su dash
 """
 
-
-
-# pacchetto pandas per leggere e scrivere csv da url
-import pandas as pd
-
 # pacchetti dash e plotly per visualizzazione
 import dash
-from dash import html
-from dash import dcc
+# pacchetto pandas per leggere e scrivere csv da url
+import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
+from dash import dcc
+from dash import html
 
 app = dash.Dash()
 
 df = pd.read_csv(
-            'data/datiCovid.csv',
-            # index_col='data',
-            parse_dates=['data'],
-            # header=0,
-            # relative python path to subdirectory
-            # sep='\t'           Tab-separated value file.
-            # quotechar="'",        # single quote allowed as quote character
-            # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
-            # usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
-            # Only load the three columns specified.
-            # parse_dates=['data'],  # Intepret the birth_date column as a date
-            # skiprows=1,         # Skip the first 10 rows of the file
-            # na_values=['.', '??']       # Take any '.' or '??' values as NA
-        )
+    'data/datiCovid.csv',
+    # index_col='data',
+    parse_dates=['data'],
+    # header=0,
+    # relative python path to subdirectory
+    # sep='\t'           Tab-separated value file.
+    # quotechar="'",        # single quote allowed as quote character
+    # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
+    # usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
+    # Only load the three columns specified.
+    # parse_dates=['data'],  # Intepret the birth_date column as a date
+    # skiprows=1,         # Skip the first 10 rows of the file
+    # na_values=['.', '??']       # Take any '.' or '??' values as NA
+)
 
 dfVax = pd.read_csv(
-            'https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv',
-            # index_col='data',
-            parse_dates=['data_somministrazione'],
-            # header=0,
-            # relative python path to subdirectory
-            # sep='\t'           Tab-separated value file.
-            # quotechar="'",        # single quote allowed as quote character
-            # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
-            # usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
-            # Only load the three columns specified.
-            # parse_dates=['data'],  # Intepret the birth_date column as a date
-            # skiprows=1,         # Skip the first 10 rows of the file
-            # na_values=['.', '??']       # Take any '.' or '??' values as NA
-        )
-
+    'https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv',
+    # index_col='data',
+    parse_dates=['data_somministrazione'],
+    # header=0,
+    # relative python path to subdirectory
+    # sep='\t'           Tab-separated value file.
+    # quotechar="'",        # single quote allowed as quote character
+    # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
+    # usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
+    # Only load the three columns specified.
+    # parse_dates=['data'],  # Intepret the birth_date column as a date
+    # skiprows=1,         # Skip the first 10 rows of the file
+    # na_values=['.', '??']       # Take any '.' or '??' values as NA
+)
 
 fig = go.Figure()
 # Create and style traces
@@ -72,14 +67,15 @@ fig.update_xaxes(type="date", range=[start_date, end_date])
 
 server = app.server
 
-app.layout = html.Div(id = 'parent', children = [
-    html.H1(id = 'title', children = 'Esame PLP'),
-    html.H2(id = 'docente', children = 'Docente: Prof. Daniele Pasquini'),
-    html.H3(id = '', children = 'Gruppo 1'),
-    html.H2(id = '', children = 'Titolo: Analisi dati Covid/Vaccinazioni'),
+app.layout = html.Div(id='parent', children=[
+    html.H1(id='title', children='Esame PLP'),
+    html.H2(id='docente', children='Docente: Prof. Daniele Pasquini'),
+    html.H3(id='', children='Gruppo 1'),
+    html.H2(id='', children='Titolo: Analisi dati Covid/Vaccinazioni'),
 
-    dcc.Graph(id = 'bar_plot', figure = fig)
-    ])
+    dcc.Graph(id='bar_plot', figure=fig)
+])
+
 
 @app.callback(dash.dependencies.Output('display-value', 'children'),
               [dash.dependencies.Input('dropdown', 'value')])
