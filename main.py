@@ -24,6 +24,14 @@ app = dash.Dash(__name__,
                 external_stylesheets=external_stylesheets,
                 title="PLP Project 1 - Bioinformatica Tor Vergata",
                 meta_tags=[
+                    # A description of the app, used by e.g.
+                    # search engines when displaying search results.
+                    {
+                        'property': 'og:site_name',
+                        'content': 'PLP Project 1 - Bioinformatica Tor Vergata',
+                    },
+                    # A description of the app, used by e.g.
+                    # search engines when displaying search results.
                     {
                         'property': 'og:title',
                         'content': 'PLP Project 1 - Bioinformatica Tor Vergata',
