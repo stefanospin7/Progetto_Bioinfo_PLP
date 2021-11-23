@@ -18,6 +18,7 @@ import plotly.graph_objects as go
 from dash import dcc
 from dash import html
 
+app = dash.Dash()
 
 df = pd.read_csv(
     'data/datiCovid.csv',
@@ -66,7 +67,7 @@ end_date = "2021-10-18"
 
 fig.update_xaxes(type="date", range=[start_date, end_date])
 
-server = app.server
+#server = app.server
 app.title = "PLP Project 1 - Bioinformatica Tor Vergata"
 
 app.layout = html.Div(id='parent', children=[
@@ -75,7 +76,7 @@ app.layout = html.Div(id='parent', children=[
     html.H3(id='', children='Gruppo 1'),
     html.H2(id='', children='Titolo: Analisi dati Covid/Vaccinazioni'),
     dcc.Graph(id='bar_plot', figure=fig),
-    html.Img(src='https://ibb.co/VH6J4rr')
+    html.Img(src='https://i.ibb.co/8zkNZTT/7VE.gif')
 ])
 
 
