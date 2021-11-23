@@ -1,6 +1,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import gunicorn
 import pandas as pd
 import plotly.graph_objs as go
 import flask
@@ -12,7 +13,7 @@ server = flask.Flask(__name__) # define flask app.server
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server) # call flask server
 
 # run following in command
-# gunicorn graph:app.server -b :8000
+ gunicorn graph:app.server -b :8000
 
 
 df = pd.read_csv(
