@@ -78,7 +78,7 @@ app.layout = html.Div(id = 'parent', children = [
 
     dcc.Graph(id = 'bar_plot', figure = fig)
     ])
-"""
+
 if __name__ == '__main__':
     def app(environ, start_response):
         data = b"Hello, World!\n"
@@ -87,7 +87,7 @@ if __name__ == '__main__':
             ("Content-Length", str(len(data)))
         ])
         return iter([data])
-    """app.run_server()"""
+    app.run_server()"""
 
 
 
