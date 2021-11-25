@@ -10,18 +10,17 @@ Prova 0.2:
 
 # pacchetti dash e plotly per visualizzazione
 
-
+# Dash: libreria per creazione layout html
 import dash
-# pacchetto pandas per leggere e scrivere csv da url
-import pandas as pd
-import plotly.graph_objects as go
 from dash import dcc
 from dash import html
+# pacchetto pandas per leggere e scrivere csv da url
+import pandas as pd
+# Plotly: crea grafico
+import plotly.graph_objects as go
 
-external_stylesheets = ['https://fonts.googleapis.com/css?family=Tangerine']
-
+# Genera layout web tramite libreria Dash
 app = dash.Dash(__name__,
-                external_stylesheets=external_stylesheets,
                 title="PLP Project 1 - Bioinformatica Tor Vergata",
                 meta_tags=[
                     # A description of the app, used by e.g.
@@ -45,6 +44,7 @@ app = dash.Dash(__name__,
                 ]
                 )
 
+# crea DataFrame da datiCovid.cvs
 df = pd.read_csv(
     'data/datiCovid.csv',
     # index_col='data',
@@ -61,6 +61,7 @@ df = pd.read_csv(
     # na_values=['.', '??']       # Take any '.' or '??' values as NA
 )
 
+# crea DataFrame da dati somministrazioni-vaccini-latest.csv
 dfVax = pd.read_csv(
     'https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv',
     # index_col='data',
@@ -77,6 +78,10 @@ dfVax = pd.read_csv(
     # na_values=['.', '??']       # Take any '.' or '??' values as NA
 )
 
+# Analisi Dati
+# Media? BUIO
+
+# Crea un grafico da plotly.graph_objects
 fig = go.Figure()
 # Create and style traces
 fig.add_trace(go.Scatter(x=df.data, y=df.totale_ospedalizzati, name='totale_ospedalizzati',
@@ -87,13 +92,16 @@ fig.add_trace(go.Scatter(x=df.data, y=df.terapia_intensiva, name='terapia_intens
                          ))
 fig.add_trace(go.Scatter(x=dfVax.data_somministrazione, y=dfVax.prima_dose, name='prima_dose',
                          ))
+
+# Creo variabili per selezionare un periodo di riferimento e aggiorno grafico con range di date
 start_date = "2021-03-26"
 end_date = "2021-10-18"
-
 fig.update_xaxes(type="date", range=[start_date, end_date])
 
+#lancia il server per visualizzazione html
 server = app.server
 
+#Genera pagina web html
 app.layout = html.Div(id='parent', children=[
     html.Div(id='header', className='out-container', children=[
         html.Div(className='container', children=[
@@ -104,6 +112,7 @@ app.layout = html.Div(id='parent', children=[
         ])
     ]),
     html.Div(className='container', children=[
+        # inserisce il grafico
         dcc.Graph(id='bar_plot', figure=fig),
     ]),
     html.Div(id='image', className='out-container', children=[
@@ -111,7 +120,7 @@ app.layout = html.Div(id='parent', children=[
     ])
 ])
 
-
+#Menu per il debug su macchina locale, non visibile su server online
 @app.callback(dash.dependencies.Output('display-value', 'children'),
               [dash.dependencies.Input('dropdown', 'value')])
 def display_value(value):
