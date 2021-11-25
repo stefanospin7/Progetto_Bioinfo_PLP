@@ -1,0 +1,22 @@
+body {
+    margin:0;
+    padding:0;
+}
+
+.out-container {
+    width: 100%;
+    margin:  0;
+    padidng: 0;
+}
+.container {
+    width: 1110px;
+    margin: 0 auto;
+}
+#header {
+    background: lightblue;
+    padding: 20px;
+}
+
+#image {
+    text-align: center;
+}
