@@ -18,10 +18,7 @@ import plotly.graph_objects as go
 from dash import dcc
 from dash import html
 
-external_stylesheets = ['https://fonts.googleapis.com/css?family=Tangerine']
-
 app = dash.Dash(__name__,
-                external_stylesheets=external_stylesheets,
                 title="PLP Project 1 - Bioinformatica Tor Vergata",
                 meta_tags=[
                     # A description of the app, used by e.g.
