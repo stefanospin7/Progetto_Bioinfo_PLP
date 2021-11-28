@@ -171,9 +171,9 @@ app.layout = html.Div(id='parent', children=[
         html.Div(id='covid', className='analisi', children=[
             html.H2(children='Analisi decessi / vaccinazioni'),
             html.Div(className='legenda', children=[
-                html.P(children='Media:'),
-                html.P(children='Massimo:'),
-                html.P(children='Minimo:'),
+                html.P(children=('Media: ',round(dfVaxDeceduti.deceduti.diff().mean(), 2))),
+                html.P(children=('Massimo: ',dfVaxDeceduti.deceduti.diff().max())),
+                html.P(children=('Minimo: ',dfVaxDeceduti.deceduti.diff().min())),
             ]),
             dcc.Graph(className='grafico', id='bar_plot', figure=fig1),
         ]),
@@ -181,7 +181,7 @@ app.layout = html.Div(id='parent', children=[
             html.H2(children='Analisi decessi con machine learning Prophet'),
             html.Div(className='legenda', children=[
                 html.P(children='Media:'),
-                html.P(children='Massimo:'),
+                html.P(children='Massimo:' ),
                 html.P(children='Minimo:'),
             ]),
             dcc.Graph(className='grafico', id='bar_plot1', figure=fig2),
