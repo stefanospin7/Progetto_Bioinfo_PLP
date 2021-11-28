@@ -5,8 +5,6 @@ Pull data from database and export an aggregated .cvs file
 import pandas as pd
 # pacchetto datetime per utilizzo e manipolaizione date
 from datetime import timedelta, date
-# pacchetto plotly.express per visualizzazione grafici
-import plotly.express as px
 
 # definisco procedura range di date
 def daterange(start_date, end_date):
