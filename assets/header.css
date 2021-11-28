@@ -28,3 +28,23 @@ body {
     font-weight: 100;
     font-size: 14px;
 }
+
+#covid {
+
+}
+
+.legenda{
+width: 20%;
+    float: left;
+}
+
+.analisi {
+float: left;
+    width: 100%;
+    margin: 40px 0;
+}
+
+.grafico {
+    width: 80%;
+    float: left;
+}

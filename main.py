@@ -77,7 +77,8 @@ fig1.update_layout(legend=dict(
     y=0.97,
     xanchor="left",
     x=0.01
-))
+),
+    margin={'l': 0, 'r': 0, 't': 0, 'b': 0})
 
 """
 MACHINE LEARNING
@@ -125,7 +126,8 @@ fig2.update_layout(legend=dict(
     y=0.97,
     xanchor="left",
     x=0.01
-))
+    ),
+    margin={'l': 0, 'r': 0, 't': 0, 'b': 0})
 
 
 """
@@ -166,8 +168,24 @@ app.layout = html.Div(id='parent', children=[
         ])
     ]),
     html.Div(className='container', children=[
-        dcc.Graph(id='bar_plot', figure=fig1),
-        dcc.Graph(id='bar_plot1', figure=fig2),
+        html.Div(id='covid', className='analisi', children=[
+            html.Div(className='legenda', children=[
+                html.H2(children='Analisi decessi / vaccinazioni'),
+                html.P(children='Media:'),
+                html.P(children='Massimo:'),
+                html.P(children='Minimo:'),
+            ]),
+            dcc.Graph(className='grafico', id='bar_plot', figure=fig1),
+        ]),
+        html.Div(id='ML', className='analisi', children=[
+            html.Div(className='legenda', children=[
+                html.H2(children='Analisi decessi con machine learning Prophet'),
+                html.P(children='Media:'),
+                html.P(children='Massimo:'),
+                html.P(children='Minimo:'),
+            ]),
+            dcc.Graph(className='grafico', id='bar_plot1', figure=fig2),
+        ]),
     ]),
     html.Div(id='image', className='out-container', children=[
         html.Img(src='https://i.ibb.co/8zkNZTT/7VE.gif')
