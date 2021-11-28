@@ -192,10 +192,22 @@ app.layout = html.Div(id='parent', children=[
     ]),
 html.Div(id='footer', className='out-container', children=[
         html.Div(className='container', children=[
-            html.P(children='Lavoro di gruppo'),
-            html.P(children='Corso di Programmazione e Laboratorio di Programmazione'),
-            html.P(children='Bioinformatica - Tor Vergata'),
-            html.P(children='Docente: Daniele Pasquini'),
+            html.Div(className='credits', children=[
+                html.P(children='Lavoro di gruppo'),
+                html.P(children='Corso di Programmazione e Laboratorio di Programmazione'),
+                html.P(children='Bioinformatica - Tor Vergata'),
+                html.P(children='Docente: Daniele Pasquini'),
+            ]),
+            html.Ul(className='creditsR', children=[
+                html.P(children='Studenti:'),
+                html.Li(children='Manfredo Aristide Fraccola'),
+                html.Li(children='Sara Giordani'),
+                html.Li(children='Andrea Misiti'),
+                html.Li(children='Angela Sangiorgio'),
+                html.Li(children='Stefano Spinelli'),
+                html.Li(children='Gaia Tomei'),
+                html.Li(children='Alessandro Pucci'),
+            ]),
         ])
     ]),
 ])
