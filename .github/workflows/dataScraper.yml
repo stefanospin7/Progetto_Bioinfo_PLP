@@ -2,7 +2,7 @@ name: dataScraper
 
 on:
   schedule:
-    - cron: '57 15 * * *' # runs at 12:00 UTC everyday
+    - cron: '05 16 * * *' # runs at 12:00 UTC everyday
 
 jobs:
   build:
