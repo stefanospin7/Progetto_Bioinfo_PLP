@@ -14,7 +14,7 @@ def daterange(start_date, end_date):
         yield start_date + timedelta(n)
 
 # definisco data di inizio e fine dell'analisi dati
-start_date = date(2020, 4, 1)
+start_date = date(2020, 2, 24)
 end_date = date.today()
 
 # inizializzo e popolo lista di indirizzi url dei file cvs su git-hub
@@ -36,7 +36,7 @@ for n in indirizzi:
             # sep='\t'           Tab-separated value file.
             # quotechar="'",        # single quote allowed as quote character
             # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
-            usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
+            # usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
             # Only load the three columns specified.
             # parse_dates=['data'],  # Intepret the birth_date column as a date
             # skiprows=1,         # Skip the first 10 rows of the file
