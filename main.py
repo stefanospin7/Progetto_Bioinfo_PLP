@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 from dash import dcc
 from dash import html
 from datetime import timedelta, date
-from fbprophet import Prophet
+import fbprophet as Prophet
 
 
 dfDeceduti = pd.read_csv(
@@ -103,7 +103,7 @@ dfDecedutiML.columns = ['ds', 'y']
 
 dfDecedutiML.ds = dfDecedutiML.ds.dt.date
 print(dfDecedutiML.tail())
-m = Prophet(weekly_seasonality=True)
+m = Prophet.Prophet(weekly_seasonality= True)
 m.fit(dfDecedutiML)
 future = m.make_future_dataframe(periods=365)
 forecast = m.predict(future)
@@ -117,8 +117,8 @@ GRAFICO TEST ML
 """
 fig2 = go.Figure()
 # Create and style traces
-fig2.add_trace(go.Scatter(x=forecast.ds, y=forecast.yhat, name='Test ML Prophet', fill='none', connectgaps=True))
-fig2.add_trace(go.Scatter(x=dfDecedutiML.ds, y=dfDecedutiML.y, name='deceduti', fill='none'))
+fig2.add_trace(go.Scatter(x=forecast.ds, y=forecast.yhat, name='Test ML Prophet', fill='tonexty', connectgaps=True))
+fig2.add_trace(go.Scatter(x=dfDecedutiML.ds, y=dfDecedutiML.y, name='deceduti', fill='tozeroy'))
 
 fig2.update_layout(legend=dict(
     yanchor="top",
