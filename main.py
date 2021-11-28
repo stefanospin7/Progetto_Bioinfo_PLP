@@ -162,10 +162,7 @@ server = app.server
 app.layout = html.Div(id='parent', children=[
     html.Div(id='header', className='out-container', children=[
         html.Div(className='container', children=[
-            html.H1(id='title', children='Esame PLP'),
-            html.H2(id='docente', children='Docente: Prof. Daniele Pasquini'),
-            html.H3(id='', children='Gruppo 1'),
-            html.H2(id='', children='Titolo: Analisi dati Covid/Vaccinazioni'),
+            html.H1(id='title', children='COVID-19 Dashboard'),
         ])
     ]),
     html.Div(className='container', children=[
@@ -174,7 +171,15 @@ app.layout = html.Div(id='parent', children=[
     ]),
     html.Div(id='image', className='out-container', children=[
         html.Img(src='https://i.ibb.co/8zkNZTT/7VE.gif')
-    ])
+    ]),
+html.Div(id='footer', className='out-container', children=[
+        html.Div(className='container', children=[
+            html.P(children='Lavoro di gruppo'),
+            html.P(children='Corso di Programmazione e Laboratorio di Programmazione'),
+            html.P(children='Bioinformatica - Tor Vergata'),
+            html.P(children='Docente: Daniele Pasquini'),
+        ])
+    ]),
 ])
 
 
@@ -185,4 +190,4 @@ def display_value(value):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)

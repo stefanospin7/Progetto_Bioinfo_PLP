@@ -14,9 +14,17 @@ body {
 }
 #header {
     background: lightblue;
-    padding: 20px;
+    padding: 20px 0;
 }
 
 #image {
     text-align: center;
+}
+
+#footer {
+    background: #484848;
+    color: #fff;
+    padding: 20px 0 40px;
+    font-weight: 100;
+    font-size: 14px;
 }
