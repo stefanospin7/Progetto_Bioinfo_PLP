@@ -5,7 +5,9 @@ body {
 }
 
 h1 {
-    font-weight: 400;
+    font-size: 41px;
+    font-weight: lighter;
+    color: #fff;
 }
 
 h3 {
