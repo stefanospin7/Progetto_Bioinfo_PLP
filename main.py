@@ -17,6 +17,121 @@ import pandas as pd
 import plotly.graph_objects as go
 from dash import dcc
 from dash import html
+from datetime import timedelta, date
+from fbprophet import Prophet
+
+
+dfDeceduti = pd.read_csv(
+    'data/datiCovid.csv',
+    index_col='data',
+    parse_dates=['data'],  # Intepret the column as a date
+    # header=0,
+    # relative python path to subdirectory
+    # sep='\t'           Tab-separated value file.
+    # quotechar="'",        # single quote allowed as quote character
+    # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
+    usecols=['data', 'deceduti'],  # Only load the columns specified.
+    # skiprows=1,         # Skip the first 10 rows of the file
+    # na_values=['.', '??']       # Take any '.' or '??' values as NA
+)
+
+dfDeceduti.index = dfDeceduti.index.normalize()
+
+dfVax = pd.read_csv(
+    'https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv',
+    index_col='data_somministrazione',
+    parse_dates=['data_somministrazione'],
+    # header=0,
+    # relative python path to subdirectory
+    # sep='\t'           Tab-separated value file.
+    # quotechar="'",        # single quote allowed as quote character
+    # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
+    usecols=['data_somministrazione', 'prima_dose'],
+    # Only load the three columns specified.
+    # parse_dates=['data'],  # Intepret the birth_date column as a date
+    # skiprows=1,         # Skip the first 10 rows of the file
+    # na_values=['.', '??']       # Take any '.' or '??' values as NA
+)
+
+start_date = "2021-01-01"
+end_date = "2021-09-05"
+
+dfDeceduti = dfDeceduti.loc[start_date:end_date]
+dfVax = dfVax.loc[start_date:end_date].groupby('data_somministrazione').sum()
+
+dfVaxDeceduti = pd.concat([dfDeceduti, dfVax], axis=1)
+
+"""
+GRAFICO TEST 0.2
+"""
+fig1 = go.Figure()
+# Create and style traces
+fig1.add_trace(
+    go.Scatter(x=dfVaxDeceduti.index, y=dfVaxDeceduti.prima_dose, name='vaccinati con prima dose', fill='none',
+               connectgaps=True))
+fig1.add_trace(go.Scatter(x=dfVaxDeceduti.index, y=dfVaxDeceduti.deceduti.diff(), name='deceduti', fill='none'))
+
+fig1.update_yaxes(type="log")  # log range: 10^0=1, 10^5=100000
+fig1.update_layout(legend=dict(
+    yanchor="top",
+    y=0.97,
+    xanchor="left",
+    x=0.01
+))
+
+"""
+MACHINE LEARNING
+TEST 0.1
+Test redesign dataframe
+"""
+
+dfDecedutiML = pd.read_csv(
+    'data/datiCovid.csv',
+    index_col='data',
+    parse_dates=['data'],  # Intepret the column as a date
+    # header=0,
+    # relative python path to subdirectory
+    # sep='\t'           Tab-separated value file.
+    # quotechar="'",        # single quote allowed as quote character
+    # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
+    usecols=['data', 'deceduti'],  # Only load the columns specified.
+    # skiprows=1,         # Skip the first 10 rows of the file
+    # na_values=['.', '??']       # Take any '.' or '??' values as NA
+)
+dfDecedutiML = dfDecedutiML.reset_index()
+dfDecedutiML.columns = ['ds', 'y']
+
+dfDecedutiML.ds = dfDecedutiML.ds.dt.date
+print(dfDecedutiML.tail())
+m = Prophet(weekly_seasonality=True)
+m.fit(dfDecedutiML)
+future = m.make_future_dataframe(periods=365)
+forecast = m.predict(future)
+print(forecast)
+# iterating the columns
+for col in forecast.columns:
+    print(col)
+
+"""
+GRAFICO TEST ML
+"""
+fig2 = go.Figure()
+# Create and style traces
+fig2.add_trace(go.Scatter(x=forecast.ds, y=forecast.yhat, name='Test ML Prophet', fill='none', connectgaps=True))
+fig2.add_trace(go.Scatter(x=dfDecedutiML.ds, y=dfDecedutiML.y, name='deceduti', fill='none'))
+
+fig2.update_layout(legend=dict(
+    yanchor="top",
+    y=0.97,
+    xanchor="left",
+    x=0.01
+))
+
+
+"""
+LAYOUT HTML
+"""
+
 
 app = dash.Dash(__name__,
                 title="PLP Project 1 - Bioinformatica Tor Vergata",
@@ -42,53 +157,6 @@ app = dash.Dash(__name__,
                 ]
                 )
 
-df = pd.read_csv(
-    'data/datiCovid.csv',
-    # index_col='data',
-    parse_dates=['data'],
-    # header=0,
-    # relative python path to subdirectory
-    # sep='\t'           Tab-separated value file.
-    # quotechar="'",        # single quote allowed as quote character
-    # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
-    # usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
-    # Only load the three columns specified.
-    # parse_dates=['data'],  # Intepret the birth_date column as a date
-    # skiprows=1,         # Skip the first 10 rows of the file
-    # na_values=['.', '??']       # Take any '.' or '??' values as NA
-)
-
-dfVax = pd.read_csv(
-    'https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv',
-    # index_col='data',
-    parse_dates=['data_somministrazione'],
-    # header=0,
-    # relative python path to subdirectory
-    # sep='\t'           Tab-separated value file.
-    # quotechar="'",        # single quote allowed as quote character
-    # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
-    # usecols=['data', 'ricoverati_con_sintomi', 'terapia_intensiva', 'totale_ospedalizzati'],
-    # Only load the three columns specified.
-    # parse_dates=['data'],  # Intepret the birth_date column as a date
-    # skiprows=1,         # Skip the first 10 rows of the file
-    # na_values=['.', '??']       # Take any '.' or '??' values as NA
-)
-
-fig = go.Figure()
-# Create and style traces
-fig.add_trace(go.Scatter(x=df.data, y=df.totale_ospedalizzati, name='totale_ospedalizzati',
-                         ))
-fig.add_trace(go.Scatter(x=df.data, y=df.ricoverati_con_sintomi, name='ricoverati_con_sintomi',
-                         ))
-fig.add_trace(go.Scatter(x=df.data, y=df.terapia_intensiva, name='terapia_intensiva',
-                         ))
-fig.add_trace(go.Scatter(x=dfVax.data_somministrazione, y=dfVax.prima_dose, name='prima_dose',
-                         ))
-start_date = "2021-03-26"
-end_date = "2021-10-18"
-
-fig.update_xaxes(type="date", range=[start_date, end_date])
-
 server = app.server
 
 app.layout = html.Div(id='parent', children=[
@@ -101,7 +169,8 @@ app.layout = html.Div(id='parent', children=[
         ])
     ]),
     html.Div(className='container', children=[
-        dcc.Graph(id='bar_plot', figure=fig),
+        dcc.Graph(id='bar_plot', figure=fig1),
+        dcc.Graph(id='bar_plot1', figure=fig2),
     ]),
     html.Div(id='image', className='out-container', children=[
         html.Img(src='https://i.ibb.co/8zkNZTT/7VE.gif')
