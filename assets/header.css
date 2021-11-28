@@ -27,6 +27,20 @@ body {
     padding: 20px 0 40px;
     font-weight: 100;
     font-size: 14px;
+    float: left;
+}
+.credits {
+    float: left;
+}
+.creditsR {
+    float: right;
+    margin: 0;
+    padding: 0;
+    margin-top: 0;
+}
+
+.creditsR li {
+    list-style: none;
 }
 
 #covid {
