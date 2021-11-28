@@ -4,3 +4,4 @@ matplotlib~=3.5.0
 plotly~=5.4.0
 Flask~=2.0.2
 gunicorn~=20.1.0
+fbprophet~=0.7.1
