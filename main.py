@@ -169,8 +169,8 @@ app.layout = html.Div(id='parent', children=[
     ]),
     html.Div(className='container', children=[
         html.Div(id='covid', className='analisi', children=[
+            html.H2(children='Analisi decessi / vaccinazioni'),
             html.Div(className='legenda', children=[
-                html.H2(children='Analisi decessi / vaccinazioni'),
                 html.P(children='Media:'),
                 html.P(children='Massimo:'),
                 html.P(children='Minimo:'),
@@ -178,8 +178,8 @@ app.layout = html.Div(id='parent', children=[
             dcc.Graph(className='grafico', id='bar_plot', figure=fig1),
         ]),
         html.Div(id='ML', className='analisi', children=[
+            html.H2(children='Analisi decessi con machine learning Prophet'),
             html.Div(className='legenda', children=[
-                html.H2(children='Analisi decessi con machine learning Prophet'),
                 html.P(children='Media:'),
                 html.P(children='Massimo:'),
                 html.P(children='Minimo:'),
