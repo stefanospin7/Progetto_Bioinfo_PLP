@@ -53,16 +53,38 @@ width: 20%;
 }
 
 .analisi {
-float: left;
-    width: 100%;
+/*float: left;*/
+ /*   width: 100%;*/
     margin: 40px 0;
 }
 
 .grafico {
-    width: 80%;
-    float: left;
+ /*   width: 80%;
+    float: left;*/
 }
 
 .legenda p {
         font-size: 12px;
+}
+
+#menutest {
+display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#menutest button {
+    margin-right: 10px;
+    background: #00665C;
+    border: 1px solid #fff;
+    padding: 20px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#menutest button:hover {
+    background: #fff;
+    color: #00665C;
+    border: 1px solid #00665C;
 }
