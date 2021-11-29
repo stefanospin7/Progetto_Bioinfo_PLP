@@ -56,6 +56,7 @@ width: 20%;
 /*float: left;*/
  /*   width: 100%;*/
     margin: 40px 0;
+    width: calc(100% - 50px);
 }
 
 .grafico {
@@ -87,4 +88,27 @@ display: flex;
     background: #fff;
     color: #00665C;
     border: 1px solid #00665C;
+}
+
+/* On screens that are 992px or less, set the background color to blue */
+@media screen and (max-width: 1080px) {
+    .analisi {
+
+    }
+    .container {
+    width: auto;
+    }
+}
+
+@media screen and (max-width: 720px) {
+
+    .analisi {
+
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .analisi {
+
+    }
 }
