@@ -168,6 +168,10 @@ app = dash.Dash(__name__,
                     {
                         'property': 'og:description',
                         'content': 'Progetto di analisi dati Covid-19 e Vaccinazioni',
+                    },
+{
+                        'name': 'viewport',
+                        'content': 'width=device-width, initial-scale=1.0',
                     }
                 ],
                 )
