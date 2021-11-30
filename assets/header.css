@@ -23,6 +23,10 @@ body {
     text-align: center;
 }
 
+#image img {
+max-width: 100%;
+}
+
 #footer {
     background: #484848;
     color: #fff;
@@ -62,8 +66,9 @@ width: 20%;
 }
 
 .grafico {
- /*   width: 80%;
-    float: left;*/
+    width: calc(80% - 20px);
+    float: left;
+    margin-left: 20px;
 }
 
 .legenda p {
@@ -94,11 +99,19 @@ display: flex;
 
 /* On screens that are 992px or less, set the background color to blue */
 @media screen and (max-width: 1080px) {
-    .analisi {
-
+   .credits {
+       float: left;
+       padding: 0 20px;
+   }
+    .creditsR {
+        float: left;
+       padding: 0 20px;
     }
     .container {
     width: auto;
+    }
+    #footer .container {
+        display: block;
     }
 }
 
