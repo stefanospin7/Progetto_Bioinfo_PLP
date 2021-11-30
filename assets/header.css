@@ -9,8 +9,10 @@ body {
     padidng: 0;
 }
 .container {
-    width: 1110px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 #header {
     background: #00665C;
