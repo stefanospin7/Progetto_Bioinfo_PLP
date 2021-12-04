@@ -1,3 +1,5 @@
+[![dataScraper](https://github.com/manfrifrac/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml/badge.svg)](https://github.com/manfrifrac/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml)
+
 # Progetto_Bioinfo_PLP
 
 Questa repository sarà usata per managing di un progetto universitario di gruppo di Bioinformatica (TOR VERGATA).
