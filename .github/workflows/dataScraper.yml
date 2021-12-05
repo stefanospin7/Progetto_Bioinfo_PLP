@@ -22,7 +22,7 @@ jobs:
           pip install -r requirementsPullData.txt
 
       - name: execute py script # run pullDataItalia.py to get the latest data
-        run: python pullDataItalia.py
+        run: python data/pullDataItalia.py
 
       - name: commit files
         run: |
