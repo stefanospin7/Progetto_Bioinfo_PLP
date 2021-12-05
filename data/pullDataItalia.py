@@ -4,7 +4,6 @@ Pull data from database and export an aggregated .cvs file
 
 from datetime import timedelta, date # pacchetto datetime per utilizzo e manipolaizione date
 import pandas as pd  # gestione csv/dataframe
-import plotly.graph_objects as go  # creazione grafici
 import fbprophet as Prophet # machine learning fbprophet
 
 
