@@ -1,8 +1,7 @@
 name: dataScraper
 
 on:
-  schedule:
-    - cron: "0 20 * * *"
+  workflow_dispatch
 
 jobs:
   build:
@@ -24,6 +23,9 @@ jobs:
 
       - name: execute py script # run pullDataItalia.py to get the latest data
         run: python data/pullDataItalia.py
+        
+      - name: execute py script # run pullDataCina.py to get the latest data
+        run: python data/pullDataCina.py
 
       - name: commit files
         run: |
