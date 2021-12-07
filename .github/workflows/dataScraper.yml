@@ -21,11 +21,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirementsPullData.txt
 
-      - name: execute py script # run pullDataItalia.py to get the latest data
+      - name: pull dataset Italy # run pullDataItalia.py to get the latest data
         run: python data/pullDataItalia.py
         
-      - name: execute py script # run pullDataCina.py to get the latest data
+      - name: pull dataset China # run pullDataCina.py to get the latest data
         run: python data/pullDataCina.py
+
+      - name: pull dataset World # run PullDataGlobalCovid.py to get the latest data
+        run: python data/PullDataGlobalCovid.py
 
       - name: commit files
         run: |
