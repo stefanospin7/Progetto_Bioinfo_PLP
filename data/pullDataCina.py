@@ -10,4 +10,4 @@ df.rename(columns={'date': 'data', 'total_cases': 'totale_positivi', 'new_cases'
 df.index.names = ['data']
 print(df.tail(10))
 
-df.to_csv("datiCovidCina.csv", index=True)
+df.to_csv("data/datiCovidCina.csv", index=True)
