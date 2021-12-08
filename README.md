@@ -1,4 +1,4 @@
-[![dataScraper](https://github.com/manfrifrac/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml/badge.svg)](https://github.com/manfrifrac/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml)
+[![dataScraper](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml/badge.svg)](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml)
 
 # Progetto_Bioinfo_PLP
 
