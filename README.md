@@ -1,4 +1,4 @@
-[![dataScraper](https://github.com/manfrifrac/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml/badge.svg)](https://github.com/manfrifrac/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml)
+[![dataScraper](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml/badge.svg)](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml)
 
 # Progetto_Bioinfo_PLP
 
@@ -8,8 +8,7 @@ Questa repository sarà usata per managing di un progetto universitario di grupp
 <br/>
 ************* Info: **************<br/>
 
-Questo progetto ha come target quello di estrapolare dati statistici riguardanti Covid-19 in Italia e in altri paesi secondo criteri che sono ancora da decidere tramite python e librerie. Attualmente il codice è stato totalmente steso da Manfredo Aristide Fraccola.
-
+Questo progetto ha come target quello di estrapolare dati statistici riguardanti Covid-19 in Italia e in altri paesi secondo criteri che sono ancora da decidere tramite python e librerie.
 
 <br/>
 ************* File: **************<br/>
