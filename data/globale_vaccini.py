@@ -7,5 +7,5 @@ keep = ["location", "date", "daily_vaccinations", "people_vaccinated", "people_f
 vaccini_globali = vaccini_globali[keep]
 vaccini_globali = vaccini_globali.rename(columns={"date": "data", "location": "paese",
                                                   "daily_vaccinations": "vaccinazioni"})
-vaccini_globali.to_csv("data/vaccini_globali.csv")
+vaccini_globali.to_csv("vaccini_globali.csv")
 print(vaccini_globali.head())
