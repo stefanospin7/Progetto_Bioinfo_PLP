@@ -29,6 +29,8 @@ jobs:
 
       - name: pull dataset World # run PullDataGlobalCovid.py to get the latest data
         run: python data/PullDataGlobalCovid.py
+      - name: pull dataset Vaccini in Cina
+        run: python data/pullDataCinaVaccini.py
 
       - name: commit files
         run: |
