@@ -1,7 +1,7 @@
 name: dataScraper
 
 on:
-  workflow_dispatch:
+  workflow_dispatch
 
 jobs:
   build:
@@ -14,15 +14,21 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x' # install the python version needed
+          python-version: '3.9' # install the python version needed
 
       - name: install python packages
         run: |
           python -m pip install --upgrade pip
           pip install -r requirementsPullData.txt
 
-      - name: execute py script # run pullData.py to get the latest data
-        run: python pullData.py
+      - name: pull dataset Italy # run pullDataItalia.py to get the latest data
+        run: python data/pullDataItalia.py
+        
+      - name: pull dataset China # run pullDataCina.py to get the latest data
+        run: python data/pullDataCina.py
+
+      - name: pull dataset World # run PullDataGlobalCovid.py to get the latest data
+        run: python data/PullDataGlobalCovid.py
 
       - name: commit files
         run: |

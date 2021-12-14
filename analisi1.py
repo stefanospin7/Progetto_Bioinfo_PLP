@@ -6,17 +6,10 @@ start_date = "2021-01-01"
 end_date = "2021-11-20"
 
 dfDeceduti = pd.read_csv(
-    'data/datiCovid.csv',
+    'data/datiCovidItalia.csv',
     index_col='data',
     parse_dates=['data'],  # Intepret the column as a date
-    # header=0,
-    # relative python path to subdirectory
-    # sep='\t'           Tab-separated value file.
-    # quotechar="'",        # single quote allowed as quote character
-    # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
     usecols=['data', 'deceduti'],  # Only load the columns specified.
-    # skiprows=1,         # Skip the first 10 rows of the file
-    # na_values=['.', '??']       # Take any '.' or '??' values as NA
 )
 
 dfDeceduti.index = dfDeceduti.index.normalize()
@@ -25,16 +18,7 @@ dfVax = pd.read_csv(
     'https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv',
     index_col='data_somministrazione',
     parse_dates=['data_somministrazione'],
-    # header=0,
-    # relative python path to subdirectory
-    # sep='\t'           Tab-separated value file.
-    # quotechar="'",        # single quote allowed as quote character
-    # dtype={"terapia_intensiva": int},  # Parse the salary column as an integer
     usecols=['data_somministrazione', 'prima_dose', 'seconda_dose'],
-    # Only load the three columns specified.
-    # parse_dates=['data'],  # Intepret the birth_date column as a date
-    # skiprows=1,         # Skip the first 10 rows of the file
-    # na_values=['.', '??']       # Take any '.' or '??' values as NA
 )
 
 dfDeceduti = dfDeceduti.loc[start_date:end_date]
@@ -68,7 +52,7 @@ Test redesign dataframe
 """
 
 dfDecedutiML = pd.read_csv(
-    'data/datiCovid.csv',
+    'data/datiCovidItalia.csv',
     index_col='data',
     parse_dates=['data'],  # Intepret the column as a date
     # header=0,
