@@ -19,4 +19,4 @@ df = pd.read_csv("https://covid.ourworldindata.org/data/owid-covid-data.csv",
 df = df.groupby(['date']).sum() #funzione che raggruppa le date e mi fa la somma
 df.rename(columns={'date': 'data', 'total_cases': 'totale_positivi', 'new_cases' : 'nuovi_positivi', 'icu_patients' : 'terapia_intensiva', 'new_deaths' : 'deceduti', 'hosp_patients' : 'totale_ospedalizzati', 'new_tests' : 'tamponi'}, inplace=True)
 print(df.tail(10)) #stampa le prime 10 righe dell'head (parte iniziale) o tail del dataframe
-df.to_csv('datiCovidMondo.csv')
+df.to_csv('data/datiCovidMondo.csv')
