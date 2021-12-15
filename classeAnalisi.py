@@ -12,5 +12,7 @@ class Analisi:
                    )
             )
 
-italia = Analisi("data/datiCovidItalia.csv")
-italia.fig.show()
+"""italia = Analisi("data/datiCovidItalia.csv")
+italia.fig.show() 
+cina = Analisi("data/datiCovidCina.csv")
+cina.fig.show() """
