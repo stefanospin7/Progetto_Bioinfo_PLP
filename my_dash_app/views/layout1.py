@@ -59,6 +59,7 @@ def make_layout():
     ]),
     html.Div(id='image', className='out-container', children=[
         html.Img(src='https://i.ibb.co/8zkNZTT/7VE.gif')
+        #
     ]),
     html.Div(id='footer', className='out-container', children=[
         html.Div(className='container', children=[
