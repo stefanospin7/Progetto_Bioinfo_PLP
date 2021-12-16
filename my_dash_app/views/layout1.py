@@ -43,7 +43,18 @@ def make_layout():
                 html.P(children=('Massimo: ', cina.df.deceduti.diff().max())),
                 html.P(children=('Minimo: ', cina.df.deceduti.diff().min())),
             ]),
+
             dcc.Graph(className='grafico', id='bar_plot1', figure=cina.fig, responsive=True),
+
+        ]),
+        html.Div(id='covidTot', className='analisi', children=[
+            html.H2(children='Grafico Totale in Scala Logaritmica di tutte le colonne'),
+            html.H3(children='Italia'),
+            dcc.Graph(className='grafico', id='scatter_1', figure=italia.figTot, responsive=True,
+                      config={'responsive': True, 'autosizable': True}),
+            html.H3(children='Cina'),
+            dcc.Graph(className='grafico', id='scatter_2', figure=cina.figTot, responsive=True,
+                      config={'responsive': True, 'autosizable': True}),
         ]),
     ]),
     html.Div(id='image', className='out-container', children=[
