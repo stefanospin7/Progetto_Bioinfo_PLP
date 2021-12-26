@@ -34,6 +34,10 @@ class Analisi:
         end_date = date.today()
         self.figTot.update_xaxes(range=[start_date, end_date])
 
+        start_date = date(2020, 2, 24)
+        end_date = date.today()
+        self.figTot.update_xaxes(range=[start_date, end_date])
+
 
 
 """italia = Analisi("data/datiCovidItalia.csv")
