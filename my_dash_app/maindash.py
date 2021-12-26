@@ -1,4 +1,6 @@
 import dash  # layout html
+import dash_bootstrap_components as dbc
+from dash import html, Input, Output, callback_context
 
 app = dash.Dash(__name__,
                 title="PLP Project 1 - Bioinformatica Tor Vergata",
@@ -21,9 +23,7 @@ app = dash.Dash(__name__,
                         'property': 'og:description',
                         'content': 'Progetto di analisi dati Covid-19 e Vaccinazioni',
                     },
-                    {
-                        'name': 'viewport',
-                        'content': 'width=device-width, initial-scale=1.0',
-                    }
+                    {"name": "viewport", "content": "width=device-width, initial-scale=1"},
                 ],
+                external_stylesheets=[dbc.themes.FLATLY, dbc.icons.BOOTSTRAP, 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'],
                 )
