@@ -1,6 +1,8 @@
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as ex
+from datetime import timedelta, date # pacchetto datetime per utilizzo e manipolaizione date
+
 class Analisi:
     def __init__(self, csv):
         self.df = pd.read_csv(csv)
@@ -35,6 +37,10 @@ class Analisi:
             margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
             showlegend=True
         )
+
+        start_date = date(2020, 2, 24)
+        end_date = date.today()
+        self.figTot.update_xaxes(range=[start_date, end_date])
 
 
 
