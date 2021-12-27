@@ -4,29 +4,21 @@ import plotly.express as ex
 from datetime import timedelta, date # pacchetto datetime per utilizzo e manipolaizione date
 
 class Analisi:
-    def __init__(self, csv):
-        self.df = pd.read_csv(csv)
+    def __init__(self, paese):
+        self.df = pd.read_csv("data/owid-dataset.csv")
+
+        self.df = self.df[self.df["location"] == paese]
 
         self.fig = go.Figure(
             go.Bar(hoverinfo='skip',
-                    x=self.df["data"],
-                    y=self.df["deceduti"]
+                    x=self.df["date"],
+                    y=self.df["new_deaths"]
                    )
             )
 
         self.figTot = go.Figure()
         self.figTot.add_trace(
-            go.Scatter(x=self.df.data, y=self.df.deceduti, name='Deceduti', fill='tonexty', connectgaps=True))
-        self.figTot.add_trace(
-            go.Scatter(x=self.df.data, y=self.df.totale_positivi, name='Totale Positivi', fill='tonexty', connectgaps=True))
-        self.figTot.add_trace(
-            go.Scatter(x=self.df.data, y=self.df.nuovi_positivi, name='Nuovi Positivi', fill='tonexty', connectgaps=True))
-        self.figTot.add_trace(
-            go.Scatter(x=self.df.data, y=self.df.terapia_intensiva, name='Terapia Intensiva', fill='tonexty', connectgaps=True))
-        self.figTot.add_trace(
-            go.Scatter(x=self.df.data, y=self.df.totale_ospedalizzati, name='Totale Ospedalizzati', fill='tonexty', connectgaps=True))
-        self.figTot.add_trace(
-            go.Scatter(x=self.df.data, y=self.df.tamponi, name='Tamponi', fill='tonexty', connectgaps=True))
+            go.Scatter(x=self.df.date, y=self.df.columns, name='Deceduti', fill='tonexty', connectgaps=True))
         self.figTot.update_yaxes(type="log")
         self.figTot.update_layout(
             legend=dict(
