@@ -7,9 +7,9 @@ import plotly.graph_objects as go  # creazione grafici
 
 from classeAnalisi import Analisi
 
-italia = Analisi("data/datiCovidItalia.csv")
+italia = Analisi("Italy")
 
-cina = Analisi("data/datiCovidCina.csv")
+cina = Analisi("China")
 
 
 """
@@ -28,9 +28,9 @@ def make_layout():
         html.Div(id='covid', className='analisi', children=[
             html.H2(children='Analisi deceduti Italia'),
             html.Div(className='legenda', children=[
-                html.P(children=('Media: ', round(italia.df.deceduti.diff().mean(), 2))),
-                html.P(children=('Massimo: ', italia.df.deceduti.diff().max())),
-                html.P(children=('Minimo: ', italia.df.deceduti.diff().min())),
+                html.P(children=('Media: ', round(italia.df.new_deaths.diff().mean(), 2))),
+                html.P(children=('Massimo: ', italia.df.new_deaths.diff().max())),
+                html.P(children=('Minimo: ', italia.df.new_deaths.diff().min())),
             ]),
             dcc.Graph(className='grafico', id='bar_plot', figure=italia.fig, responsive=True,
                       config={'responsive': True, 'autosizable': True}),
@@ -39,9 +39,9 @@ def make_layout():
         html.Div(id='ML', className='analisi', children=[
             html.H2(children='Analisi deceduti Cina'),
             html.Div(className='legenda', children=[
-                html.P(children=('Media: ', round(cina.df.deceduti.diff().mean(), 2))),
-                html.P(children=('Massimo: ', cina.df.deceduti.diff().max())),
-                html.P(children=('Minimo: ', cina.df.deceduti.diff().min())),
+                html.P(children=('Media: ', round(cina.df.new_deaths.diff().mean(), 2))),
+                html.P(children=('Massimo: ', cina.df.new_deaths.diff().max())),
+                html.P(children=('Minimo: ', cina.df.new_deaths.diff().min())),
             ]),
 
             dcc.Graph(className='grafico', id='bar_plot1', figure=cina.fig, responsive=True),
