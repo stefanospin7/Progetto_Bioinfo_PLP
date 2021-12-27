@@ -29,11 +29,13 @@ jobs:
 
       - name: pull dataset World # run PullDataGlobalCovid.py to get the latest data
         run: python data/PullDataGlobalCovid.py
+      - name: pull dataset Vaccini in Cina
+        run: python data/pullDataCinaVaccini.py
 
       - name: commit files
         run: |
-          git config --local user.email "manfrifrac@gmail.com"
-          git config --local user.name "manfrifrac"
+          git config --local user.email "progetto.plp@gmail.com"
+          git config --local user.name "PLP Project - bot"
           git add -A
           git commit -m "update data" -a
 

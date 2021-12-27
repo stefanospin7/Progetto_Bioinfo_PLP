@@ -67,6 +67,7 @@ forecast.index = pd.to_datetime(forecast.index)
 forecast.rename(columns={'trend': 'decedutiMl', 'trend_upper': 'decedutiMLUp', 'trend_lower': 'decedutiMLDw'}, inplace=True)
 forecast = forecast[['decedutiMl','decedutiMLUp','decedutiMLDw']]
 dfCvMLIt = pd.concat([dfCvIt, forecast], axis=1) # concatena 2 dataframe
+dfCvMLIt.index.names = ['data']
 
 #creo file cvs in cartella /data
 dfCvMLIt.to_csv('data/datiCovidItalia.csv', index=True)

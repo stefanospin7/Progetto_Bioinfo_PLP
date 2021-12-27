@@ -40,4 +40,4 @@ df=df.drop(["location"], axis=1)
 df.rename(columns={'date': 'data', "daily_vaccinations":"nuovi_vaccinati","total_boosters":"terza_dose", "total_vaccinations":"vaccinazioni_totali"}, inplace=True)
 print(df.tail(10))
 
-df.to_csv("datiVacciniCina.csv", index=True)
+df.to_csv("data/datiVacciniCina.csv", index=True)
