@@ -23,6 +23,7 @@ def coutries_list():
 LAYOUT HTML
 """
 
+oggi = date.today()
 
 #ANALISI COVID
 analisiCovid = dbc.Container([
@@ -45,13 +46,14 @@ analisiCovid = dbc.Container([
             dbc.Col([
                 dcc.DatePickerRange(
                     id='my-date-picker-range',
-                    min_date_allowed=date(1995, 8, 5),
-                    max_date_allowed=date(2017, 9, 19),
-                    initial_visible_month=date(2017, 8, 5),
-                    end_date=date(2017, 8, 25)
+                    min_date_allowed=date(2020, 3, 1),
+                    max_date_allowed=oggi,
+                    initial_visible_month=date(2020, 3, 1),
+                    end_date=oggi
                 ),
             ],
-            width=3)
+            width=3,
+            className="ms-auto")
         ],
         align="center",
         className="mb-3"
@@ -60,7 +62,7 @@ analisiCovid = dbc.Container([
         dbc.Col([
             dbc.Checklist(
                 options=[{'label': i, 'value': i} for i in italia.df.columns],
-                value=[1],
+                value=["new_cases"],
                 id="dato-input",
                 switch=True,
             )
