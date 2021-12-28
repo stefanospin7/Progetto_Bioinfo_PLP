@@ -4,6 +4,7 @@ from appCovidData.views.layout3 import make_layout as pag2
 
 from dash import html, Input, Output, dcc  # funzioni di layout html interattivo
 
+server = app.server
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Div(id='page-content')
