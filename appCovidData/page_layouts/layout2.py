@@ -18,6 +18,12 @@ def coutries_list():
     df = df[keep]
     return df['location'].unique()
 
+import plotly.graph_objects as go
+import plotly.express as px
+import pandas as pd
+
+
+
 
 """
 LAYOUT HTML
@@ -42,38 +48,25 @@ analisiCovid = dbc.Container([
                     className="mb-3"
                 ),
             ],
-            width=3),
-            dbc.Col([
-                dcc.DatePickerRange(
-                    id='my-date-picker-range',
-                    min_date_allowed=date(2020, 3, 1),
-                    max_date_allowed=oggi,
-                    initial_visible_month=date(2020, 3, 1),
-                    end_date=oggi
-                ),
-            ],
-            width=3,
-            className="ms-auto")
+            width=3)
         ],
         align="center",
         className="mb-3"
         ),
     dbc.Row([
         dbc.Col([
-            dbc.Checklist(
+            dbc.RadioItems(
                 options=[{'label': i, 'value': i} for i in italia.df.columns],
                 value=["new_cases"],
                 id="dato-input",
-                switch=True,
             )
             ],
             width="3"
              ),
         dbc.Col(
             dcc.Graph(
-                className='grafico',
-                id='bar_plot',
-                figure=italia.figTot,
+                id='fig-mondo',
+                #figure=italia.figTot,
                 responsive=True,
                 config={
                     'responsive': True,
