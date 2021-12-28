@@ -37,7 +37,7 @@ analisiCovid = dbc.Container([
         dbc.Col([
             dbc.RadioItems(
                 options=[{'label': i, 'value': i} for i in italia.df.columns],
-                value="new_cases",
+                value="total_cases",
                 id="dato-input",
             )
             ],
