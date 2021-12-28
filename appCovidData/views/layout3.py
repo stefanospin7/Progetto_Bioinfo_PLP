@@ -1,14 +1,12 @@
 from dash import dcc  # layout html
-from dash import html, Input, Output, callback_context  #funzioni di layout html interattivo
+from dash import html  #funzioni di layout html interattivo
 import dash_bootstrap_components as dbc
 
-from dash.exceptions import PreventUpdate #funzioni di layout html interattivo
+from appCovidData.classeAnalisi import Analisi
 
-from classeAnalisi import Analisi
+italia = Analisi("Italy")
 
-italia = Analisi("data/datiCovidItalia.csv")
-
-cina = Analisi("data/datiCovidCina.csv")
+cina = Analisi("China")
 
 
 """
@@ -93,9 +91,9 @@ analisiCovid = dbc.Container([
         ),
     dbc.Row([
         dbc.Col([
-            html.P(children=('Media: ', round(italia.df.deceduti.diff().mean(), 2))),
-            html.P(children=('Massimo: ', italia.df.deceduti.diff().max())),
-            html.P(children=('Minimo: ', italia.df.deceduti.diff().min())),
+            html.P(children=('Media: ', round(italia.df.new_deaths.diff().mean(), 2))),
+            html.P(children=('Massimo: ', italia.df.new_deaths.diff().max())),
+            html.P(children=('Minimo: ', italia.df.new_deaths.diff().min())),
             ],
             width="auto"
              ),

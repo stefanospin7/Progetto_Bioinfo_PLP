@@ -1,11 +1,11 @@
 from dash import dcc  # layout html
-from dash import html, Input, Output, callback_context  #funzioni di layout html interattivo
+from dash import html  #funzioni di layout html interattivo
 import dash_bootstrap_components as dbc
-from dash.exceptions import PreventUpdate #funzioni di layout html interattivo
-from classeAnalisi import Analisi
+from appCovidData.classeAnalisi import Analisi
 
-italia = Analisi("data/datiCovidItalia.csv")
-cina = Analisi("data/datiCovidCina.csv")
+italia = Analisi("Italy")
+
+cina = Analisi("China")
 
 
 """
@@ -78,7 +78,7 @@ analisiCovid = dbc.Container([
             dcc.Dropdown(
                 id='yaxis-column',
                 options=[{'label': i, 'value': i} for i in italia.df.columns],
-                value='deceduti',
+                value='new_deaths',
                 className="mb-3"
             ),
             html.Ul(children=([
@@ -94,7 +94,7 @@ analisiCovid = dbc.Container([
                         className="p-3 bg-primary text-white"),
                         dbc.Col([
                             html.Span(
-                                children=(round(italia.df.deceduti.diff().mean(), 2)),
+                                children=(round(italia.df.new_deaths.diff().mean(), 2)),
                                 className="mr-3"
                             )
                         ],
@@ -117,7 +117,7 @@ analisiCovid = dbc.Container([
                         className="p-3 bg-primary text-white"),
                         dbc.Col([
                             html.Span(
-                                children=(italia.df.deceduti.diff().min()),
+                                children=(italia.df.new_deaths.diff().min()),
                                 className="mr-3"
                             )
                         ],
@@ -140,7 +140,7 @@ analisiCovid = dbc.Container([
                         className="p-3 bg-primary text-white"),
                         dbc.Col([
                             html.Span(
-                                children=(italia.df.deceduti.diff().max()),
+                                children=(italia.df.new_deaths.diff().max()),
                                 className="mr-3"
                             )
                         ],
@@ -160,7 +160,7 @@ analisiCovid = dbc.Container([
             dcc.Graph(
                 className='grafico',
                 id='bar_plot',
-                figure=italia.figTot,
+                figure=italia.fig,
                 responsive=True,
                 config={
                     'responsive': True,
@@ -181,5 +181,25 @@ def make_layout():
         dbc.Container(navbar,
             fluid=True,
             className="p-0 bg-primary"),
-        analisiCovid
+        analisiCovid,
+        html.Div(id='footer', className='out-container', children=[
+            html.Div(className='container', children=[
+                html.Div(className='credits', children=[
+                    html.P(children='Lavoro di gruppo'),
+                    html.P(children='Corso di Programmazione e Laboratorio di Programmazione'),
+                    html.P(children='Bioinformatica - Tor Vergata'),
+                    html.P(children='Docente: Daniele Pasquini'),
+                ]),
+                html.Ul(className='creditsR', children=[
+                    html.P(children='Studenti:'),
+                    html.Li(children='Manfredo Aristide Fraccola'),
+                    html.Li(children='Sara Giordani'),
+                    html.Li(children='Andrea Misiti'),
+                    html.Li(children='Angela Sangiorgio'),
+                    html.Li(children='Stefano Spinelli'),
+                    html.Li(children='Gaia Tomei'),
+                    html.Li(children='Alessandro Pucci'),
+                ]),
+            ])
+        ]),
     ])
