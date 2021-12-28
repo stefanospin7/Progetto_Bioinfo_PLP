@@ -1,7 +1,7 @@
 from appCovidData.app import app
 from appCovidData.page_layouts.layout2 import make_layout as pag1
 from appCovidData.page_layouts.layout3 import make_layout as pag2
-
+from appCovidData import callbacks
 from dash import html, Input, Output, dcc  # funzioni di layout html interattivo
 
 server = app.server
