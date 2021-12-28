@@ -2,6 +2,8 @@ from dash import dcc  # layout html
 from dash import html  #funzioni di layout html interattivo
 import dash_bootstrap_components as dbc
 from appCovidData.classeAnalisi import Analisi
+from appCovidData.assets.header import navbar
+from appCovidData.assets.footer import footer
 
 italia = Analisi("Italy")
 
@@ -13,61 +15,7 @@ LAYOUT HTML
 """
 
 
-navbar = dbc.Navbar(
-            dbc.Container(
-                dbc.Row(
-                    [
-                        dbc.Col(
-                            html.A(
-                                # Use row and col to control vertical alignment of logo / brand
-                                dbc.Row(
-                                    [
-                                        dbc.Col(dbc.NavbarBrand(
-                                            html.H1(children="COVID-19 Dashboard"),
-                                            className="ms-2")),
-                                    ],
-                                    align="center",
-                                    className="g-0",
-                                ),
-                                href="#",
-                                style={"textDecoration": "none"},
-                            )
-                        ),
-                        dbc.Col([
-                            dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
-                            dbc.Collapse(
-                                dbc.Nav(
-                                    [
-                                        dcc.Link(dbc.NavItem(
-                                                dbc.NavLink('Go to Page 1', active=True),
-                                                ),
-                                                href='/page-1',
-                                                 ),
-                                        dcc.Link(dbc.NavItem(
-                                                dbc.NavLink('Go to Page 2'),
-                                                ),
-                                                href='/page-2',
-                                                 )
-                                    ]
-                                )
-                                ,
-                                id="navbar-collapse",
-                                is_open=False,
-                                navbar=True,
-                                className="justify-content-end",
-                            )
-                        ]),
-                    ],
-                    align="center",
-                    className="g-0 w-100",
-                ),
-                fluid=False,
-            ),
-    #color="white",
-    dark=True,
-    className="bg-transparent"
-)
-
+#ANALISI COVID
 analisiCovid = dbc.Container([
     dbc.Row(
         html.H2(children='Italia'),
@@ -176,30 +124,11 @@ analisiCovid = dbc.Container([
     className="mt-5"
     )
 
+
+
 def make_layout():
     return html.Div(id='parent', children=[
-        dbc.Container(navbar,
-            fluid=True,
-            className="p-0 bg-primary"),
+        navbar,
         analisiCovid,
-        html.Div(id='footer', className='out-container', children=[
-            html.Div(className='container', children=[
-                html.Div(className='credits', children=[
-                    html.P(children='Lavoro di gruppo'),
-                    html.P(children='Corso di Programmazione e Laboratorio di Programmazione'),
-                    html.P(children='Bioinformatica - Tor Vergata'),
-                    html.P(children='Docente: Daniele Pasquini'),
-                ]),
-                html.Ul(className='creditsR', children=[
-                    html.P(children='Studenti:'),
-                    html.Li(children='Manfredo Aristide Fraccola'),
-                    html.Li(children='Sara Giordani'),
-                    html.Li(children='Andrea Misiti'),
-                    html.Li(children='Angela Sangiorgio'),
-                    html.Li(children='Stefano Spinelli'),
-                    html.Li(children='Gaia Tomei'),
-                    html.Li(children='Alessandro Pucci'),
-                ]),
-            ])
-        ]),
+        footer
     ])
