@@ -101,7 +101,7 @@ analisiCovid = dbc.Container([
             dcc.Graph(
                 className='grafico',
                 id='bar_plot',
-                figure=italia.figTot,
+                figure=cina.figTot,
                 responsive=True,
                 config={
                     'responsive': True,
