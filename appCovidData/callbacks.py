@@ -34,10 +34,12 @@ def update_figMondo(input_dato, start_date, end_date):
                              color=input_dato,
                              #  hover_name="location",
                              title = "input_dato",
-                             # color_continuous_scale=px.colors.sequential.PuRd
+                             color_continuous_scale=px.colors.sequential.Reds,
                              animation_frame="date",
+
+
                              )
-    figMondo.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 500
+    figMondo.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 300
     figMondo.update_layout(
         margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
         showlegend=True
