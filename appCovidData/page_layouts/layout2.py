@@ -1,3 +1,5 @@
+import pandas as pd
+from datetime import date
 from dash import dcc  # layout html
 from dash import html  #funzioni di layout html interattivo
 import dash_bootstrap_components as dbc
@@ -6,8 +8,15 @@ from appCovidData.assets.header import navbar
 from appCovidData.assets.footer import footer
 
 italia = Analisi("Italy")
-
 cina = Analisi("China")
+
+
+def coutries_list():
+    df = pd.read_csv("data/owid-dataset.csv")
+    # df = df[df["location"] == "World"]
+    keep = ["location"]
+    df = df[keep]
+    return df['location'].unique()
 
 
 """
@@ -18,17 +27,62 @@ LAYOUT HTML
 #ANALISI COVID
 analisiCovid = dbc.Container([
     dbc.Row(
-        html.H2(children='Italia'),
-        className="mb-3 text-center"
+        [
+            dbc.Col([
+                html.H2(children='Italia'),
+                ],
+                width="auto"
+            ),
+            dbc.Col([
+                dcc.Dropdown(
+                    id='yaxis-column',
+                    options=[{'label': i, 'value': i} for i in coutries_list()],
+                    value='italy',
+                    className="mb-3"
+                ),
+            ],
+            width=3),
+            dbc.Col([
+                dcc.DatePickerRange(
+                    id='my-date-picker-range',
+                    min_date_allowed=date(1995, 8, 5),
+                    max_date_allowed=date(2017, 9, 19),
+                    initial_visible_month=date(2017, 8, 5),
+                    end_date=date(2017, 8, 25)
+                ),
+            ],
+            width=3)
+        ],
+        align="center",
+        className="mb-3"
         ),
     dbc.Row([
         dbc.Col([
-            dcc.Dropdown(
-                id='yaxis-column',
+            dbc.Checklist(
                 options=[{'label': i, 'value': i} for i in italia.df.columns],
-                value='new_deaths',
-                className="mb-3"
+                value=[1],
+                id="dato-input",
+                switch=True,
+            )
+            ],
+            width="3"
+             ),
+        dbc.Col(
+            dcc.Graph(
+                className='grafico',
+                id='bar_plot',
+                figure=italia.figTot,
+                responsive=True,
+                config={
+                    'responsive': True,
+                    'autosizable': True
+                },
+                style={
+                    'height': 300
+                },
+            )
             ),
+        dbc.Col([
             html.Ul(children=([
                 html.Li(children=([
                     dbc.Row([
@@ -100,29 +154,12 @@ analisiCovid = dbc.Container([
                 ]),
                 className="list-group-item p-0"),
             ]),
-            className="list-group bg-light p-3"),
-            ],
-            width="3"
-             ),
-        dbc.Col(
-            dcc.Graph(
-                className='grafico',
-                id='bar_plot',
-                figure=italia.figTot,
-                responsive=True,
-                config={
-                    'responsive': True,
-                    'autosizable': True
-                },
-                style={
-                    'height': 300
-                },
-            )
-            )
+            className="list-group bg-light p-3")
         ])
-    ],
-    className="mt-5"
-    )
+    ])
+],
+className="mt-5"
+)
 
 
 
