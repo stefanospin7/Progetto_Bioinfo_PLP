@@ -4,6 +4,7 @@ from dash import html, Input, Output, callback_context
 
 app = dash.Dash(__name__,
                 title="PLP Project 1 - Bioinformatica Tor Vergata",
+                suppress_callback_exceptions=True,
                 meta_tags=[
                     # A description of the app, used by e.g.
                     # search engines when displaying search results.

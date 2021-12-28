@@ -17,23 +17,27 @@ def toggle_navbar_collapse(n, is_open):
 @app.callback(
     Output("fig-mondo", "figure"),
     Input("dato-input", "value"),
+    Input('my-date-picker-range', 'start_date'),
+    Input('my-date-picker-range', 'end_date')
 )
-def update_figMondo(input_dato):
+def update_figMondo(input_dato, start_date, end_date):
     df = pd.read_csv("data/owid-dataset.csv",
-                     index_col="date",
                      parse_dates=["date"]
                      )
     df = df[df.location != 'World']
-    df = df.groupby(['iso_code']).max()
+    periodo = (df['date'] > start_date) & (df['date'] <= end_date)
+    df = df.loc[periodo]
 
-    df = df.reset_index()
+    df['date'] = df['date'].astype(str)
+
     figMondo = px.choropleth(df, locations="iso_code",
                              color=input_dato,
                              #  hover_name="location",
-                             #  animation_frame="date",
-                             #  title = "total_vaccinations_per_hundred",
+                             title = "input_dato",
                              # color_continuous_scale=px.colors.sequential.PuRd
+                             animation_frame="date",
                              )
+    figMondo.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 500
     figMondo.update_layout(
         margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
         showlegend=True
