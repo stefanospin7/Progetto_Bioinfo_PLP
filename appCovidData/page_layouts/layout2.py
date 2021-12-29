@@ -41,23 +41,27 @@ analisiCovid = dbc.Container([
                 id="dato-input",
             )
             ],
-            width="3"
+            width=3
              ),
         dbc.Col(
-            dcc.Graph(
-                id='fig-mondo',
-                #figure=italia.figTot,
-                responsive=True,
-                config={
-                    'responsive': True,
-                    'autosizable': True
-                },
-                style={
-                    'height': 540
-                },
-            )
+            dcc.Loading(id="ls-loading-1", children=[
+                dcc.Graph(
+                    id='fig-mondo',
+                    #figure=italia.figTot,
+                    responsive=True,
+                    config={
+                        'responsive': True,
+                        'autosizable': True
+                    },
+                    style={
+                        'height': 500
+                    },
+                )],
+            type="default"),
+        width=9
         )
-    ]),
+    ],
+    className=""),
     dbc.Row(
         [
             dbc.Col([
@@ -89,7 +93,7 @@ analisiCovid = dbc.Container([
                             className="justify-content-center align-items-center d-flex",
                             )
                         ],
-                        className="w-100 row m-0"),
+                        className="w-100 m-0"),
                     ]),
                     className="list-group-item p-0 mb-3"),
                     html.Li(children=([

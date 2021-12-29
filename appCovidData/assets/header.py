@@ -32,7 +32,8 @@ navbar = dbc.Container(dbc.Navbar(
                                 max_date_allowed=oggi,
                                 initial_visible_month=date(2020, 3, 1),
                                 start_date=date(2020, 3, 1),
-                                end_date=oggi
+                                end_date=oggi,
+                                display_format='D/M/Y',
                                 ),
                         ],
                         width=3,
