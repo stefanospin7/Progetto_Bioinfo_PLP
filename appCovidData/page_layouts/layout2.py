@@ -36,10 +36,12 @@ analisiCovid = dbc.Container([
     dbc.Row([
         dbc.Col([
             dbc.RadioItems(
-                options=[{'label': i, 'value': i} for i in italia.df.columns],
+                #options=[{'label': i, 'value': i} for i in italia.df.columns],
+                options=[{'label': 'Casi totali', 'value': 'total_cases'}, {'label': 'Nuove morti', 'value': 'new_deaths'}],
                 value="total_cases",
                 id="dato-input",
-            )
+                switch=True,
+            ),
             ],
             width=3
              ),

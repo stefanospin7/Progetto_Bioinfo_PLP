@@ -1,8 +1,10 @@
 from dash import dcc  # layout html
 from dash import html  #funzioni di layout html interattivo
 import dash_bootstrap_components as dbc
+import datetime
 from datetime import date
-oggi = date.today()
+oggi = date.today() - datetime.timedelta(days=1)
+ieri = oggi - datetime.timedelta(days=2)
 #NAVBAR
 
 navbar = dbc.Container(dbc.Navbar(
@@ -30,8 +32,8 @@ navbar = dbc.Container(dbc.Navbar(
                                 id='my-date-picker-range',
                                 min_date_allowed=date(2020, 3, 1),
                                 max_date_allowed=oggi,
-                                initial_visible_month=date(2020, 3, 1),
-                                start_date=date(2020, 3, 1),
+                                initial_visible_month=date(2021, 12, 1),
+                                start_date=ieri,
                                 end_date=oggi,
                                 display_format='D/M/Y',
                                 ),

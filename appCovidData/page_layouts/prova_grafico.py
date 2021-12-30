@@ -95,8 +95,8 @@ df = process_pandemic_data(df)
 
 # Selecting the day to display
 day = '2020-03-08'
-tmp = df[df["date"] == day]
-print(tmp.head(10))
+#tmp = df[df["date"] == day]
+#print(tmp.head(10))
 #tmp = df.xs(day)
 
 
