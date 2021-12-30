@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 import matplotlib.dates as mdates
 import numpy as np
-
+from datetime import date as dt
 data = pd.read_csv('owid-dataset.csv')
 data = data[data["location"] == "World"]
 print (data.columns)
@@ -102,16 +102,14 @@ from sklearn.metrics import max_error
 import math
 y_pred = linear_regr.predict(X)
 error = max_error(y, y_pred)
+future_days = 100
+X_test = pd.date_range(datetime.today(), periods=future_days).tolist()
 
-X_test = []
-future_days = 30
-location = [x for x in df['iso_code'].unique().tolist()
-            if type(x) == str]
-for i in range(0, len(location)):
-
-for i in range(starting_date, starting_date + future_days):
-    X_test.append([i])
+#for i in range(starting_date, starting_date + future_days):
+ #   X_test.append([i])
 y_pred_linear = linear_regr.predict(X_test)
+
+
 
 y_pred_max = []
 y_pred_min = []
