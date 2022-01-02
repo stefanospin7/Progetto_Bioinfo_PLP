@@ -1,4 +1,4 @@
-name: dataScraper
+name: machine learning Prophet
 
 on:
   #schedule:
