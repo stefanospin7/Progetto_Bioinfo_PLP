@@ -15,7 +15,7 @@ mlData = ["total_cases", "new_cases", "new_deaths", "new_vaccinations", "people_
 
 
 
-df = pd.read_csv("owid-dataset.csv")
+df = pd.read_csv("data/owid-dataset.csv")
 df = df.fillna(0)
 
 
