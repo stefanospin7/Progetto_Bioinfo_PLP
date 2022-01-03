@@ -35,6 +35,7 @@ datiCol = ["total_cases", "new_cases", "new_deaths", "new_vaccinations", "people
 #NAVBAR
 
 navbar = dbc.Container([
+    html.Hr(style={'height': "4px", "width": "10%"}, className="mx-auto text-primary"),
     html.H2(children="World COVID-19 dataset", className="fs-4 text-center text-white mb-4"),
     dbc.Navbar(
             dbc.Container([
@@ -153,6 +154,7 @@ className="m-0 p-0"
 )
 
 analisiCovid = dbc.Container([
+    html.Hr(style={'height': "4px", "width": "10%"}, className="mx-auto text-primary"),
     html.H2(children="Confronta 2 nazioni", className="fs-4 text-center mb-4"),
     dbc.Container([
         dbc.Row(
