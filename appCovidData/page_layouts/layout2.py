@@ -34,11 +34,14 @@ datiCol = ["total_cases", "new_cases", "new_deaths", "new_vaccinations", "people
 
 #NAVBAR
 
-navbar = dbc.Container(dbc.Navbar(
-            dbc.Container(
+navbar = dbc.Container([
+    html.H2(children="World COVID-19 dataset", className="fs-4 text-center text-white mb-4"),
+    dbc.Navbar(
+            dbc.Container([
                 dbc.Row(
                     [
                         dbc.Col([
+                            html.H3(children="1. Scegli il dato da visualizzare:", className="fs-5 bg-primary p-1"),
                             dbc.RadioItems(
                                 #options=[{'label': i, 'value': i} for i in italia.df.columns],
                                 options=[{'label': i, 'value': i} for i in datiCol],
@@ -50,9 +53,10 @@ navbar = dbc.Container(dbc.Navbar(
                             ),
                             ],
                             width=12,
-                            lg=4
+                            lg=6
                              ),
                         dbc.Col([
+                            html.H3(children="2. Scegli il range di date:", className="fs-5 bg-primary p-1"),
                             dcc.DatePickerRange(
                                 id='my-date-picker-range',
                                 min_date_allowed=date(2020, 3, 1),
@@ -62,6 +66,8 @@ navbar = dbc.Container(dbc.Navbar(
                                 end_date=oggi,
                                 display_format='D/M/Y',
                                 ),
+
+                            html.H3(children="3. Seleziona per fare una previsione:", className="fs-5 mt-3 bg-primary p-1"),
                             dbc.Switch(
                                 id="futuro-input",
                                 label="Fai una previsione",
@@ -73,11 +79,13 @@ navbar = dbc.Container(dbc.Navbar(
                                 max_date_allowed=futuroMax,
                                 initial_visible_month=futuro,
                                 date=futuro,
-                                ),
+                            ),
+
                         ],
                         width=12,
-                        lg=4,
+                        lg=6,
                         className=""),
+
                         # dbc.Col([
                         #     dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
                         #     dbc.Collapse(
@@ -103,17 +111,17 @@ navbar = dbc.Container(dbc.Navbar(
                         #     )
                         # ]),
                     ],
-                    align="center",
-                    className="g-0 w-100",
-                ),
+                    align="",
+                    className="w-100 text-white",
+                )],
                 fluid=False,
             ),
         #color="white",
         dark=True,
         className="bg-transparent"
-        ),
+        )],
         fluid=True,
-        className="p-0 bg-dark")
+        className="p-0 py-5 bg-dark")
 
 
 #ANALISI COVID
@@ -143,10 +151,13 @@ fluid=True,
 className="m-0 p-0"
 )
 
-analisiCovid = dbc.Container([dbc.Container([
-dbc.Row(
+analisiCovid = dbc.Container([
+    html.H2(children="Confronta 2 nazioni", className="fs-4 text-center mb-4"),
+    dbc.Container([
+        dbc.Row(
         [
         dbc.Col([
+            html.H4(children="5. Scegli la nazione 1:", className="fs-5 mt-3 bg-primary p-1 bg-primary p-1 text-white"),
             dcc.Dropdown(
                 id='input-nazione-1',
                 options=[{'label': i, 'value': i} for i in coutries_list()],
@@ -173,16 +184,18 @@ dbc.Row(
                         'autosizable': True
                     },
                     style={
-
+                        'height': '330px'
                     },
                 )],
             type="default")
             ],
             width=12,
             lg=4,
-            #className="order-1 order-lg-2"
+            align="bottom",
+            className="mt-5"
             ),
         dbc.Col([
+            html.H4(children="6. Scegli la nazione 2:", className="fs-5 mt-3 bg-primary p-1 text-white"),
             dcc.Dropdown(
                 id='input-nazione-2',
                 options=[{'label': i, 'value': i} for i in coutries_list()],
