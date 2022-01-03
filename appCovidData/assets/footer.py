@@ -29,5 +29,5 @@ footer = dbc.Container(
                 ]),
             ),
         fluid=True,
-        className="text-white bg-dark pt-3 mt-5"
+        className="text-white bg-dark pt-3"
         )

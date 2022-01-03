@@ -10,10 +10,9 @@ keep = ["location", "date", "total_cases", "new_cases", "icu_patients", "new_dea
 df = df[keep]
 
 def process_pandemic_data(df):
-
-
-    location = [x for x in df['iso_code'].unique().tolist()
+    location = [x for x in df['location'].unique().tolist()
                 if type(x) == str]
+    #print(location)
     latitude = []
     longitude = []
     for i in range(0, len(location)):
@@ -22,6 +21,9 @@ def process_pandemic_data(df):
             address = location[i]
             geolocator = Nominatim(user_agent="ny_explorer")
             loc = geolocator.geocode(address)
+            #print(address)
+            #print(loc.latitude)
+            #print(loc.longitude)
             latitude.append(loc.latitude)
             longitude.append(loc.longitude)
             #print('The geographical coordinate of location are {}, {}.'.format(loc.latitude, loc.longitude))
@@ -31,11 +33,11 @@ def process_pandemic_data(df):
             latitude.append(np.nan)
             longitude.append(np.nan)
     # create a dataframe with the locatio, latitude and longitude
-    df_ = pd.DataFrame({'iso_code': location,
+    df_ = pd.DataFrame({'location': location,
                         'latitude': latitude,
                         'longitude': longitude})
     # merge on Restaurant_Location with rest_df to get the column
-    new_df = df.merge(df_, on='iso_code', how='left')
+    new_df = df.merge(df_, on='location', how='left')
 
     print(new_df.head(10))
 
