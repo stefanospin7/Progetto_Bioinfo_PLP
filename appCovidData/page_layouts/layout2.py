@@ -142,10 +142,11 @@ mondo = dbc.Container([
                     },
                 )],
             type="default"),
-        width=12
+        width=12,
+        className="m-0 p-0"
         )
     ],
-    className=""),
+    className="w-100 m-0 p-0"),
 ],
 fluid=True,
 className="m-0 p-0"
