@@ -194,6 +194,14 @@ def update_figMondo(input_dato, start_date, end_date, futuro_input, future_date)
     time.sleep(1)
     return fig
 
+# update country1 Title
+@app.callback(
+    Output("titolo-dato", "children"),
+    Input("dato-input", "value"),
+)
+def updateNazioneTit(dato):
+    return dato
+
 # update country 1 on input
 @app.callback(
     Output("dati-nazione-1", "children"),

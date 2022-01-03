@@ -177,6 +177,7 @@ analisiCovid = dbc.Container([
             #className="order-2 order-lg-1"
             ),
         dbc.Col([
+            html.H2(id="titolo-dato", className="text-center"),
             dcc.Loading(id="ls-loading-2", children=[
                 dcc.Graph(
                     id='fig-confronto',
@@ -195,7 +196,7 @@ analisiCovid = dbc.Container([
             width=12,
             lg=4,
             align="bottom",
-            className="mt-5"
+            className=""
             ),
         dbc.Col([
             html.H4(children="6. Scegli la nazione 2:", className="fs-5 mt-3 bg-primary p-1 text-white"),
