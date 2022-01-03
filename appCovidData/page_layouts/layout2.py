@@ -130,7 +130,7 @@ mondo = dbc.Container([
                         'autosizable': True
                     },
                     style={
-
+                        "height": 500
                     },
                 )],
             type="default"),
