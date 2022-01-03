@@ -49,7 +49,8 @@ navbar = dbc.Container(dbc.Navbar(
                                 className="text-white"
                             ),
                             ],
-                            width=3
+                            width=12,
+                            lg=4
                              ),
                         dbc.Col([
                             dcc.DatePickerRange(
@@ -74,7 +75,8 @@ navbar = dbc.Container(dbc.Navbar(
                                 date=futuro,
                                 ),
                         ],
-                        width=3,
+                        width=12,
+                        lg=4,
                         className=""),
                         # dbc.Col([
                         #     dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
@@ -128,7 +130,7 @@ mondo = dbc.Container([
                         'autosizable': True
                     },
                     style={
-                        'height': 500
+
                     },
                 )],
             type="default"),
@@ -156,7 +158,9 @@ dbc.Row(
                 className="list-group bg-light p-3",
                 id ="dati-nazione-1")
             ],
-            width=4
+            width=12,
+            lg=4,
+            #className="order-2 order-lg-1"
             ),
         dbc.Col([
             dcc.Loading(id="ls-loading-2", children=[
@@ -174,7 +178,9 @@ dbc.Row(
                 )],
             type="default")
             ],
-            width=4
+            width=12,
+            lg=4,
+            #className="order-1 order-lg-2"
             ),
         dbc.Col([
             dcc.Dropdown(
@@ -188,7 +194,9 @@ dbc.Row(
                 className="list-group bg-light p-3",
                 id ="dati-nazione-2")
             ],
-            width=4
+            width=12,
+            lg=4,
+            #className="order-3 order-lg-3"
             ),
         ],
         #align="center",

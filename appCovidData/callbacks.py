@@ -35,12 +35,12 @@ def update_figMondo(input_dato, start_date, end_date, futuro_input, future_date)
                      parse_dates=["date"]
                      )
     # Filter and clean df
-    locationDel = ['World','Asia', 'Africa', 'Oceania', 'Europe', 'High income', 'Upper middle income', 'Lower middle income', 'North America', 'South America', 'European Union']
+    locationDel = ['World','Asia', 'Africa', 'Oceania', 'Europe', 'High income', 'Low income','Upper middle income', 'Lower middle income', 'North America', 'South America', 'European Union']
     df = df[~df.location.isin(locationDel)]
     print(df.location.unique())
 
     #df = df[df.location != 'World']
-
+    periodo = (df['date'] > start_date) & (df['date'] <= end_date)
     if (futuro_input == False):
         periodo = (df['date'] > start_date) & (df['date'] <= end_date)
     else:
