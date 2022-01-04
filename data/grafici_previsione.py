@@ -1,88 +1,37 @@
+
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 import matplotlib.dates as mdates
 import numpy as np
+import plotly.graph_objects as go
+
 from datetime import date as dt
 data = pd.read_csv('owid-dataset.csv')
 data = data[data["location"] == "World"]
-print (data.columns)
+print(data.columns)
 data = data.fillna(0).replace(np.inf, 0)
 
 
-data['new_deaths'] = data['new_deaths']
+
+
 #data['diff_tamponi'] = data['tamponi'].diff()
 dates = data['date']
 date_format = [pd.to_datetime(d) for d in dates]
 
 
-variable = 'new_cases'
-fig, ax = plt.subplots(figsize=(12, 5))
-ax.grid()
-ax.scatter(date_format,data[variable])
-ax.set(xlabel='date',ylabel=variable,title=variable)
-date_form = DateFormatter('%d-%m')
-ax.xaxis.set_major_formatter(date_form)
-ax.xaxis.set_major_locator(mdates.DayLocator(interval = 3))
-fig.savefig(variable + '.png')
-plt.show()
 
-rolling_average_days = 7
-data['new_cases_moving'] = data['new_cases'].rolling(window=rolling_average_days).mean()
-variable = 'new_cases_moving'
-fig, ax = plt.subplots(figsize=(12, 5))
-ax.grid()
-ax.scatter(date_format,data[variable])
-ax.set(xlabel='date',ylabel=variable,title=variable)
-date_form = DateFormatter('%d-%m')
-ax.xaxis.set_major_formatter(date_form)
-ax.xaxis.set_major_locator(mdates.DayLocator(interval = 3))
-fig.savefig(variable + '.png')
-plt.show()
-
-
-
-variable = 'icu_patients'
-fig, ax = plt.subplots(figsize=(12, 5))
-ax.grid()
-ax.scatter(date_format,data[variable])
-ax.set(xlabel='date',ylabel=variable,title=variable)
-date_form = DateFormatter('%d-%m')
-ax.xaxis.set_major_formatter(date_form)
-ax.xaxis.set_major_locator(mdates.DayLocator(interval = 3))
-fig.savefig(variable + '.png')
-plt.show()
-variable = 'new_deaths'
-fig, ax = plt.subplots(figsize=(12, 5))
-ax.grid()
-ax.scatter(date_format,data[variable])
-ax.set(xlabel='date',ylabel=variable,title=variable)
-date_form = DateFormatter('%d-%m')
-ax.xaxis.set_major_formatter(date_form)
-ax.xaxis.set_major_locator(mdates.DayLocator(interval = 3))
-fig.savefig(variable + '.png')
-plt.show()
-
-data['gravi_deceduti'] = data['new_deaths'] + data['icu_patients']
-variable = 'gravi_deceduti'
-fig, ax = plt.subplots(figsize=(12, 5))
-ax.grid()
-ax.scatter(date_format,data[variable])
-ax.set(xlabel="date",ylabel=variable,title=variable)
-date_form = DateFormatter("%d-%m")
-ax.xaxis.set_major_formatter(date_form)
-ax.xaxis.set_major_locator(mdates.DayLocator(interval = 3))
-ax.axvline(datetime(2020, 4, 1), c="green", zorder=0)
-fig.savefig(variable + '.png')
-plt.show()
 
 
 import numpy as np
 from sklearn import linear_model
 # prepare the lists for the model
 X = date_format
-y = data['gravi_deceduti'].tolist()[1:]
+y = data['new_cases'].tolist()[1:]
+
+
+
 # date format is not suitable for modeling, let's transform the date into incrementals number starting from April 1st
 starting_date = 37  # April 1st is the 37th day of the series
 day_numbers = []
@@ -94,6 +43,9 @@ X = X[starting_date:]
 y = y[starting_date:]
 # Instantiate Linear Regression
 linear_regr = linear_model.LinearRegression()
+
+
+
 # Train the model using the training sets
 linear_regr.fit(X, y)
 print ("Linear Regression Model Score: %s" % (linear_regr.score(X, y)))
@@ -101,11 +53,13 @@ print ("Linear Regression Model Score: %s" % (linear_regr.score(X, y)))
 from sklearn.metrics import max_error
 import math
 y_pred = linear_regr.predict(X)
+print(y_pred)
 error = max_error(y, y_pred)
 X_test = []
-future_days = 55
+future_days = 1500
 for i in range(starting_date, starting_date + future_days):
     X_test.append([i])
+print(X_test)
 y_pred_linear = linear_regr.predict(X_test)
 
 #for i in range(starting_date, starting_date + future_days):
@@ -120,9 +74,71 @@ for i in range(0, len(y_pred_linear)):
     y_pred_max.append(y_pred_linear[i] + error)
     y_pred_min.append(y_pred_linear[i] - error)
 
+
+
+print(y_pred_max)
+print(y_pred_min)
+print(y_pred_linear)
+print(X_test)
+
+
+new_df = pd.DataFrame(list(zip(X_test,y_pred_max,y_pred_min,y_pred_linear)),
+               columns =['indice', 'massimo',"minimo","predictions"])
+
+
+
+nuovo_indice = []
+date_indicizzate = []
+
+#date_time_str = data["date"].iloc[-1]
+date_time_str = "2020-04-01"
+
+date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d') + timedelta(days=1)
+
+#print(date_time_obj)
+
+
+for i in range(0, len(new_df.indice)):
+    nuovo_indice.append(new_df.indice[i][0])
+    date_indicizzate.append(date_time_obj+ timedelta(days=i)
+
+)
+
+new_df["indice"]=date_indicizzate
+
+
+print(new_df.tail())
+print(new_df.dtypes)
+
+
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=new_df.indice, y=new_df["predictions"], name="prediction", connectgaps=True))
+fig.add_trace(go.Scatter(x=data["date"], y=data["new_cases"], name="original", connectgaps=True))
+#fig.update_yaxes(type="log")
+fig.update_layout(
+    legend=dict(
+        yanchor="top",
+        y=0.97,
+        xanchor="left",
+        x=0.01),
+    margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
+    showlegend=True
+)
+#fig.update_xaxes(range=[start_date, end_date])
+
+
+fig.show()
+
+
+
+#print(new_df.indice[0])
+
+
+"""
+
 # convert date of the epidemic peak into datetime format
 from datetime import datetime, timedelta
-date_zero = data['date'][starting_date]
+date_zero = datetime.strptime(data['date'][starting_date], '%Y-%m-%dT%H:%M:%S')
 #date_zero = datetime.strptime(data['date'][starting_date], '%Y-%m-%d')
 # creating x_ticks for making the plot more appealing
 date_prev = []
@@ -149,7 +165,7 @@ plt.plot(X_test, y_pred_min, color='red', linewidth=1, linestyle='dashed')
 plt.xlabel('Days')
 plt.xlim(starting_date, starting_date + future_days)
 plt.xticks(x_ticks, date_prev)
-plt.ylabel('gravi_deceduti')
+plt.ylabel('new_cases')
 plt.yscale("log")
 plt.savefig("prediction.png")
 plt.show()
@@ -159,3 +175,4 @@ zone1_df = data[data.denominazione_regione.isin(['Piemonte','Emilia-Romagna','Ve
 zone1_df['deceduti'].sum()
 print("Zone 1 accounts for %s percent of the total deaths" % (round(zone1_df['deceduti'].sum() / data['deceduti'].sum() * 100,2)))
 
+"""
