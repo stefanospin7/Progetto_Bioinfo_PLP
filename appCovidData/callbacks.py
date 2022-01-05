@@ -11,6 +11,7 @@ import numpy as np
 from datetime import datetime, timedelta, date
 from sklearn import linear_model
 from sklearn.metrics import max_error
+import prophet as Prophet
 
 datiCol = ["total_cases", "new_cases", "new_deaths", "new_vaccinations", "people_vaccinated", "people_fully_vaccinated", "total_boosters"]
 dictDati =	{
@@ -486,7 +487,7 @@ def updateFigML(dato_input, nazione):
     y = data[dato_input].tolist()[1:]
 
     # date format is not suitable for modeling, let's transform the date into incrementals number starting from April 1st
-    starting_date = 37  # April 1st is the 37th day of the series
+    starting_date = 1  # April 1st is the 37th day of the series
     day_numbers = []
     for i in range(1, len(X)):
         day_numbers.append([i])
@@ -552,8 +553,27 @@ def updateFigML(dato_input, nazione):
     print(new_df.tail())
     print(new_df.dtypes)
 
+
+    tmp = data
+    keep = ["date", dato_input]
+    tmp = tmp[keep]
+    print(tmp.head(10))
+
+    tmp.columns = ['ds', 'y']
+    tmp['ds'] = pd.to_datetime(tmp['ds']).dt.date
+    # print(dfML.tail())
+    m = Prophet.Prophet(weekly_seasonality=True)
+    m.fit(tmp)
+    future = m.make_future_dataframe(periods=365)
+    forecast = m.predict(future)
+
+    print(forecast.tail(10))
+
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=new_df.indice, y=new_df["predictions"], name=dictDati[dato_input]+" Machine Learning"+" - "+nazione, connectgaps=True))
+    fig.add_trace(go.Scatter(x=new_df.indice, y=new_df["predictions"], name=dictDati[dato_input]+" Machine Learning SciKit Learn"+" - "+nazione, connectgaps=True))
+    fig.add_trace(go.Scatter(x=forecast["ds"], y=forecast["yhat"],
+                             name=dictDati[dato_input] + " Machine Learning Prophet" + " - " + nazione,
+                             connectgaps=True))
     fig.add_trace(go.Scatter(x=data["date"], y=data[dato_input], name=dictDati[dato_input]+" - "+nazione, connectgaps=True))
     # fig.update_yaxes(type="log")
     fig.update_layout(
