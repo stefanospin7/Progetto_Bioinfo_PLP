@@ -1,122 +1,84 @@
+import pandas as pd
+from datetime import date
 from dash import dcc  # layout html
 from dash import html  #funzioni di layout html interattivo
 import dash_bootstrap_components as dbc
-
 from appCovidData.classeAnalisi import Analisi
+import datetime
+from datetime import date
+from appCovidData.assets.header import header
+from appCovidData.assets.footer import footer
+import numpy as np
+import plotly.graph_objects as go
+from datetime import datetime, timedelta, date
 
-italia = Analisi("Italy")
+datiCol = ["total_cases", "new_cases", "new_deaths", "new_vaccinations", "people_vaccinated", "people_fully_vaccinated", "total_boosters"]
 
-cina = Analisi("China")
+dictDati =	{
+    "total_cases": "Casi totali",
+    "new_cases": "Casi giornalieri",
+    "new_deaths": "Decessi giornalieri",
+    "new_vaccinations": "Vaccinazioni giornaliere",
+    "people_vaccinated": "Vaccinati totali",
+    "people_fully_vaccinated": "Vaccinati con terza dose totali",
+    "total_boosters": "Terze dosi totali",
+}
+
+def coutries_list():
+    df = pd.read_csv("data/owid-dataset.csv")
+    # df = df[df["location"] == "World"]
+    keep = ["location"]
+    df = df[keep]
+    return df['location'].unique()
+
+
 
 
 """
 LAYOUT HTML
 """
 
-search_bar = dbc.Row(
-    [
-        dbc.Col(dbc.Input(type="search", placeholder="Search")),
-        dbc.Col(
-            dbc.Button(
-                "Search", color="primary", className="ms-2", n_clicks=0
-            ),
-            width="auto",
-        ),
-    ],
-    className="g-0 ms-auto flex-nowrap mt-3 mt-md-0",
-    align="center",
-)
+machineLearning = dbc.Container([
+    html.H2(children="Test Machine Learning", className=""),
+    html.H3(children="1. Scegli il dato da visualizzare:", className="fs-5 bg-primary p-1"),
+    dbc.RadioItems(
+        # options=[{'label': i, 'value': i} for i in italia.df.columns],
+        options=[{'label': dictDati[i], 'value': i} for i in datiCol],
+        # options=[{'label': 'Casi totali', 'value': 'total_cases'}, {'label': 'Nuove morti', 'value': 'new_deaths'}],
+        value="total_cases",
+        id="dato-input-ML",
+        switch=True,
+        className=""
+    ),
+    html.H4(children="Scegli la nazione:", className=""),
+    dcc.Dropdown(
+        id='input-nazione-ML',
+        options=[{'label': i, 'value': i} for i in coutries_list()],
+        value='Italy',
+        className="mb-3"
+    ),
+    dcc.Graph(
+                        id='fig-ML',
+                        #figure= fig,
+                        responsive=True,
+                        config={
+                            'responsive': True,
+                            'autosizable': True
+                        },
+                        style={
+                          #  'height': '330px'
+                        },
+                    )
 
-navbar = dbc.Navbar(
-            dbc.Container(
-                dbc.Row(
-                    [
-                        dbc.Col(
-                            html.A(
-                                # Use row and col to control vertical alignment of logo / brand
-                                dbc.Row(
-                                    [
-                                        dbc.Col(dbc.NavbarBrand(
-                                            html.H1(children="COVID-19 Dashboard"),
-                                            className="ms-2")),
-                                    ],
-                                    align="center",
-                                    className="g-0",
-                                ),
-                                href="#",
-                                style={"textDecoration": "none"},
-                            )
-                        ),
-                        dbc.Col([
-                            dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
-                            dbc.Collapse(
-                                dbc.Nav(
-                                    [
-                                        dcc.Link(dbc.NavItem(
-                                            dbc.NavLink('Go to Page 1', className="text-decoration-none"),
-                                            className="text-decoration-none"
-                                        ),
-                                            href='/page-1',
-                                            className="text-decoration-none"
-                                        ),
-                                        dcc.Link(dbc.NavItem(
-                                            dbc.NavLink('Go to Page 2', active=True, style={"textDecoration": "none"}),
-                                        ),
-                                            href='/page-2',
-                                        )
-                                    ]
-                                )
-                                ,
-                                id="navbar-collapse",
-                                is_open=False,
-                                navbar=True,
-                                className="justify-content-end",
-                            )
-                        ]),
                     ],
-                    align="center",
-                    className="g-0 w-100",
-                ),
-                fluid=False,
-            ),
-    #color="white",
-    dark=True,
-    className="bg-transparent"
-)
-
-analisiCovid = dbc.Container([
-    dbc.Row(
-        html.H2(children='Cina'),
-        className="mb-3 text-center"
-        ),
-    dbc.Row([
-        dbc.Col([
-            html.P(children=('Media: ', round(italia.df.new_deaths.diff().mean(), 2))),
-            html.P(children=('Massimo: ', italia.df.new_deaths.diff().max())),
-            html.P(children=('Minimo: ', italia.df.new_deaths.diff().min())),
-            ],
-            width="auto"
-             ),
-        dbc.Col(
-            dcc.Graph(
-                className='grafico',
-                id='bar_plot',
-                figure=cina.figTot,
-                responsive=True,
-                config={
-                    'responsive': True,
-                    'autosizable': True
-                })
-            )
-        ])
-    ],
-    className="mt-5"
-    )
+                    className="",
+                    id="",
+                    fluid=True
+                                )
 
 def make_layout():
     return html.Div(id='parent', children=[
-        dbc.Container(navbar,
-            fluid=True,
-            className="p-0 bg-primary"),
-        analisiCovid
+        header,
+        machineLearning,
+        footer
     ])

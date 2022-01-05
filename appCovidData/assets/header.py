@@ -6,7 +6,7 @@ header = dbc.Container(dbc.Navbar(
             dbc.Container(
                 dbc.Row(
                     [
-                        dbc.Col(
+                        dbc.Col([
                             html.A(
                                 # Use row and col to control vertical alignment of logo / brand
                                 dbc.Row(
@@ -20,7 +20,8 @@ header = dbc.Container(dbc.Navbar(
                                 ),
                                 href="#",
                                 style={"textDecoration": "none"},
-                            )
+                                className=""
+                            )],
                         ),
                         dbc.Col(
                             html.A(
@@ -45,7 +46,7 @@ header = dbc.Container(dbc.Navbar(
                     align="center",
                     className="g-0 w-100",
                 ),
-                fluid=False,
+                fluid=True,
             ),
         #color="white",
         dark=True,
