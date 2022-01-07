@@ -22,6 +22,9 @@ header = dbc.Container(dbc.Navbar(
                                 style={"textDecoration": "none"},
                                 className=""
                             )],
+                            className="mb-3",
+                            width=12,
+                            sm=6
                         ),
                         dbc.Col(
                             html.A(
@@ -33,20 +36,23 @@ header = dbc.Container(dbc.Navbar(
                                             html.P(children="Git-Hub app repository", className="d-inline"),
                                             ],
                                             width="auto",
-                                            className="ms-auto"),
+                                            className="mx-auto mb-3"),
                                     ],
                                     align="center",
                                     className="g-0",
                                 ),
                                 href="https://github.com/stefanospin7/Progetto_Bioinfo_PLP",
                                 style={"textDecoration": "none"},
-                            )
+                            ),
+                            width=12,
+                            sm=6,
+                            className="text-center"
                         ),
                     ],
                     align="center",
                     className="g-0 w-100",
                 ),
-                fluid=True,
+                fluid=False,
             ),
         #color="white",
         dark=True,
