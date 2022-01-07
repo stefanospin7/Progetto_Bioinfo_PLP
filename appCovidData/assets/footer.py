@@ -8,26 +8,26 @@ footer = dbc.Container(
             dbc.Container(
                 dbc.Row([
                     dbc.Col([
-                        html.P(children='Lavoro di gruppo'),
-                        html.P(children='Corso di Programmazione e Laboratorio di Programmazione'),
+                        html.P(children='Lavoro di gruppo', className='m-0'),
+                        html.P(children='Corso di Programmazione e Laboratorio di Programmazione', className="fw-bold m-0"),
                         html.P(children='Bioinformatica - Tor Vergata'),
-                        html.P(children='Docente: Daniele Pasquini'),
+                        html.P(children=[html.Span(children='Docente: ', className="fw-bold"), html.Span(children='Daniele Pasquini')]),
                         ]
                     ),
                     dbc.Col([
-                        html.P(children='Studenti:'),
-                        html.Ul(className='creditsR', children=[
-                            html.Li(children='Manfredo Aristide Fraccola'),
-                            html.Li(children='Sara Giordani'),
-                            html.Li(children='Andrea Misiti'),
-                            html.Li(children='Angela Sangiorgio'),
-                            html.Li(children='Stefano Spinelli'),
-                            html.Li(children='Gaia Tomei'),
-                            html.Li(children='Alessandro Pucci')
+                        html.P(children='Studenti:', className="fw-bold"),
+                        html.Ul(className='list-unstyled', children=[
+                            html.Li(children=[html.P(children='Manfredo Aristide Fraccola', className='m-0'),]),
+                            html.Li(children=[html.P(children='Sara Giordani', className='m-0')]),
+                            html.Li(children=[html.P(children='Andrea Misiti', className='m-0')]),
+                            html.Li(children=[html.P(children='Angela Sangiorgio', className='m-0')]),
+                            html.Li(children=[html.P(children='Stefano Spinelli', className='m-0')]),
+                            html.Li(children=[html.P(children='Gaia Tomei', className='m-0')]),
+                            html.Li(children=[html.P(children='Alessandro Pucci', className='m-0')])
                         ])
                     ])
                 ]),
             ),
         fluid=True,
-        className="text-white bg-dark pt-3"
+        className="text-dark bg-light py-5"
         )
