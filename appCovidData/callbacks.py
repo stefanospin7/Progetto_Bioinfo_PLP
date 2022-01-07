@@ -12,6 +12,7 @@ from datetime import datetime, timedelta, date
 from sklearn import linear_model
 from sklearn.metrics import max_error
 import prophet as Prophet
+import json
 
 datiCol = ["icu_patients", "icu_patients_per_million", "new_cases", "new_cases_per_million", "new_deaths", "new_deaths_per_million", "new_tests", "new_tests_per_thousand", "new_vaccinations", "people_fully_vaccinated", "people_fully_vaccinated_per_hundred", "people_vaccinated", "people_vaccinated_per_hundred", "positive_rate", "total_boosters", "total_boosters_per_hundred", "total_cases", "total_cases_per_million", "total_deaths", "total_deaths_per_million", "total_tests", "total_tests_per_thousand", "total_vaccinations", "total_vaccinations_per_hundred"]
 dictDati = {
@@ -85,19 +86,44 @@ def update_figMondo(input_dato, start_date, end_date):
 
     # Columns renaming
     df.columns = [col.lower() for col in df.columns]
+    with open('data/custom.geo.json') as fp:
+        data = json.load(fp)
 
-    fig = px.choropleth(df, locations="iso_code",
-                             color=input_dato,
-                             hover_name="location",
-                             animation_frame="date",
+    # Round off the locations to 2 decimal places (about 1.1 km accuracy)
+    for i in range(0, len(data["features"])):
+        for j in range(0, len(data["features"][i]['geometry']['coordinates'])):
+            try:
+                data["features"][i]['geometry']['coordinates'][j] = np.round(
+                    np.array(data["features"][i]['geometry']['coordinates'][j]), 2)
+            except:
+                print(i, j)
 
-                             #  title = "total_vaccinations_per_hundred",
-                             color_continuous_scale=px.colors.sequential.Teal
+    px.set_mapbox_access_token(
+        "pk.eyJ1IjoibWFuZnJlZG9mcmFjY29sYSIsImEiOiJja3hyd2JjbnEwNnVjMnBvNTZrbHBqdmwzIn0.YFYLdLUxoYC3gSpkcGplqQ")
 
-                             )
+    fig = px.choropleth_mapbox(df, geojson=data, locations='iso_code', color=input_dato,
+                               featureidkey="properties.iso_a3",
+                               color_continuous_scale="Viridis",
+                               range_color=(df[input_dato].min(), df[input_dato].max()),
+                               # mapbox_style="carto-positron",
+                               zoom=1, center={"lat": 0, "lon": 0},
+                               opacity=0.5,
+                               labels={input_dato: dictDati[input_dato]},
+                               animation_frame='date'
+                               )
 
-    fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 10
-    fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 5
+    # fig = px.choropleth(df, locations="iso_code",
+    #                          color=input_dato,
+    #                          hover_name="location",
+    #                          animation_frame="date",
+    #
+    #                          #  title = "total_vaccinations_per_hundred",
+    #                          color_continuous_scale=px.colors.sequential.Teal
+    #
+    #                          )
+
+    fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 200
+    fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 50
 
     fig.update_layout(
         paper_bgcolor='rgba(255,255,255,0)',

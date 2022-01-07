@@ -12,7 +12,7 @@ header = dbc.Container(dbc.Navbar(
                                 dbc.Row(
                                     [
                                         dbc.Col(dbc.NavbarBrand(
-                                            html.H1(children="COVID-19 Dashboard", className="fs-4"),
+                                            html.Img(src="https://i.ibb.co/z56z80g/logo.png", style={"height": "80px"}),
                                             className="ms-2")),
                                     ],
                                     align="center",
@@ -22,7 +22,7 @@ header = dbc.Container(dbc.Navbar(
                                 style={"textDecoration": "none"},
                                 className=""
                             )],
-                            className="mb-3",
+                            className="my-3",
                             width=12,
                             sm=6
                         ),
