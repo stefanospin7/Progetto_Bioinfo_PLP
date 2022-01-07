@@ -4,4 +4,6 @@ plotly~=5.4.0
 Flask~=2.0.2
 gunicorn~=20.1.0
 dash_bootstrap_components~=1.0.2
-
+prophet~=1.0.1
+scikit-learn~=1.0.2
+numpy~=1.21.5
