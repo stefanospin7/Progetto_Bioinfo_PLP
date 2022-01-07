@@ -13,16 +13,32 @@ from sklearn import linear_model
 from sklearn.metrics import max_error
 import prophet as Prophet
 
-datiCol = ["total_cases", "new_cases", "new_deaths", "new_vaccinations", "people_vaccinated", "people_fully_vaccinated",
-           "total_boosters"]
+datiCol = ["icu_patients", "icu_patients_per_million", "new_cases", "new_cases_per_million", "new_deaths", "new_deaths_per_million", "new_tests", "new_tests_per_thousand", "new_vaccinations", "people_fully_vaccinated", "people_fully_vaccinated_per_hundred", "people_vaccinated", "people_vaccinated_per_hundred", "positive_rate", "total_boosters", "total_boosters_per_hundred", "total_cases", "total_cases_per_million", "total_deaths", "total_deaths_per_million", "total_tests", "total_tests_per_thousand", "total_vaccinations", "total_vaccinations_per_hundred"]
 dictDati = {
-    "total_cases": "Casi totali",
-    "new_cases": "Casi giornalieri",
-    "new_deaths": "Decessi giornalieri",
-    "new_vaccinations": "Vaccinazioni giornaliere",
-    "people_vaccinated": "Vaccinati totali",
-    "people_fully_vaccinated": "Vaccinati con terza dose totali",
-    "total_boosters": "Terze dosi totali",
+"icu_patients" : "Terapia Intensiva",
+"icu_patients_per_million" : "Terapia Intensiva per milione",
+"new_cases" : "Casi giornalieri",
+"new_cases_per_million" : "Casi giornalieri per milione",
+"new_deaths" : "Decessi giornalieri",
+"new_deaths_per_million" : "Decessi giornalieri per milione",
+"new_tests" : "Tamponi giornalieri",
+"new_tests_per_thousand" : "Tamponi per centinaia",
+"new_vaccinations" : "Vaccinazioni giornaliere",
+"people_fully_vaccinated" : "Vaccinati completamente",
+"people_fully_vaccinated_per_hundred" : "Vaccinati completamente per centinaia",
+"people_vaccinated" : "Vaccinati totali",
+"people_vaccinated_per_hundred" : "Vaccinati totali per centinaia",
+"positive_rate" : "Tasso di positività",
+"total_boosters" : "Dosi booster totali",
+"total_boosters_per_hundred" : "Dosi booster totali per centinaia",
+"total_cases" : "Casi totali",
+"total_cases_per_million" : "Casi totali per milione",
+"total_deaths" : "Decessi totali",
+"total_deaths_per_million" : "Decessi totali per milione",
+"total_tests" : "Tamponi totali",
+"total_tests_per_thousand" : "Tamponi totali per migliaia",
+"total_vaccinations" : "Dosi somministrate totali",
+"total_vaccinations_per_hundred" : "Dosi somministrate per centiania",
 }
 
 
@@ -54,6 +70,7 @@ def update_figMondo(input_dato, start_date, end_date):
     df = df[~df.location.isin(locationDel)]
     print(df.location.unique())
 
+
     # df = df[df.location != 'World']
     # periodo = (df['date'] > start_date) & (df['date'] <= end_date)
     # if (futuro_input == False):
@@ -64,152 +81,183 @@ def update_figMondo(input_dato, start_date, end_date):
     periodo = (df['date'] >= start_date) & (df['date'] <= end_date)
     df = df.loc[periodo]
 
-    # Columns renaming
-    df.columns = [col.lower() for col in df.columns]
-    # Filling nan values with 0
-
-    # Compute bubble sizes
-    sizeInput = "size" + input_dato
-    df[sizeInput] = df[input_dato].apply(
-        lambda x: (np.sqrt(x / 1000) + 1) if x > 500 else (np.log(x) / 2 + 1)).replace(
-        np.NINF, 0)
-
-    # Compute bubble color
-    colorInput = "color" + input_dato
-    df[colorInput] = (df[input_dato] / df['total_cases']).fillna(0).replace(np.inf, 0)
-    df = df.fillna(0).replace(np.inf, 0)
-
-    days = df['date'].dt.date.unique().astype(str)
-
     df['date'] = df['date'].dt.date.astype(str)
 
-    # days = ["2021-12-01", "2021-12-02"]
-    # print(tmp.head(10))
-    # colors = ["royalblue", "crimson", "lightseagreen", "orange", "lightgrey"]
+    # Columns renaming
+    df.columns = [col.lower() for col in df.columns]
 
-    def generate_frame(day, input):
-        sizeInput = "size" + input
-        colorInput = "color" + input
-        # print(sizeInput, colorInput, day, df[df["date"] == day])
+    fig = px.choropleth(df, locations="iso_code",
+                             color=input_dato,
+                             hover_name="location",
+                             animation_frame="date",
 
-        customDataList = []
-        for i in datiCol:
-            customDataList.append(df[df["date"] == day][i])
+                             #  title = "total_vaccinations_per_hundred",
+                             color_continuous_scale=px.colors.sequential.Teal
 
-        hoverTemplateList = []
-        for i in datiCol:
-            hoverTemplateList.append("%{customdata[" + i + "]}  <br>")
+                             )
 
-        frame = {
-            'name': 'frame_{}'.format(day),
-            'data': {
-                'type': 'scattermapbox',
-                'lat': df[df["date"] == day]['latitude'],
-                'lon': df[df["date"] == day]['longitude'],
-                'marker': go.scattermapbox.Marker(
-                    size=df[df["date"] == day][sizeInput],
-                    # color=df[df["date"] == day][colorInput],
-                    # color=df[df["date"] == day][colorInput],
-                    #    showscale=True,
-                    #    colorbar={'title':'Recovered', 'titleside':'top', 'thickness':4, 'ticksuffix':' %'},
-                ),
-                'customdata': np.stack((df[df["date"] == day]['location'], df[df["date"] == day]['total_cases'],
-                                        df[df["date"] == day]['new_cases'], df[df["date"] == day]['new_deaths']),
-                                       axis=-1),
-                'hovertemplate': "<extra></extra><em>%{customdata[0]}  </em><br>Total cases  %{customdata[1]}<br>New Cases  %{customdata[2]}<br>New deaths️  %{customdata[3]}",
-            }
-        }
-        return frame
+    fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 10
+    fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 5
 
-    frames = []
-    for day in days:
-        frames.append(generate_frame(day, input_dato))
-
-    # print(frames[0])
-
-    sliders = [{
-        'transition': {'duration': 0},
-        'x': 0.08,
-        'len': 0.88,
-        'currentvalue': {'font': {'size': 15}, 'prefix': 'Date: ', 'visible': True, 'xanchor': 'center'},
-        'steps': [
-            {
-                'label': day,
-                'method': 'animate',
-                'args': [
-                    ['frame_{}'.format(day)],
-                    {'mode': 'immediate', 'frame': {'duration': 100, 'redraw': True}, 'transition': {'duration': 50}}
-                ],
-            } for day in days]
-    }]
-
-    # Defining the initial state
-    data = frames[0]['data']
-
-    play_button = [{
-        'type': 'buttons',
-        'showactive': True,
-        'x': 0.045, 'y': -0.08,
-        'buttons': [{
-            'label': '▶',  # Play
-            'method': 'animate',
-            'args': [
-                None,
-                {
-                    'frame': {'duration': 100, 'redraw': True},
-                    'transition': {'duration': 50},
-                    'fromcurrent': True,
-                    'mode': 'immediate',
-                }
-            ]
-        }]
-    }]
-
-    # Adding all sliders and play button to the layout
-    layout = go.Layout(
-        sliders=sliders,
-        paper_bgcolor='rgba(0,0,0,0)',
+    fig.update_layout(
+        paper_bgcolor='rgba(255,255,255,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font_color='#fff',
-        updatemenus=[{
-            'type': 'buttons',
-            'showactive': True,
-            'x': 0.045, 'y': -0.08,
-            'bgcolor': 'rgba(255,255,255,1)',
-            'font': {
-                'color': '#000',
-            },
-            'buttons': [{
-                'label': '▶',  # Play
-                'method': 'animate',
-                'args': [
-                    None,
-                    {
-                        'frame': {'duration': 100, 'redraw': True},
-                        'transition': {'duration': 50},
-                        'fromcurrent': True,
-                        'mode': 'immediate',
-                    }
-                ]
-            }]
-        }],
-        mapbox={
-            'accesstoken': "pk.eyJ1IjoibWFuZnJlZG9mcmFjY29sYSIsImEiOiJja3hyd2JjbnEwNnVjMnBvNTZrbHBqdmwzIn0.YFYLdLUxoYC3gSpkcGplqQ",
-            'center': {"lat": 37.86, "lon": 2.15},
-            'zoom': 1.7,
-            'style': 'light',
-        },
         legend=dict(
             yanchor="top",
             y=0.97,
             xanchor="left",
+            bgcolor="Black",
             x=0.01),
         margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
-        # showlegend = True
+        showlegend=True
     )
 
-    # Creating the figure
-    fig = go.Figure(data=data, layout=layout, frames=frames)
+    # Filling nan values with 0
+    #
+    # # Compute bubble sizes
+    # sizeInput = "size" + input_dato
+    # df[sizeInput] = df[input_dato].apply(
+    #     lambda x: (np.sqrt(x / 100) + 1) if x > 500 else (x / 2 + 1)).replace(
+    #     np.NINF, 0)
+    #
+    # # Compute bubble color
+    # colorInput = "color" + input_dato
+    # df[colorInput] = (df["new_cases_per_million"] / df["new_deaths_per_million"]).fillna(0).replace(np.inf, 0)
+    # df = df.fillna(0).replace(np.inf, 0)
+    # df[sizeInput] = df[sizeInput].replace(np.inf, 0)
+    #
+    # days = df['date'].dt.date.unique().astype(str)
+    #
+    # df['date'] = df['date'].dt.date.astype(str)
+    #
+    # # days = ["2021-12-01", "2021-12-02"]
+    # # print(tmp.head(10))
+    # # colors = ["royalblue", "crimson", "lightseagreen", "orange", "lightgrey"]
+    #
+    # def generate_frame(day, input):
+    #     sizeInput = "size" + input
+    #     #colorInput = "color" + input
+    #     # print(sizeInput, colorInput, day, df[df["date"] == day])
+    #
+    #     customDataList = []
+    #     for i in datiCol:
+    #         customDataList.append(df[df["date"] == day][i])
+    #
+    #     hoverTemplateList = []
+    #     for i in datiCol:
+    #         hoverTemplateList.append("%{customdata[" + i + "]}  <br>")
+    #
+    #     frame = {
+    #         'name': 'frame_{}'.format(day),
+    #         'data': {
+    #             'type': 'scattermapbox',
+    #             'lat': df[df["date"] == day]['latitude'],
+    #             'lon': df[df["date"] == day]['longitude'],
+    #             'marker': go.scattermapbox.Marker(
+    #                 size=df[df["date"] == day][sizeInput],
+    #                 color=df[df["date"] == day][colorInput],
+    #                 # color=df[df["date"] == day][colorInput],
+    #                 #    showscale=True,
+    #                 #    colorbar={'title':'Recovered', 'titleside':'top', 'thickness':4, 'ticksuffix':' %'},
+    #             ),
+    #             'customdata': np.stack((df[df["date"] == day]['location'], df[df["date"] == day]['total_cases'],
+    #                                     df[df["date"] == day]['new_cases'], df[df["date"] == day]['new_deaths']),
+    #                                    axis=-1),
+    #             'hovertemplate': "<extra></extra><em>%{customdata[0]}  </em><br>Total cases  %{customdata[1]}<br>New Cases  %{customdata[2]}<br>New deaths️  %{customdata[3]}",
+    #         }
+    #     }
+    #     return frame
+    #
+    # frames = []
+    # for day in days:
+    #     frames.append(generate_frame(day, input_dato))
+    #
+    # # print(frames[0])
+    #
+    # sliders = [{
+    #     'transition': {'duration': 0},
+    #     'x': 0.08,
+    #     'len': 0.88,
+    #     'currentvalue': {'font': {'size': 15}, 'prefix': 'Date: ', 'visible': True, 'xanchor': 'center'},
+    #     'steps': [
+    #         {
+    #             'label': day,
+    #             'method': 'animate',
+    #             'args': [
+    #                 ['frame_{}'.format(day)],
+    #                 {'mode': 'immediate', 'frame': {'duration': 100, 'redraw': True}, 'transition': {'duration': 50}}
+    #             ],
+    #         } for day in days]
+    # }]
+    #
+    # # Defining the initial state
+    # data = frames[0]['data']
+    #
+    # play_button = [{
+    #     'type': 'buttons',
+    #     'showactive': True,
+    #     'x': 0.045, 'y': -0.08,
+    #     'buttons': [{
+    #         'label': '▶',  # Play
+    #         'method': 'animate',
+    #         'args': [
+    #             None,
+    #             {
+    #                 'frame': {'duration': 100, 'redraw': True},
+    #                 'transition': {'duration': 50},
+    #                 'fromcurrent': True,
+    #                 'mode': 'immediate',
+    #             }
+    #         ]
+    #     }]
+    # }]
+    #
+    # # Adding all sliders and play button to the layout
+    # layout = go.Layout(
+    #     sliders=sliders,
+    #     paper_bgcolor='rgba(0,0,0,0)',
+    #     plot_bgcolor='rgba(0,0,0,0)',
+    #     font_color='#fff',
+    #     updatemenus=[{
+    #         'type': 'buttons',
+    #         'showactive': True,
+    #         'x': 0.045, 'y': -0.08,
+    #         'bgcolor': 'rgba(255,255,255,1)',
+    #         'font': {
+    #             'color': '#000',
+    #         },
+    #         'buttons': [{
+    #             'label': '▶',  # Play
+    #             'method': 'animate',
+    #             'args': [
+    #                 None,
+    #                 {
+    #                     'frame': {'duration': 100, 'redraw': True},
+    #                     'transition': {'duration': 50},
+    #                     'fromcurrent': True,
+    #                     'mode': 'immediate',
+    #                 }
+    #             ]
+    #         }]
+    #     }],
+    #     mapbox={
+    #         'accesstoken': "pk.eyJ1IjoibWFuZnJlZG9mcmFjY29sYSIsImEiOiJja3hyd2JjbnEwNnVjMnBvNTZrbHBqdmwzIn0.YFYLdLUxoYC3gSpkcGplqQ",
+    #         'center': {"lat": 37.86, "lon": 2.15},
+    #         'zoom': 1.7,
+    #         'style': 'light',
+    #     },
+    #     legend=dict(
+    #         yanchor="top",
+    #         y=0.97,
+    #         xanchor="left",
+    #         x=0.01),
+    #     margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
+    #     # showlegend = True
+    # )
+    #
+    # # Creating the figure
+    # fig = go.Figure(data=data, layout=layout, frames=frames)
 
     time.sleep(1)
     return fig
@@ -517,7 +565,7 @@ def updateFigML(dato_input, nazione):
     print(y_pred)
     error = max_error(y, y_pred)
     X_test = []
-    future_days = 365
+    future_days = 1500
     for i in range(starting_date, starting_date + future_days):
         X_test.append([i])
     print(X_test)
