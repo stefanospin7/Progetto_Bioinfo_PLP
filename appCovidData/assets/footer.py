@@ -20,10 +20,10 @@ footer = dbc.Container(
                             html.Li(children=[html.P(children='Manfredo Aristide Fraccola', className='m-0'),]),
                             html.Li(children=[html.P(children='Sara Giordani', className='m-0')]),
                             html.Li(children=[html.P(children='Andrea Misiti', className='m-0')]),
+                            html.Li(children=[html.P(children='Alessandro Pucci', className='m-0')]),
                             html.Li(children=[html.P(children='Angela Sangiorgio', className='m-0')]),
                             html.Li(children=[html.P(children='Stefano Spinelli', className='m-0')]),
                             html.Li(children=[html.P(children='Gaia Tomei', className='m-0')]),
-                            html.Li(children=[html.P(children='Alessandro Pucci', className='m-0')])
                         ])
                     ])
                 ]),
