@@ -1,25 +1,16 @@
 from appCovidData.app import app
 from appCovidData.page_layouts.layout2 import make_layout as pag1
-from appCovidData.page_layouts.layout3 import make_layout as pag2
-from appCovidData import callbacks
 from dash import html, Input, Output, dcc  # funzioni di layout html interattivo
 
+#creo un server dash 
 server = app.server
+
+#applico layout html
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    html.Div(id='page-content')
+    html.Div(id='page-content', children = pag1())
 ])
 
-# Update the index
-@app.callback(
-    Output('page-content', 'children'),
-    Input('url', 'pathname'))
-def display_page(pathname):
-    if pathname == '/page-2':
-        return pag2()
-    else:
-        return pag1()
-    # You could also return a 404 "URL not found" page here
-
+#run server 
 if __name__ == '__main__':
     app.run_server(debug=True)
