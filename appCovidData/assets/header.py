@@ -1,7 +1,7 @@
-from dash import dcc  # layout html
-from dash import html  #funzioni di layout html interattivo
+from dash import html  
 import dash_bootstrap_components as dbc
 
+#definizione layout html dell'header
 header = dbc.Container(
             dbc.Row(
                 [
