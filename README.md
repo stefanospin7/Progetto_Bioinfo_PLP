@@ -1,7 +1,5 @@
 [![dataScraper](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml/badge.svg)](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml)
 
-[![mlProphet](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/mlProphet.yml/badge.svg)](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/mlProphet.yml)
-
 # Progetto_Bioinfo_PLP
 
 Questa repository sarà usata per managing di un progetto universitario di gruppo di Bioinformatica (TOR VERGATA).
