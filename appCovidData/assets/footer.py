@@ -1,9 +1,7 @@
-from dash import dcc  # layout html
-from dash import html  #funzioni di layout html interattivo
+from dash import html  
 import dash_bootstrap_components as dbc
 
-#FOOTER
-
+#definizione layout dell'html footer
 footer = dbc.Container(
             dbc.Container([
                 html.H4(children='Credits', className=''),
@@ -14,7 +12,6 @@ footer = dbc.Container(
                         html.P(children='Bioinformatica - Tor Vergata'),
                         html.P(children=[html.Span(children='Docente: ', className="fw-bold"), html.Span(children='Daniele Pasquini')]),
                         html.A(
-                            # Use row and col to control vertical alignment of logo / brand
                             dbc.Row(
                                 [
                                     dbc.Col([
