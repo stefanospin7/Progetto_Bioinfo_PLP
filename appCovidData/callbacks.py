@@ -42,6 +42,11 @@ dictDati = {
 "total_vaccinations_per_hundred" : "Dosi somministrate per centiania",
 }
 
+dfTot = pd.read_csv("data/owid-dataset.csv",
+                     parse_dates=["date"]
+                     )
+
+
 
 @app.callback(
     Output("fig-mondo", "figure"),
@@ -50,9 +55,8 @@ dictDati = {
     Input('my-date-picker-range', 'end_date'),
 )
 def update_figMondo(input_dato, start_date, end_date):
-    df = pd.read_csv("data/owid-dataset.csv",
-                     parse_dates=["date"]
-                     )
+    df = dfTot
+
     # Filter and clean df
     locationDel = ['World', 'Asia', 'Africa', 'Oceania', 'Europe', 'High income', 'Low income', 'Upper middle income',
                    'Lower middle income', 'North America', 'South America', 'European Union', 'Qatar']
@@ -72,11 +76,9 @@ def update_figMondo(input_dato, start_date, end_date):
     # Round off the locations to 2 decimal places (about 1.1 km accuracy)
     for i in range(0, len(data["features"])):
         for j in range(0, len(data["features"][i]['geometry']['coordinates'])):
-            try:
-                data["features"][i]['geometry']['coordinates'][j] = np.round(
-                    np.array(data["features"][i]['geometry']['coordinates'][j]), 2)
-            except:
-                print(i, j)
+            data["features"][i]['geometry']['coordinates'][j] = np.round(
+                np.array(data["features"][i]['geometry']['coordinates'][j]), 2)
+
 
     px.set_mapbox_access_token(
         "pk.eyJ1IjoibWFuZnJlZG9mcmFjY29sYSIsImEiOiJja3hyd2JjbnEwNnVjMnBvNTZrbHBqdmwzIn0.YFYLdLUxoYC3gSpkcGplqQ")
@@ -325,7 +327,7 @@ def updateTitConfronto(dato1, dato2, nazione1, nazione2, start_date, end_date):
     return x
 
 
-# CONFRONTO NUMERICO
+# CONFRONTO NUMERICO NAZIONE 1
 @app.callback(
     Output("dati-nazione-1", "children"),
     Input('input-nazione-1', 'value'),
@@ -334,10 +336,9 @@ def updateTitConfronto(dato1, dato2, nazione1, nazione2, start_date, end_date):
     Input('date-confronto', 'end_date'),
 )
 def updateNazione(nazione, dato, start_date, end_date):
-    df = Analisi(nazione).df
+    df = Analisi(nazione, dfTot).df
     # df['date'] = pd.to_datetime(df['date'])
-    df = df[df.location == nazione]
-    periodo = (df.index > start_date) & (df.index <= end_date)
+    periodo = (df["date"] > start_date) & (df["date"] <= end_date)
     datiCol = [dato]
     # mldt.append(i)
     df = df[datiCol]
@@ -369,10 +370,9 @@ def updateNazione(nazione, dato, start_date, end_date):
     Input('date-confronto', 'end_date'),
 )
 def updateNazione(nazione, dato, start_date, end_date):
-    df = Analisi(nazione).df
+    df = Analisi(nazione, dfTot).df
     # df['date'] = pd.to_datetime(df['date'])
-    df = df[df.location == nazione]
-    periodo = (df.index > start_date) & (df.index <= end_date)
+    periodo = (df["date"] > start_date) & (df["date"] <= end_date)
     datiCol = [dato]
     # mldt.append(i)
     df = df[datiCol]
@@ -406,11 +406,10 @@ def updateNazione(nazione, dato, start_date, end_date):
 )
 def updateFigConfronto(nazione1, nazione2, datoInputOne, datoInputTwo, start_date, end_date):
     def generateDf(nazione, dato):
-        df = Analisi(nazione).df
+        df = Analisi(nazione, dfTot).df
         # df['date'] = pd.to_datetime(df['date'])
-        df = df[df.location == nazione]
-        periodo = (df.index > start_date) & (df.index <= end_date)
-        datiCol = [dato]
+        periodo = (df["date"] > start_date) & (df["date"] <= end_date)
+        datiCol = ["date", dato]
         # mldt.append(i)
         df = df[datiCol]
         df = df.loc[periodo]
@@ -421,8 +420,8 @@ def updateFigConfronto(nazione1, nazione2, datoInputOne, datoInputTwo, start_dat
 
     # Creating the figure
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df1.index, y=df1[datoInputOne], name=dictDati[datoInputOne] + " - " + nazione1, fill='tonexty', connectgaps=True, line_color="rgb(52, 152, 219)"))
-    fig.add_trace(go.Scatter(x=df2.index, y=df2[datoInputTwo], name=dictDati[datoInputTwo] + " - " + nazione2, fill='tonexty', connectgaps=True, line_color="rgb(0, 188, 140)"))
+    fig.add_trace(go.Scatter(x=df1["date"], y=df1[datoInputOne], name=dictDati[datoInputOne] + " - " + nazione1, fill='tonexty', connectgaps=True, line_color="rgb(52, 152, 219)"))
+    fig.add_trace(go.Scatter(x=df2["date"], y=df2[datoInputTwo], name=dictDati[datoInputTwo] + " - " + nazione2, fill='tonexty', connectgaps=True, line_color="rgb(0, 188, 140)"))
     fig.update_yaxes(type="log")
     fig.update_layout(
         paper_bgcolor='rgba(255,255,255,0)',
@@ -450,9 +449,11 @@ def updateFigConfronto(nazione1, nazione2, datoInputOne, datoInputTwo, start_dat
     Input("input-nazione-ML", "value"),
 )
 def updateTitML(dato, nazione):
-    df = Analisi(nazione).df
-    inizio = df.index[0].strftime("%d/%m/%Y")
-    fine = df.index[-1].strftime("%d/%m/%Y")
+    df = Analisi(nazione, dfTot).df
+    #print("DF head nazione ML")
+    #print(df.head(10))
+    inizio = df["date"].iloc[0].strftime("%d/%m/%Y")
+    fine = df["date"].iloc[-1].strftime("%d/%m/%Y")
     periodo = "Trend: " + inizio + " - " + fine + " | Proiezione: 100 giorni"
     titDato = dictDati[dato] + " - " + nazione
     x = dbc.Row([
@@ -474,9 +475,9 @@ def updateTitML(dato, nazione):
 )
 def updateFigML(dato_input, nazione):
     from datetime import date as dt
-    data = pd.read_csv('data/owid-dataset.csv')
+    data = dfTot
     data = data[data["location"] == nazione]
-    print(data.columns)
+    #print(data.columns)
     import numpy as np
     data = data.fillna(0).replace(np.inf, 0)
 
@@ -504,18 +505,18 @@ def updateFigML(dato_input, nazione):
 
     # Train the model using the training sets
     linear_regr.fit(X, y)
-    print("Linear Regression Model Score: %s" % (linear_regr.score(X, y)))
+    #print("Linear Regression Model Score: %s" % (linear_regr.score(X, y)))
     # Predict future trend
     import numpy as np
     import math
     y_pred = linear_regr.predict(X)
-    print(y_pred)
+    #print(y_pred)
     error = max_error(y, y_pred)
     X_test = []
     future_days = 1000
     for i in range(starting_date, starting_date + future_days):
         X_test.append([i])
-    print(X_test)
+    #print(X_test)
     y_pred_linear = linear_regr.predict(X_test)
 
     # for i in range(starting_date, starting_date + future_days):
@@ -528,10 +529,10 @@ def updateFigML(dato_input, nazione):
         y_pred_max.append(y_pred_linear[i] + error)
         y_pred_min.append(y_pred_linear[i] - error)
 
-    print(y_pred_max)
-    print(y_pred_min)
-    print(y_pred_linear)
-    print(X_test)
+    #print(y_pred_max)
+    #print(y_pred_min)
+    #print(y_pred_linear)
+    #print(X_test)
 
     new_df = pd.DataFrame(list(zip(X_test, y_pred_max, y_pred_min, y_pred_linear)),
                           columns=['indice', 'massimo', "minimo", "predictions"])
@@ -554,13 +555,13 @@ def updateFigML(dato_input, nazione):
 
     new_df["indice"] = date_indicizzate
 
-    print(new_df.tail())
-    print(new_df.dtypes)
+    #print(new_df.tail())
+    #print(new_df.dtypes)
 
     tmp = data
     keep = ["date", dato_input]
     tmp = tmp[keep]
-    print(tmp.head(10))
+    #print(tmp.head(10))
 
     tmp.columns = ['ds', 'y']
     tmp['ds'] = pd.to_datetime(tmp['ds']).dt.date
@@ -570,7 +571,7 @@ def updateFigML(dato_input, nazione):
     future = m.make_future_dataframe(periods=365)
     forecast = m.predict(future)
 
-    print(forecast.tail(10))
+    #print(forecast.tail(10))
 
     fig = go.Figure()
     fig.add_trace(

@@ -28,8 +28,8 @@ maxDate = oggi
 monthVisible = oggi
 startDate = oggi - datetime.timedelta(days=60)
 endDate = oggi
-startDateMondo = date(2020, 1, 1)
-endDateMondo = date(2020, 6, 1)
+startDateMondo = date(2020, 3, 1)
+endDateMondo = date(2020, 5, 1)
 
 datiCol = ["icu_patients", "icu_patients_per_million", "new_cases", "new_cases_per_million", "new_deaths",
            "new_deaths_per_million", "new_tests", "new_tests_per_thousand", "new_vaccinations",
