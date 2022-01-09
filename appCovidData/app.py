@@ -3,26 +3,26 @@ import dash_bootstrap_components as dbc
 from dash import html, Input, Output, callback_context
 
 app = dash.Dash(__name__,
-                title="PLP Project 1 - Bioinformatica Tor Vergata",
+                title="COWID - a COVID-19 dashboard",
                 suppress_callback_exceptions=True,
                 meta_tags=[
                     # A description of the app, used by e.g.
                     # search engines when displaying search results.
                     {
                         'property': 'og:site_name',
-                        'content': 'PLP Project 1 - Bioinformatica Tor Vergata',
+                        'content': 'COWID - a COVID-19 dashboard',
                     },
                     # A description of the app, used by e.g.
                     # search engines when displaying search results.
                     {
                         'property': 'og:title',
-                        'content': 'Progetto di analisi dati Covid-19 e Vaccinazioni',
+                        'content': 'COWID - a COVID-19 dashboard',
                     },
                     # A description of the app, used by e.g.
                     # search engines when displaying search results.
                     {
                         'property': 'og:description',
-                        'content': 'Progetto di analisi dati Covid-19 e Vaccinazioni',
+                        'content': 'COWID - a COVID-19 dashboard',
                     },
                     {"name": "viewport", "content": "width=device-width, initial-scale=1"},
                 ],

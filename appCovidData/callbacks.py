@@ -67,7 +67,7 @@ def update_figMondo(input_dato, start_date, end_date):
                      )
     # Filter and clean df
     locationDel = ['World', 'Asia', 'Africa', 'Oceania', 'Europe', 'High income', 'Low income', 'Upper middle income',
-                   'Lower middle income', 'North America', 'South America', 'European Union']
+                   'Lower middle income', 'North America', 'South America', 'European Union', 'Qatar']
     df = df[~df.location.isin(locationDel)]
     print(df.location.unique())
 
@@ -103,15 +103,18 @@ def update_figMondo(input_dato, start_date, end_date):
 
     fig = px.choropleth_mapbox(df, geojson=data, locations='iso_code', color=input_dato,
                                featureidkey="properties.iso_a3",
-                               color_continuous_scale="Viridis",
-                               range_color=(df[input_dato].min(), df[input_dato].max()),
+                               #color_continuous_scale="Viridis",
+                               color_continuous_scale=["rgb(55, 90, 127)", "rgb(0, 188, 140)"],
+                               #range_color=(df[input_dato].min(), df[input_dato].max()),
                                # mapbox_style="carto-positron",
-                               zoom=1, center={"lat": 0, "lon": 0},
+                               zoom=1, center={"lat": 24.8, "lon": 6.2},
                                opacity=0.5,
                                labels={input_dato: dictDati[input_dato]},
-                               animation_frame='date'
-                               )
+                               animation_frame='date',
 
+                               )
+    fig['layout']['updatemenus'][0]['pad'] = dict(r=10, t=10)
+    fig['layout']['sliders'][0]['pad'] = dict(r=10, t=10, )
     # fig = px.choropleth(df, locations="iso_code",
     #                          color=input_dato,
     #                          hover_name="location",
@@ -136,7 +139,10 @@ def update_figMondo(input_dato, start_date, end_date):
             bgcolor="Black",
             x=0.01),
         margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
-        showlegend=True
+        showlegend=True,
+        coloraxis_colorbar=dict(
+            title="",
+        )
     )
 
     # Filling nan values with 0
@@ -289,242 +295,155 @@ def update_figMondo(input_dato, start_date, end_date):
     return fig
 
 
-# update country1 Title
+# UPDATE TITOLO MONDO
 @app.callback(
-    Output("titolo-dato", "children"),
-    Input("dato-input", "value"),
-)
-def updateTitDato(dato):
-    x = dictDati[dato]
-    return x
-
-
-# update country 1 on input
-@app.callback(
-    Output("dati-nazione-1", "children"),
-    Input('input-nazione-1', 'value'),
+    Output("titolo-mondo", "children"),
     Input("dato-input", "value"),
     Input('my-date-picker-range', 'start_date'),
     Input('my-date-picker-range', 'end_date'),
 )
-def updateNazione(nazione, datoInput, start_date, end_date):
+def updateTitDato(dato, start_date, end_date):
+    inizio = pd.to_datetime(start_date).strftime("%d/%m/%Y")
+    fine = pd.to_datetime(end_date).strftime("%d/%m/%Y")
+    periodo = inizio + " - " + fine
+    x = dbc.Row([
+        dbc.Col(html.H3(children=dictDati[dato], className="fs-4 m-0"),
+                width=12,
+                md=6),
+        dbc.Col(html.P(children= periodo, className="text-md-end m-0"),
+                width=12,
+                md=6)
+                 ],
+    )
+    return x
+
+
+
+# UPDATE TITOLO CONFRONTO
+@app.callback(
+    Output("titolo-confronto", "children"),
+    Input("dato-input-1", "value"),
+    Input("dato-input-2", "value"),
+    Input("input-nazione-1", "value"),
+    Input("input-nazione-2", "value"),
+    Input('date-confronto', 'start_date'),
+    Input('date-confronto', 'end_date'),
+)
+def updateTitConfronto(dato1, dato2, nazione1, nazione2, start_date, end_date):
+    inizio = pd.to_datetime(start_date).strftime("%d/%m/%Y")
+    fine = pd.to_datetime(end_date).strftime("%d/%m/%Y")
+    periodo = inizio + " - " + fine
+    titDato = dictDati[dato1] + " - " + nazione1 + " vs " + dictDati[dato2] + " - " + nazione2
+    x = dbc.Row([
+        dbc.Col(html.H3(children= titDato, className="fs-4 m-0"),
+                width=12,
+                md=6),
+        dbc.Col(html.P(children= periodo, className="text-md-end m-0"),
+                width=12,
+                md=6)
+                 ],
+    )
+    return x
+
+
+# CONFRONTO NUMERICO
+@app.callback(
+    Output("dati-nazione-1", "children"),
+    Input('input-nazione-1', 'value'),
+    Input("dato-input-1", "value"),
+    Input('date-confronto', 'start_date'),
+    Input('date-confronto', 'end_date'),
+)
+def updateNazione(nazione, dato, start_date, end_date):
     df = Analisi(nazione).df
     # df['date'] = pd.to_datetime(df['date'])
     df = df[df.location == nazione]
     periodo = (df.index > start_date) & (df.index <= end_date)
-    datiCol = [datoInput]
+    datiCol = [dato]
     # mldt.append(i)
     df = df[datiCol]
     df = df.loc[periodo]
+    titDato = dictDati[dato] + " - " + nazione
+    outputNazione = dbc.ListGroup(
+        [
+            dbc.ListGroupItem(titDato,
+                              color="primary",
+                              className="bg-info"
+                              ),
+            dbc.ListGroupItem(["Media", dbc.Badge(round(df[dato].mean(), 2), color="light", text_color="primary", className="ms-1"),],color="primary"),
+            dbc.ListGroupItem(["Minimo", dbc.Badge(df[dato].min(), color="light", text_color="primary",
+                                                  className="ms-1"), ], color="primary"),
+            dbc.ListGroupItem(["Massimo", dbc.Badge(df[dato].max(), color="light", text_color="primary",
+                                                  className="ms-1"), ], color="primary"),
 
-    outputNazione = ([
-        html.Li(children=([
-            dbc.Row([
-                dbc.Col([
-                    html.Span(
-                        children=("Media"),
-                    )
-                ],
-                    width=7,
-                    className="p-3 bg-primary text-white"),
-                dbc.Col([
-                    html.Span(
-                        children=(round(df[datoInput].mean(), 2)),
-                        className="mr-3",
-                        id="media-1"
-                    )
-                ],
-                    width=5,
-                    className="justify-content-center align-items-center d-flex",
-                )
-            ],
-                className="w-100 m-0"),
-        ]),
-            className="list-group-item p-0 mb-3"),
-        html.Li(children=([
-            dbc.Row([
-                dbc.Col([
-                    html.Span(
-                        children=("Minimo")
-                    )
-                ],
-                    width=7,
-                    className="p-3 bg-primary text-white"),
-                dbc.Col([
-                    html.Span(
-                        children=(df[datoInput].min()),
-                        className="mr-3"
-                    )
-                ],
-                    width=5,
-                    className="justify-content-center align-items-center d-flex",
-                )
-            ],
-                className="w-100 row m-0"),
-        ]),
-            className="list-group-item p-0 mb-3"),
-        html.Li(children=([
-            dbc.Row([
-                dbc.Col([
-                    html.Span(
-                        children=("Massimo")
-                    )
-                ],
-                    width=7,
-                    className="p-3 bg-primary text-white"),
-                dbc.Col([
-                    html.Span(
-                        children=(df[datoInput].max()),
-                        className="mr-3"
-                    )
-                ],
-                    width=5,
-                    className="justify-content-center align-items-center d-flex",
-                )
-            ],
-                className="w-100 row m-0"),
-        ]),
-            className="list-group-item p-0"),
-    ])
+        ]
+    )
     return outputNazione
-
-
-# update country1 Title
-@app.callback(
-    Output("titolo-nazione-1", "children"),
-    Input('input-nazione-1', 'value'),
-)
-def updateNazioneTit(nazione):
-    return nazione
 
 
 # update country 2 on input
 @app.callback(
     Output("dati-nazione-2", "children"),
     Input('input-nazione-2', 'value'),
-    Input("dato-input", "value"),
-    Input('my-date-picker-range', 'start_date'),
-    Input('my-date-picker-range', 'end_date'),
+    Input("dato-input-2", "value"),
+    Input('date-confronto', 'start_date'),
+    Input('date-confronto', 'end_date'),
 )
-def updateNazione(nazione, datoInput, start_date, end_date):
+def updateNazione(nazione, dato, start_date, end_date):
     df = Analisi(nazione).df
     # df['date'] = pd.to_datetime(df['date'])
     df = df[df.location == nazione]
     periodo = (df.index > start_date) & (df.index <= end_date)
-    datiCol = [datoInput]
+    datiCol = [dato]
     # mldt.append(i)
     df = df[datiCol]
     df = df.loc[periodo]
+    titDato = dictDati[dato] + " - " + nazione
+    outputNazione = dbc.ListGroup(
+        [
+            dbc.ListGroupItem(titDato,
+                              color="primary",
+                              className="bg-success"),
+            dbc.ListGroupItem(["Media", dbc.Badge(round(df[dato].mean(), 2), color="light", text_color="primary", className="ms-1"),],color="primary"),
+            dbc.ListGroupItem(["Minimo", dbc.Badge(df[dato].min(), color="light", text_color="primary",
+                                                  className="ms-1"), ], color="primary"),
+            dbc.ListGroupItem(["Massimo", dbc.Badge(df[dato].max(), color="light", text_color="primary",
+                                                  className="ms-1"), ], color="primary"),
 
-    outputNazione = ([
-        html.Li(children=([
-            dbc.Row([
-                dbc.Col([
-                    html.Span(
-                        children=("Media"),
-                    )
-                ],
-                    width=7,
-                    className="p-3 bg-primary text-white"),
-                dbc.Col([
-                    html.Span(
-                        children=(round(df[datoInput].mean(), 2)),
-                        className="mr-3",
-                        id="media-1"
-                    )
-                ],
-                    width=5,
-                    className="justify-content-center align-items-center d-flex",
-                )
-            ],
-                className="w-100 m-0"),
-        ]),
-            className="list-group-item p-0 mb-3"),
-        html.Li(children=([
-            dbc.Row([
-                dbc.Col([
-                    html.Span(
-                        children=("Minimo")
-                    )
-                ],
-                    width=7,
-                    className="p-3 bg-primary text-white"),
-                dbc.Col([
-                    html.Span(
-                        children=(df[datoInput].min()),
-                        className="mr-3"
-                    )
-                ],
-                    width=5,
-                    className="justify-content-center align-items-center d-flex",
-                )
-            ],
-                className="w-100 row m-0"),
-        ]),
-            className="list-group-item p-0 mb-3"),
-        html.Li(children=([
-            dbc.Row([
-                dbc.Col([
-                    html.Span(
-                        children=("Massimo")
-                    )
-                ],
-                    width=7,
-                    className="p-3 bg-primary text-white"),
-                dbc.Col([
-                    html.Span(
-                        children=(df[datoInput].max()),
-                        className="mr-3"
-                    )
-                ],
-                    width=5,
-                    className="justify-content-center align-items-center d-flex",
-                )
-            ],
-                className="w-100 row m-0"),
-        ]),
-            className="list-group-item p-0"),
-    ])
+        ]
+    )
     return outputNazione
 
 
-# update country1 Title
-@app.callback(
-    Output("titolo-nazione-2", "children"),
-    Input('input-nazione-2', 'value'),
-)
-def updateNazioneTit(nazione):
-    return nazione
-
-
-# update fig compare 2 countries
+# FIGURA CONFRONTO
 @app.callback(
     Output("fig-confronto", "figure"),
     Input('input-nazione-1', 'value'),
     Input('input-nazione-2', 'value'),
-    Input("dato-input", "value"),
-    Input('my-date-picker-range', 'start_date'),
-    Input('my-date-picker-range', 'end_date'),
+    Input("dato-input-1", "value"),
+    Input("dato-input-2", "value"),
+    Input('date-confronto', 'start_date'),
+    Input('date-confronto', 'end_date'),
 )
-def updateFigConfronto(nazione1, nazione2, datoInput, start_date, end_date):
-    def generateDf(nazione):
+def updateFigConfronto(nazione1, nazione2, datoInputOne, datoInputTwo, start_date, end_date):
+    def generateDf(nazione, dato):
         df = Analisi(nazione).df
         # df['date'] = pd.to_datetime(df['date'])
         df = df[df.location == nazione]
         periodo = (df.index > start_date) & (df.index <= end_date)
-        datiCol = [datoInput]
+        datiCol = [dato]
         # mldt.append(i)
         df = df[datiCol]
         df = df.loc[periodo]
         return df
 
-    df1 = generateDf(nazione1)
-    df2 = generateDf(nazione2)
+    df1 = generateDf(nazione1, datoInputOne)
+    df2 = generateDf(nazione2, datoInputTwo)
 
     # Creating the figure
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df1.index, y=df1[datoInput], name=nazione1, fill='tonexty', connectgaps=True))
-    fig.add_trace(go.Scatter(x=df2.index, y=df2[datoInput], name=nazione2, fill='tonexty', connectgaps=True))
+    fig.add_trace(go.Scatter(x=df1.index, y=df1[datoInputOne], name=dictDati[datoInputOne] + " - " + nazione1, fill='tonexty', connectgaps=True, line_color="rgb(52, 152, 219)"))
+    fig.add_trace(go.Scatter(x=df2.index, y=df2[datoInputTwo], name=dictDati[datoInputTwo] + " - " + nazione2, fill='tonexty', connectgaps=True, line_color="rgb(0, 188, 140)"))
     fig.update_yaxes(type="log")
     fig.update_layout(
         paper_bgcolor='rgba(255,255,255,0)',
@@ -544,6 +463,30 @@ def updateFigConfronto(nazione1, nazione2, datoInput, start_date, end_date):
     time.sleep(1)
     return fig
 
+
+#UPDATE TITOLO MACHINE LEARNING
+
+@app.callback(
+    Output("titolo-ML", "children"),
+    Input("dato-input-ML", "value"),
+    Input("input-nazione-ML", "value"),
+)
+def updateTitML(dato, nazione):
+    df = Analisi(nazione).df
+    inizio = df.index[0].strftime("%d/%m/%Y")
+    fine = df.index[-1].strftime("%d/%m/%Y")
+    periodo = "Trend: " + inizio + " - " + fine + " | Proiezione: 100 giorni"
+    titDato = dictDati[dato] + " - " + nazione
+    x = dbc.Row([
+        dbc.Col(html.H3(children= titDato, className="fs-4 m-0"),
+                width=12,
+                md=6),
+        dbc.Col(html.P(children= periodo, className="text-md-end m-0"),
+                width=12,
+                md=6)
+                 ],
+    )
+    return x
 
 # update fig ML
 @app.callback(
@@ -591,7 +534,7 @@ def updateFigML(dato_input, nazione):
     print(y_pred)
     error = max_error(y, y_pred)
     X_test = []
-    future_days = 1500
+    future_days = 1000
     for i in range(starting_date, starting_date + future_days):
         X_test.append([i])
     print(X_test)
@@ -654,13 +597,14 @@ def updateFigML(dato_input, nazione):
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(x=data["date"], y=data[dato_input], name=dictDati[dato_input] + " - " + nazione, connectgaps=True,
-                   fill='tozeroy'))
+                   fill='tozeroy', line_color = "rgb(55, 90, 127)"))
     fig.add_trace(go.Scatter(x=new_df.indice, y=new_df["predictions"],
                              name=dictDati[dato_input] + " Machine Learning SciKit Learn" + " - " + nazione,
-                             connectgaps=True))
+                             connectgaps=True, line_color = "rgb(52, 152, 219)"))
     fig.add_trace(go.Scatter(x=forecast["ds"], y=forecast["yhat"],
                              name=dictDati[dato_input] + " Machine Learning Prophet" + " - " + nazione,
-                             connectgaps=True))
+                             connectgaps=True, line_color = "rgb(0, 188, 140)"))
+
 
     # fig.update_yaxes(type="log")
     fig.update_layout(

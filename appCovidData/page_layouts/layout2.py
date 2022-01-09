@@ -9,8 +9,6 @@ from datetime import date
 from appCovidData.assets.header import header
 from appCovidData.assets.footer import footer
 
-italia = Analisi("Italy")
-cina = Analisi("China")
 
 
 def coutries_list():
@@ -20,18 +18,19 @@ def coutries_list():
     df = df[keep]
     return df['location'].unique()
 
-
-"""
-LAYOUT HTML
-"""
-
 # oggi = date.today()
 
+oggi = date.today()
+#ieri = oggi - datetime.timedelta(days=1)
 
-oggi = date.today() - datetime.timedelta(days=1)
-ieri = oggi - datetime.timedelta(days=30)
-futuro = oggi + datetime.timedelta(days=30)
-futuroMax = oggi + datetime.timedelta(days=365)
+minDate = date(2020, 1, 1)
+maxDate = oggi
+monthVisible = oggi
+startDate = oggi - datetime.timedelta(days=60)
+endDate = oggi
+startDateMondo = date(2020, 1, 1)
+endDateMondo = date(2020, 6, 1)
+
 datiCol = ["icu_patients", "icu_patients_per_million", "new_cases", "new_cases_per_million", "new_deaths",
            "new_deaths_per_million", "new_tests", "new_tests_per_thousand", "new_vaccinations",
            "people_fully_vaccinated", "people_fully_vaccinated_per_hundred", "people_vaccinated",
@@ -83,207 +82,309 @@ dictDatiMondo = {
     "total_vaccinations_per_hundred": "Dosi somministrate",
 }
 
+"""
+LAYOUT HTML
+"""
+
+
 # FIGURA MONDO
 mondo = dbc.Container([
-    dbc.Row([
-        dbc.Col([
-            html.Hr(style={'height': "4px", "width": "10%"}, className="mx-auto text-white"),
-            html.H2(children="World COVID-19 dataset", className="fs-4 text-center mb-4 fw-lighter"),
-            html.H3(id="titolo-dato", className="bg-success text-center py-3 shadow"),
-            html.P(children="Scegli il dato da visualizzare:", className="bg-primary p-2"),
-            dbc.RadioItems(
-                # options=[{'label': i, 'value': i} for i in italia.df.columns],
-                options=[{'label': dictDatiMondo[i], 'value': i} for i in datiColMondo],
-                # options=[{'label': 'Casi totali', 'value': 'total_cases'}, {'label': 'Nuove morti', 'value': 'new_deaths'}],
-                value="total_cases_per_million",
-                id="dato-input",
-                switch=True,
-                className="mb-3"
-            ),
-            html.P(children="Scegli il range di date:", className="bg-primary p-2"),
-            dcc.DatePickerRange(
-                id='my-date-picker-range',
-                min_date_allowed=date(2020, 3, 1),
-                max_date_allowed=oggi,
-                initial_visible_month=date(2021, 12, 1),
-                start_date=date(2020, 3, 1),
-                end_date=date(2020, 10, 1),
-                display_format='D/M/Y',
-            ),
+    dbc.Card([
+        dbc.CardHeader([
+            dbc.Row([
+                dbc.Col([
+                    html.H2(children="World data", className="fs-4 m-0"),
+                ],
+                width= 12,
+                md = 3,
+                className="bg-primary p-3"
+                ),
+                dbc.Col(
+                width= 12,
+                md = 9,
+                className="bg-white text-dark p-3",
+                id="titolo-mondo"
+                ),
+            ],
+            className="g-0",
+            align="center"),
         ],
-            lg=3,
-            width=12,
-            className="p-3 pb-3"
+        className="p-0"),
+        dbc.CardBody(
+            [
+                dbc.Row([
+                    dbc.Col([
+                        html.P(children="Scegli il dato da visualizzare:", className=""),
+                        dbc.RadioItems(
+                            # options=[{'label': i, 'value': i} for i in italia.df.columns],
+                            options=[{'label': dictDatiMondo[i], 'value': i} for i in datiColMondo],
+                            # options=[{'label': 'Casi totali', 'value': 'total_cases'}, {'label': 'Nuove morti', 'value': 'new_deaths'}],
+                            value="total_cases_per_million",
+                            id="dato-input",
+                            switch=True,
+                            className="mb-3"
+                        ),
+                        html.P(children="Scegli il range di date:", className=""),
+                        dcc.DatePickerRange(
+                            id='my-date-picker-range',
+                            min_date_allowed=minDate,
+                            max_date_allowed=maxDate,
+                            initial_visible_month=monthVisible,
+                            start_date=startDateMondo,
+                            end_date=endDateMondo,
+                            display_format='D/M/Y',
+                            style={"font-size": "12px", }
+                        ),
+                    ],
+                        lg=3,
+                        width=12,
+                        className="p-3"
+                    ),
+                    dbc.Col([
+                        dcc.Loading(id="ls-loading-1", children=[
+                            dcc.Graph(
+                                id='fig-mondo',
+                                # figure=italia.figTot,
+                                responsive=True,
+                                config={
+                                    'responsive': True,
+                                    'autosizable': True
+                                },
+                                style={
+                                    "height": "500px",
+                                    "min-height": "500px",
+                                },
+                                className="p-3"
+                            )],
+                                    type="default"),
+                    ],
+                        className="m-0 p-3 p-lg-0 bg-black",
+                        lg=9,
+                        width=12
+                    )
+                ],
+                    className="w-100 m-0 p-0 g-0 border-white"),
+            ],
+            className="p-0"
         ),
-        dbc.Col([
-            dcc.Loading(id="ls-loading-1", children=[
-                dcc.Graph(
-                    id='fig-mondo',
-                    # figure=italia.figTot,
-                    responsive=True,
-                    config={
-                        'responsive': True,
-                        'autosizable': True
-                    },
-                    style={
-                        "height": "80vh"
-                    },
-                    className="pb-3"
-                )],
-                        type="default"),
-        ],
-            className="m-0 p-3 p-lg-0",
-            lg=9,
-            width=12
-        )
+        dbc.CardFooter("Data source: OWID - Our World In Data"),
     ],
-        className="w-100 m-0 p-0"),
+    className="rounded"),
 ],
+    className="p-0 mb-5",
     fluid=False,
-    className="p-0 rounded shadow bg-black mt-5 container"
+    #className="p-0 rounded shadow bg-black mt-5 container"
 )
 
 analisiCovid = dbc.Container([
-    dbc.Row([
-        dbc.Col([
+    dbc.Card([
+        dbc.CardHeader([
             dbc.Row([
                 dbc.Col([
-                    html.Hr(style={'height': "4px", "width": "10%"}, className="mx-auto text-white"),
-                    html.H2(children="Confronta 2 nazioni", className="fs-4 text-center mb-4 fw-lighter"),
-                    html.P(children="Scegli la nazione 1:",
-                           className="bg-primary p-2"),
-                    dcc.Dropdown(
-                        id='input-nazione-1',
-                        options=[{'label': i, 'value': i} for i in coutries_list()],
-                        value='Italy',
-                        className="mb-3 text-dark"
-                    ),
-                    html.P(children="Scegli la nazione 2:", className="bg-primary p-2"),
-                    dcc.Dropdown(
-                        id='input-nazione-2',
-                        options=[{'label': i, 'value': i} for i in coutries_list()],
-                        value='China',
-                        className="mb-3 text-dark"
-                    ),
+                    html.H2(children="Effettua un confronto", className="fs-4 m-0"),
                 ],
-                    className="p-3"),
+                width= 12,
+                md = 3,
+                className="bg-primary p-3"
+                ),
+                dbc.Col(
+                width= 12,
+                md = 9,
+                className="bg-white text-dark p-3",
+                id="titolo-confronto"
+                ),
             ],
-                className="w-100 m-0 p-0"
-            ),
+            className="g-0",
+            align="center"),
         ],
-            lg=3,
-            width=12,
-            className="p-3 pb-3"),
-        dbc.Col([
-            dbc.Row(
-                [
+        className="p-0"),
+        dbc.CardBody(
+            [
+                dbc.Row([
                     dbc.Col([
-                        html.H2(id="titolo-nazione-1", className="bg-success text-center py-3 shadow"),
-                        html.Ul(
-                            className="list-group bg-light",
-                            id="dati-nazione-1")
+                        html.P(children="Scegli il range di date:", className=""),
+                        dcc.DatePickerRange(
+                            id='date-confronto',
+                            min_date_allowed=minDate,
+                            max_date_allowed=maxDate,
+                            initial_visible_month=monthVisible,
+                            start_date=startDate,
+                            end_date=endDate,
+                            display_format='D/M/Y',
+                            style={"font-size": "12px", },
+                            className="mb-3"
+                        ),
+                        html.P(children="Dato 1:",
+                               className=""),
+                        dcc.Dropdown(
+                            # options=[{'label': i, 'value': i} for i in italia.df.columns],
+                            options=[{'label': dictDati[i], 'value': i} for i in datiCol],
+                            # options=[{'label': 'Casi totali', 'value': 'total_cases'}, {'label': 'Nuove morti', 'value': 'new_deaths'}],
+                            value="total_cases",
+                            id="dato-input-1",
+                            # switch=True,
+                            className="text-black"
+                        ),
+                        dcc.Dropdown(
+                            id='input-nazione-1',
+                            options=[{'label': i, 'value': i} for i in coutries_list()],
+                            value='Italy',
+                            className="mb-3 text-dark"
+                        ),
+                        html.P(children="Dato 2:", className=""),
+                        dcc.Dropdown(
+                            # options=[{'label': i, 'value': i} for i in italia.df.columns],
+                            options=[{'label': dictDati[i], 'value': i} for i in datiCol],
+                            # options=[{'label': 'Casi totali', 'value': 'total_cases'}, {'label': 'Nuove morti', 'value': 'new_deaths'}],
+                            value="total_cases",
+                            id="dato-input-2",
+                            # switch=True,
+                            className="text-black"
+                        ),
+                        dcc.Dropdown(
+                            id='input-nazione-2',
+                            options=[{'label': i, 'value': i} for i in coutries_list()],
+                            value='Spain',
+                            className="mb-3 text-dark"
+                        ),
                     ],
+                        lg=3,
                         width=12,
-                        lg=6,
-                        className="p-3"
-                    ),
+                        className="p-3"),
                     dbc.Col([
-                        html.H2(id="titolo-nazione-2", className="bg-success text-center py-3 shadow"),
-                        html.Ul(
-                            className="list-group bg-light",
-                            id="dati-nazione-2")
+                        dbc.Row([
+                            dbc.Col([
+                                dcc.Loading(id="ls-loading-2", children=[
+                                    dcc.Graph(
+                                        id='fig-confronto',
+                                        # figure=italia.figTot,
+                                        responsive=True,
+                                        config={
+                                            'responsive': True,
+                                            'autosizable': True
+                                        },
+                                        style={
+                                            'height': '200px'
+                                        },
+                                    )],
+                                            type="default")
+                            ],
+                                width=12,
+                                align="bottom",
+                                className="p-3"
+                            ),
+                        ]),
+                        dbc.Row(
+                            [
+                                dbc.Col([],
+                                    width=12,
+                                    lg=6,
+                                    className="p-3",
+                                    id="dati-nazione-1"
+                                ),
+                                dbc.Col([],
+                                    width=12,
+                                    lg=6,
+                                    className="p-3",
+                                    id="dati-nazione-2"
+                                ),
+                            ],
+                            # align="center",
+                            className="mb-3 g-0"
+                        ),
                     ],
-                        width=12,
-                        lg=6,
-                        className="p-3"
+                        className="m-0 p-3 p-lg-0 bg-black",
+                        lg=9,
+                        width=12
                     ),
                 ],
-                # align="center",
-                className="mb-3 g-0"
-            ),
-        ],
-            className="m-0 p-3 p-lg-0",
-            lg=9,
-            width=12
+                className="g-0"),
+            ],
+            className="p-0"
         ),
+        dbc.CardFooter("Data source: OWID - Our World In Data"),
     ]),
-    dbc.Row([
-        dbc.Col([
-            dcc.Loading(id="ls-loading-2", children=[
-                dcc.Graph(
-                    id='fig-confronto',
-                    # figure=italia.figTot,
-                    responsive=True,
-                    config={
-                        'responsive': True,
-                        'autosizable': True
-                    },
-                    style={
-                        'height': '330px'
-                    },
-                )],
-                        type="default")
-        ],
-            width=12,
-            align="bottom",
-            className="p-3"
-        ),
-    ])
 ],
     fluid=False,
-    className="p-0 rounded shadow bg-black mt-5 container"
+    className="p-0"
 )
 
+
+
 machineLearning = dbc.Container([
-    dbc.Row([
-        dbc.Col([
-            html.Hr(style={'height': "4px", "width": "10%"}, className="mx-auto text-white"),
-            html.H2(children="Fai una proiezione", className="fs-4 text-center mb-4 fw-lighter"),
-            html.P(children="Scegli il dato:", className="bg-primary p-2"),
-            dcc.Dropdown(
-                # options=[{'label': i, 'value': i} for i in italia.df.columns],
-                options=[{'label': dictDati[i], 'value': i} for i in datiCol],
-                # options=[{'label': 'Casi totali', 'value': 'total_cases'}, {'label': 'Nuove morti', 'value': 'new_deaths'}],
-                value="total_cases",
-                id="dato-input-ML",
-                # switch=True,
-                className="text-black"
-            ),
-            html.P(children="Scegli la nazione:", className="bg-primary p-2"),
-            dcc.Dropdown(
-                id='input-nazione-ML',
-                options=[{'label': i, 'value': i} for i in coutries_list()],
-                value='Italy',
-                className="mb-3 text-black"
-            ),
-        ],
-            lg=3,
-            width=12,
-            className="p-3"
-        ),
-        dbc.Col([
-            dcc.Loading(id="ls-loading-3", children=[
-                dcc.Graph(
-                    id='fig-ML',
-                    # figure= fig,
-                    responsive=True,
-                    config={
-                        'responsive': True,
-                        'autosizable': True
-                    },
-                    style={
-                        #  'height': '330px'
-                    },
+    dbc.Card([
+        dbc.CardHeader([
+            dbc.Row([
+                dbc.Col([
+                    html.H2(children="Fai una proiezione", className="fs-4 m-0"),
+                ],
+                width= 12,
+                md = 3,
+                className="bg-primary p-3"
                 ),
-            ]),
+                dbc.Col(
+                width= 12,
+                md = 9,
+                className="bg-white text-dark p-3",
+                id="titolo-ML"
+                ),
+            ],
+            className="g-0",
+            align="center"),
         ],
-            width=12,
-            lg=9,
-            align="bottom",
-            className="p-3"
-        ),
-    ],
-        className="g-0"),
+        className="p-0"),
+        dbc.CardBody([
+            dbc.Row([
+                dbc.Col([
+                    html.P(children="Scegli il dato:", className=""),
+                    dcc.Dropdown(
+                        # options=[{'label': i, 'value': i} for i in italia.df.columns],
+                        options=[{'label': dictDati[i], 'value': i} for i in datiCol],
+                        # options=[{'label': 'Casi totali', 'value': 'total_cases'}, {'label': 'Nuove morti', 'value': 'new_deaths'}],
+                        value="total_cases",
+                        id="dato-input-ML",
+                        # switch=True,
+                        className="text-black mb-3"
+                    ),
+                    html.P(children="Scegli la nazione:", className=""),
+                    dcc.Dropdown(
+                        id='input-nazione-ML',
+                        options=[{'label': i, 'value': i} for i in coutries_list()],
+                        value='Italy',
+                        className="mb-3 text-black"
+                    ),
+                ],
+                    lg=3,
+                    width=12,
+                    className="p-3"
+                ),
+                dbc.Col([
+                    dcc.Loading(id="ls-loading-3", children=[
+                        dcc.Graph(
+                            id='fig-ML',
+                            # figure= fig,
+                            responsive=True,
+                            config={
+                                'responsive': True,
+                                'autosizable': True
+                            },
+                            style={
+                                'height': '250px'
+                            },
+                        ),
+                    ]),
+                ],
+                    width=12,
+                    lg=9,
+                    align="bottom",
+                    className="m-0 p-3 bg-black"
+                ),
+            ],
+                className="g-0"),
+        ],
+                     className="p-0"),
+        dbc.CardFooter(["Data source: OWID - Our World In Data"]),
+    ]),
 ],
     fluid=False,
     className="p-0 rounded shadow bg-black my-5"
