@@ -1,13 +1,5 @@
-import pandas as pd
-import plotly.graph_objects as go
-import plotly.express as ex
-from datetime import timedelta, date # pacchetto datetime per utilizzo e manipolaizione date
-
-
+#definisco classe analisi per filtro dataset in base alla nazione 
 class Analisi:
-
     def __init__(self, paese , df):
-
-
+#filtra il dataframe mantenendo le righe in cui il valore della colonna location è uguale a paese  
         self.df = df[df["location"] == paese]
-
