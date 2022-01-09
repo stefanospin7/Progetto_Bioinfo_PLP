@@ -43,18 +43,6 @@ dictDati = {
 }
 
 
-# add callback for toggling the collapse on small screens
-@app.callback(
-    Output("navbar-collapse", "is_open"),
-    [Input("navbar-toggler", "n_clicks")],
-    [State("navbar-collapse", "is_open")],
-)
-def toggle_navbar_collapse(n, is_open):
-    if n:
-        return not is_open
-    return is_open
-
-
 @app.callback(
     Output("fig-mondo", "figure"),
     Input("dato-input", "value"),
@@ -69,15 +57,7 @@ def update_figMondo(input_dato, start_date, end_date):
     locationDel = ['World', 'Asia', 'Africa', 'Oceania', 'Europe', 'High income', 'Low income', 'Upper middle income',
                    'Lower middle income', 'North America', 'South America', 'European Union', 'Qatar']
     df = df[~df.location.isin(locationDel)]
-    print(df.location.unique())
 
-
-    # df = df[df.location != 'World']
-    # periodo = (df['date'] > start_date) & (df['date'] <= end_date)
-    # if (futuro_input == False):
-    #     periodo = (df['date'] > start_date) & (df['date'] <= end_date)
-    # else:
-    #        periodo = (df['date'] > start_date) & (df['date'] <= future_date)
 
     periodo = (df['date'] >= start_date) & (df['date'] <= end_date)
     df = df.loc[periodo]
@@ -85,7 +65,7 @@ def update_figMondo(input_dato, start_date, end_date):
     df['date'] = df['date'].dt.date.astype(str)
 
     # Columns renaming
-    df.columns = [col.lower() for col in df.columns]
+    #df.columns = [col.lower() for col in df.columns]
     with open('data/custom.geo.json') as fp:
         data = json.load(fp)
 
@@ -291,7 +271,6 @@ def update_figMondo(input_dato, start_date, end_date):
     # # Creating the figure
     # fig = go.Figure(data=data, layout=layout, frames=frames)
 
-    time.sleep(1)
     return fig
 
 
@@ -460,7 +439,6 @@ def updateFigConfronto(nazione1, nazione2, datoInputOne, datoInputTwo, start_dat
     )
     fig.update_xaxes(range=[start_date, end_date])
 
-    time.sleep(1)
     return fig
 
 
@@ -623,5 +601,4 @@ def updateFigML(dato_input, nazione):
     # fig.update_xaxes(range=[start_date, end_date])
 
     # fig.show()
-    time.sleep(1)
     return fig
