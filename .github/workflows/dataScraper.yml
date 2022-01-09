@@ -1,3 +1,6 @@
+#aggiorna ogni giorno, alle 22:00 CET, il file owid-dataset.csv 
+
+
 name: dataScraper
 
 on:
