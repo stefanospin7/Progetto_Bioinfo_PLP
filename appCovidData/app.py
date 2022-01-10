@@ -20,6 +20,10 @@ app = dash.Dash(__name__,
                         'property': 'og:description',
                         'content': 'COWID - a COVID-19 dashboard',
                     },
+                    {
+                        'property': 'og:image',
+                        'content': 'https://i.ibb.co/BfCMHLZ/logo-Tavola-disegno-1.png',
+                    },
                   #set viewport for mobile
                     {"name": "viewport", "content": "width=device-width, initial-scale=1"},
                 ],
