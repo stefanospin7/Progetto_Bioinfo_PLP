@@ -130,9 +130,8 @@ def update_figMondo(input_dato, start_date, end_date):
         coloraxis_colorbar=dict(
             title="",
         )
-    )
-
-   return fig
+        )
+    return fig
 
 
 #UPDATE TITOLO 
