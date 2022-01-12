@@ -27,7 +27,6 @@ Clone the git repo, then install the requirements with pip
 ```
 
 git clone https://github.com/stefanospin7/Progetto_Bioinfo_PLP
-cd dash-sample-apps/apps/dash-yield-curve
 pip install -r requirements.txt
 
 ```
