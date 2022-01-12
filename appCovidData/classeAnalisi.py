@@ -1,5 +1,5 @@
-#definisco classe analisi per filtro dataset in base alla nazione 
+# defying "Analisi" class to filter dataset according to the specific Nation 
 class Analisi:
     def __init__(self, paese , df):
-#filtra il dataframe mantenendo le righe in cui il valore della colonna location è uguale a paese  
+# filtering dataframe keeping only the rows in which the data of the column location correspond (equal) to  "paese"  
         self.df = df[df["location"] == paese]

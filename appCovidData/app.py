@@ -1,7 +1,7 @@
 import dash  
 import dash_bootstrap_components as dbc
 
-#creazione web app dash 
+# creating dash web app 
 app = dash.Dash(__name__,
                 title="COWID - a COVID-19 dashboard",
                 suppress_callback_exceptions=True,

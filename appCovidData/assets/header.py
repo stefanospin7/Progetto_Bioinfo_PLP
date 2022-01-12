@@ -1,7 +1,7 @@
 from dash import html  
 import dash_bootstrap_components as dbc
 
-#definizione layout html dell'header
+# defying header html layout 
 header = dbc.Container(
             dbc.Row(
                 [

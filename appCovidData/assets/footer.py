@@ -1,7 +1,7 @@
 from dash import html  
 import dash_bootstrap_components as dbc
 
-#definizione layout dell'html footer
+# defying footer html layout 
 footer = dbc.Container(
             dbc.Container([
                 html.H4(children='Credits', className=''),

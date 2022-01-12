@@ -8,14 +8,14 @@ from appCovidData.assets.header import header
 from appCovidData.assets.footer import footer
 
 
-#funzione che crea la lista delle nazioni
+# function that creates a list of Nations 
 def coutries_list():
     df = pd.read_csv("data/owid-dataset.csv")
     keep = ["location"]
     df = df[keep]
     return df['location'].unique()
 
-#variabili utilizzate per i DateRangePicker
+# variables used by DateRangePicker as default values
 oggi = date.today()
 minDate = date(2020, 1, 1)
 maxDate = oggi
@@ -25,7 +25,7 @@ endDate = oggi
 startDateMondo = date(2020, 3, 1)
 endDateMondo = date(2020, 5, 1)
 
-#lista dati per le opzioni Dropdown e Switch
+# data list for Dropdown and Switch options 
 datiCol = ["icu_patients", "icu_patients_per_million", "new_cases", "new_cases_per_million", "new_deaths",
            "new_deaths_per_million", "new_tests", "new_tests_per_thousand", "new_vaccinations",
            "people_fully_vaccinated", "people_fully_vaccinated_per_hundred", "people_vaccinated",
@@ -37,8 +37,8 @@ datiColMondo = ["icu_patients_per_million", "new_cases_per_million", "new_deaths
                 "total_cases_per_million", "total_deaths_per_million", "total_tests_per_thousand",
                 "total_vaccinations_per_hundred"]
 
-#dizionari per la traduzione dei nomi delle colonne del dataset
-#dizionario per sezioni confronto e proiezioni
+# dictionaries to translate dataset columns' names (as an alias)
+# dictionary for "confronto" (comparison) and "proiezione" (prediction) sections 
 dictDati = {
     "icu_patients": "Terapia Intensiva",
     "icu_patients_per_million": "Terapia Intensiva per milione",
@@ -65,7 +65,7 @@ dictDati = {
     "total_vaccinations": "Dosi somministrate totali",
     "total_vaccinations_per_hundred": "Dosi somministrate per centiania",
 }
-#dizionario per la sezione World Data
+# dictionary for "World Data" section 
 dictDatiMondo = {
     "icu_patients_per_million": "Terapia Intensiva",
     "new_cases_per_million": "Casi giornalieri",
@@ -146,7 +146,7 @@ intro = dbc.Container([
 className="mb-5")
 
 
-# sezione World Data
+# World Data section 
 mondo = dbc.Container([
     dbc.Card([
         dbc.CardHeader([
@@ -162,7 +162,7 @@ mondo = dbc.Container([
                 width= 12,
                 md = 9,
                 className="bg-white text-dark p-3",
-                #aggiornamento titolo e data confronto tramite callback
+                # updating data and title of comparison section by callback 
                 id="titolo-mondo"
                 ),
             ],
@@ -176,7 +176,7 @@ mondo = dbc.Container([
                     dbc.Col([
                         html.P(children="Scegli il dato da visualizzare:", className=""),
                         dbc.RadioItems(
-                            #ciclo per mostrare opzioni da lista dati 
+                            # for loop to show options from data list  
                             options=[{'label': dictDatiMondo[i], 'value': i} for i in datiColMondo],
                             value="total_cases_per_million",
                             id="dato-input",
@@ -202,7 +202,7 @@ mondo = dbc.Container([
                     dbc.Col([
                         dcc.Loading(id="ls-loading-1", children=[
                             dcc.Graph(
-                                #grafico aggiornato tramite callback
+                                # graph updated by callback 
                                 id='fig-mondo',
                                 responsive=True,
                                 config={
@@ -234,7 +234,7 @@ mondo = dbc.Container([
     fluid=False
 )
 
-#sezione confronto
+# "confronto" (comparison) section 
 analisiCovid = dbc.Container([
     dbc.Card([
         dbc.CardHeader([
@@ -250,7 +250,7 @@ analisiCovid = dbc.Container([
                 width= 12,
                 md = 9,
                 className="bg-white text-dark p-3",
-                #aggiornamento titolo e data confronto tramite callback
+                # updating data and title of comparison section by callback
                 id="titolo-confronto"
                 ),
             ],
@@ -277,7 +277,7 @@ analisiCovid = dbc.Container([
                         html.P(children="Dato 1:",
                                className=""),
                         dcc.Dropdown(
-                            #ciclo per mostrare opzioni da lista dati
+                            # for loop to show options from data list
                             options=[{'label': dictDati[i], 'value': i} for i in datiCol],
                             value="total_cases",
                             id="dato-input-1",
@@ -285,14 +285,14 @@ analisiCovid = dbc.Container([
                         ),
                         dcc.Dropdown(
                             id='input-nazione-1',
-                            #ciclo per mostrare opzioni da lista nazioni
+                            #for loop to show options from Nation list
                             options=[{'label': i, 'value': i} for i in coutries_list()],
                             value='Italy',
                             className="mb-3 text-dark"
                         ),
                         html.P(children="Dato 2:", className=""),
                         dcc.Dropdown(
-                            #ciclo per mostrare opzioni da lista dati
+                            # for loop to show options from data list
                             options=[{'label': dictDati[i], 'value': i} for i in datiCol],
                             value="total_cases",
                             id="dato-input-2",
@@ -300,7 +300,7 @@ analisiCovid = dbc.Container([
                         ),
                         dcc.Dropdown(
                             id='input-nazione-2',
-                            #ciclo per mostrare opzioni da lista nazioni
+                            # for loop to show options from Nation list
                             options=[{'label': i, 'value': i} for i in coutries_list()],
                             value='Spain',
                             className="mb-3 text-dark"
@@ -314,7 +314,7 @@ analisiCovid = dbc.Container([
                             dbc.Col([
                                 dcc.Loading(id="ls-loading-2", children=[
                                     dcc.Graph(
-                                        #grafico aggiornato tramite callback
+                                        # graph updated by callback 
                                         id='fig-confronto',
                                         responsive=True,
                                         config={
@@ -338,14 +338,14 @@ analisiCovid = dbc.Container([
                                     width=12,
                                     lg=6,
                                     className="p-3",
-                                    #tabella dato1 aggiornata tramite callback 
+                                    # "dato1" table updated by callback  
                                     id="dati-nazione-1"
                                 ),
                                 dbc.Col([],
                                     width=12,
                                     lg=6,
                                     className="p-3",
-                                    #tabella dato2 aggiornata tramite callback 
+                                    # "dato2" table updated by callback 
                                     id="dati-nazione-2"
                                 ),
                             ],
@@ -369,7 +369,7 @@ analisiCovid = dbc.Container([
 )
 
 
-#sezione proiezione futura
+# "fai una proiezione" section (future prediction)
 machineLearning = dbc.Container([
     dbc.Card([
         dbc.CardHeader([
@@ -385,7 +385,7 @@ machineLearning = dbc.Container([
                 width= 12,
                 md = 9,
                 className="bg-white text-dark p-3",
-                #aggiornamento titolo e data proiezione tramite callback
+                # updating prediction date and title  by callback 
                 id="titolo-ML"
                 ),
             ],
@@ -398,7 +398,7 @@ machineLearning = dbc.Container([
                 dbc.Col([
                     html.P(children="Scegli il dato:", className=""),
                     dcc.Dropdown(
-                        #ciclo per mostrare opzioni da lista dati
+                        #for loop to show options from data list 
                         options=[{'label': dictDati[i], 'value': i} for i in datiCol],
                         value="total_cases",
                         id="dato-input-ML",
@@ -407,7 +407,7 @@ machineLearning = dbc.Container([
                     html.P(children="Scegli la nazione:", className=""),
                     dcc.Dropdown(
                         id='input-nazione-ML',
-                        #ciclo per mostrare opzioni da lista nazioni
+                        # for loop to show options from Nations list 
                         options=[{'label': i, 'value': i} for i in coutries_list()],
                         value='Italy',
                         className="mb-3 text-black"
@@ -420,7 +420,7 @@ machineLearning = dbc.Container([
                 dbc.Col([
                     dcc.Loading(id="ls-loading-3", children=[
                         dcc.Graph(
-                            #aggiornamento grafico proiezione tramite callback
+                            # prediction graph updated by callback 
                             id='fig-ML',
                             responsive=True,
                             config={
@@ -449,7 +449,7 @@ machineLearning = dbc.Container([
     className="p-0 rounded shadow bg-black my-5"
 )
 
-#definizione funzione per la creazione layout composto da header, footer e le varie sezioni
+# defying function to create layout made of header, footer and the other sections 
 def make_layout():
     return html.Div(id='parent', children=[
         header,
