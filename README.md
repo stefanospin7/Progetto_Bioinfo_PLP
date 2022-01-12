@@ -4,9 +4,7 @@
 
 This is a web app, developed with Dash interactive Python framework, to analize COVID-19 data from OWID - Our World in Data dataset.
 
-[OWID](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv)
-[Plotly](https://plot.ly/)
-[Dash](https://plot.ly/dash)
+[OWID - Our World In Data](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv)
 
 ## Getting Started
 
@@ -29,7 +27,6 @@ Clone the git repo, then install the requirements with pip
 ```
 
 git clone https://github.com/stefanospin7/Progetto_Bioinfo_PLP
-cd dash-sample-apps/apps/dash-yield-curve
 pip install -r requirements.txt
 
 ```
