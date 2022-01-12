@@ -3,10 +3,10 @@ from appCovidData.page_layouts.layout2 import make_layout as pag1
 from dash import html, dcc
 from appCovidData import callbacks
 
-#creo un server dash 
+# defining "server" variable as app's ".server" method return to make a connection with Gunicorn 
 server = app.server
 
-#applico layout html
+# applying html layout
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Div(id='page-content', children = pag1())
