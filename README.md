@@ -6,10 +6,6 @@ This is a web app, developed with Dash interactive Python framework, to analize 
 
 [OWID - Our World In Data](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv)
 
-[Plotly](https://plot.ly/)
-
-[Dash](https://plot.ly/dash)
-
 ## Getting Started
 
 ### Running the app locally
