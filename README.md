@@ -1,65 +1,70 @@
 [![dataScraper](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml/badge.svg)](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml)
 
-# Progetto_Bioinfo_PLP
+# COVVID - A COVID-19 dashboard
 
-Questa repository sarà usata per managing di un progetto universitario di gruppo di Bioinformatica (TOR VERGATA).
+This is a web app, developed with Dash interactive Python framework, to analize COVID-19 data from OWID - Our World in Data dataset.
 
+[OWID](https://github.com/owid/covid-19-data/blob/master/public/data/owid-covid-data.csv)
+[Plotly](https://plot.ly/)
+[Dash](https://plot.ly/dash)
 
-<br/>
-************* Info: **************<br/>
+## Getting Started
 
-Questo progetto ha come target quello di estrapolare dati statistici riguardanti Covid-19 in Italia e in altri paesi secondo criteri che sono ancora da decidere tramite python e librerie.
+### Running the app locally
 
-<br/>
-************* File: **************<br/>
+First create a virtual environment with conda or venv inside a temp folder, then activate it.
 
-- main.py: main application
-- pullData.py: crea file csv da dataset Covid
-- data/dataCovid.cvs: file cvs con import dataset Covid
+```
+virtualenv venv
 
+# Windows
+venv\Scripts\activate
+# Or Linux
+source venv/bin/activate
 
-<br/>
-************* Requirements: **************<br/>
+```
 
-Per collaborare al progetto e usufruire del codice è necessario isntallare:
-- pyton 
-- pip https://www.youtube.com/watch?v=dpQEs6tE1XU&ab_channel=ProgrammingKnowledge2
-- pandas (pip install pandas da terminale) 
-- plotly (pip install plotly da terminale)
-- dash
-- dash core-components
-- dash html-components
+Clone the git repo, then install the requirements with pip
 
+```
 
-<br/>
-************* Dataset: **************<br/>
+git clone https://github.com/stefanospin7/Progetto_Bioinfo_PLP
+cd dash-sample-apps/apps/dash-yield-curve
+pip install -r requirements.txt
 
-- https://github.com/pcm-dpc/COVID-19 - Dati Covid Italia<br/>
-- https://github.com/italia/covid19-opendata-vaccini - Dati Vaccini Italia		
+```
 
+Run the app
 
-<br/>
-************* Link utili: ************<br/>
+```
 
-- (This is How I Create Dazzling Dashboards Purely in Python)
-  https://towardsdatascience.com/plotly-dashboards-in-python-28a3bb83702c
-- Tableau - software per analisi dati suggerito dal prof
-  Licenza studenti gratuita
-  https://www.tableau.com/it-it
-- Tutorial tabpy: api per connessione python e Tableau server (?)
-  https://towardsdatascience.com/tabpy-combining-python-and-tableau-511b10da8175
+python app.py
 
+```
 
-<br/>
-************* Authors: **************<br/>
+## About the app
 
-Progetto curato da:
+This Dash app get and visualize data about COVID-19 pandemic from OWID - Our world in data dataset
+
+## Built With
+
+- [Dash](https://dash.plot.ly/) - Main server and interactive components
+- [Plotly Python](https://plot.ly/python/) - Used to create the interactive plots
+
+## Screenshots
+
+The following are screenshots for the app in this repo:
+
+## Credits
+
+University course project
+MsC in Bioinformatics, University of Tor Vergata, Rome, Italy
+
+Students:
 - Manfredo Aristide Fraccola
 - Sara Giordani
 - Andrea Misiti
+- Alessandro Pucci
 - Angela Sangiorgio
 - Stefano Spinelli
 - Gaia Tomei
-
-
-
