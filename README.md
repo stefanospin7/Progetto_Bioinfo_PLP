@@ -38,7 +38,7 @@ Run the app
 
 ```
 
-python app.py
+python main.py
 
 ```
 
@@ -54,6 +54,12 @@ This Dash app get and visualize data about COVID-19 pandemic from OWID - Our wor
 ## Screenshots
 
 The following are screenshots for the app in this repo:
+
+![Screenshot1](screenshots/screenshot1.png)
+
+![Screenshot2](screenshots/screenshot2.png)
+
+![Screenshot3](screenshots/screenshot3.png)
 
 ## Credits
 
