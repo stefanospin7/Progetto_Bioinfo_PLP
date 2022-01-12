@@ -15,13 +15,13 @@ from sklearn.metrics import max_error
 import prophet as Prophet
 import json
 import math
-#settaggio token per accedere a mapbox
+# setting token to access mapbox 
 px.set_mapbox_access_token(
         "pk.eyJ1IjoibWFuZnJlZG9mcmFjY29sYSIsImEiOiJja3hyd2JjbnEwNnVjMnBvNTZrbHBqdmwzIn0.YFYLdLUxoYC3gSpkcGplqQ")
 
-#lista dati  
+# data list   
 datiCol = ["icu_patients", "icu_patients_per_million", "new_cases", "new_cases_per_million", "new_deaths", "new_deaths_per_million", "new_tests", "new_tests_per_thousand", "new_vaccinations", "people_fully_vaccinated", "people_fully_vaccinated_per_hundred", "people_vaccinated", "people_vaccinated_per_hundred", "positive_rate", "total_boosters", "total_boosters_per_hundred", "total_cases", "total_cases_per_million", "total_deaths", "total_deaths_per_million", "total_tests", "total_tests_per_thousand", "total_vaccinations", "total_vaccinations_per_hundred"]
-#dizionari per la traduzione dei nomi delle colonne del dataset
+# dictionaries to translate ddataset columns' names 
 dictDati = {
 "icu_patients" : "Terapia Intensiva",
 "icu_patients_per_million" : "Terapia Intensiva per milione",
@@ -49,19 +49,19 @@ dictDati = {
 "total_vaccinations_per_hundred" : "Dosi somministrate per centiania",
 }
 
-#lettura globale del csv del dataset owid
+# global read_csv of owid dataset 
 dfTot = pd.read_csv("data/owid-dataset.csv",
-                    #tratta una stringa come oggetto di tipo data (colonna "date") 
+                    # processing a string as a date-time object type (column "date") 
                      parse_dates=["date"]
                      )
 
 """
-CALLBACK PER GRAFICO MONDO
+WORLD DATA GRAPH CALLBACK
 """
 
-#UPDATE GRAFICO
+# GRAPH UPDATE
 
-#@ decorator della libreria che descrive l'input e l'output di default
+#@ decorator of the library which describes the default of input and output 
 @app.callback(
     Output("fig-mondo", "figure"),
     Input("dato-input", "value"),
@@ -69,52 +69,52 @@ CALLBACK PER GRAFICO MONDO
     Input('my-date-picker-range', 'end_date'),
 )
 def update_figMondo(input_dato, start_date, end_date):
-    #crea una copia del dataframe globale (per ottimizzare il caricamento del csv)
+    # creating a copy of the global dataframe (to optimize the csv loading) 
     df = dfTot
 
-    #elimina le righe in cui la colonna location contiene gli elementi della lista
+    # deleting rows in which location column contains some elements of the list  
     locationDel = ['World', 'Asia', 'Africa', 'Oceania', 'Europe', 'High income', 'Low income', 'Upper middle income',
                    'Lower middle income', 'North America', 'South America', 'European Union', 'Qatar']
     df = df[~df.location.isin(locationDel)]
 
-    #definizione del periodo in base all'input utente e filtra il dataframe in base ad esso 
+    # definition of the time period and filtering of dataframe according to the user input 
     periodo = (df['date'] >= start_date) & (df['date'] <= end_date)
     df = df.loc[periodo]
-    #trasforma la colonna "date" in stringa
+    # convert the column "date" into a string 
     df['date'] = df['date'].dt.date.astype(str)
 
-    #legge il file custom.geo.json che contiene i poligoni delle nazioni 
+    # reading the file custom.geo.json which contains polygons of the Nations
     with open('data/custom.geo.json') as fp:
         data = json.load(fp)
 
-    #approssima le coordinate a due decimali per alleggerire i calcoli della creazione poligono
+    # rounding (approssima) coordinates to two decimals to optimize the calculation to create polyogons  
     for i in range(0, len(data["features"])):
         for j in range(0, len(data["features"][i]['geometry']['coordinates'])):
             data["features"][i]['geometry']['coordinates'][j] = np.round(
                 np.array(data["features"][i]['geometry']['coordinates'][j]), 2)
 
     
-    #definizione grafico choropleth dei dati mondo
-    fig = px.choropleth_mapbox(df, #lettura dataframe
-                               geojson=data, #lettura geojson per calcolo poligoni nazioni
-                               locations='iso_code', #cerca la colonna "iso_code" nel dataframe 
-                               color=input_dato, #da il colore al dato
-                               featureidkey="properties.iso_a3", #cerca nel geojson il dato iso_a3 che matcha con "iso_code"
-                               color_continuous_scale=["rgb(55, 90, 127)", "rgb(0, 188, 140)"], #definisco la scala di colori personalizzata
-                               zoom=1, center={"lat": 24.8, "lon": 6.2}, #definisco zoom e la posizione della mappa al caricamento
+    # defying choropleth graph of the World data 
+    fig = px.choropleth_mapbox(df, # dataframe reading
+                               geojson=data, # geojson reading to calculate polygons of Nations 
+                               locations='iso_code', # searching the column "iso_code" in dataframe 
+                               color=input_dato, # giving to data the color
+                               featureidkey="properties.iso_a3", # searching in geojson the data iso_a3 which matches with "iso_code"
+                               color_continuous_scale=["rgb(55, 90, 127)", "rgb(0, 188, 140)"], # defying the personalized color scale 
+                               zoom=1, center={"lat": 24.8, "lon": 6.2}, # defying map zoom and position at the page loading 
                                opacity=0.5, 
                                labels={input_dato: dictDati[input_dato]}, 
-                               animation_frame='date', #crea un'animazione del grafico in base alla colonna "date"
+                               animation_frame='date', # creating a graph animation according to the column "date"
 
                                )
     
-    #posizionamento corretto dello slider e del play dell'animazione
+    # correct placing of the animation slider and play 
     fig['layout']['updatemenus'][0]['pad'] = dict(r=10, t=10)
     fig['layout']['sliders'][0]['pad'] = dict(r=10, t=10, )
-    #definisce la velocità dell'animazione   
+    # defying animation speed   
     fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 200
     fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 50
-    #definisce il layout del grafico
+    # defying graph layout
     fig.update_layout(
         paper_bgcolor='rgba(255,255,255,0)',
         plot_bgcolor='rgba(0,0,0,0)',
@@ -134,7 +134,7 @@ def update_figMondo(input_dato, start_date, end_date):
     return fig
 
 
-#UPDATE TITOLO 
+# TITLE UPDATE 
 
 @app.callback(
     Output("titolo-mondo", "children"),
@@ -142,7 +142,7 @@ def update_figMondo(input_dato, start_date, end_date):
     Input('my-date-picker-range', 'start_date'),
     Input('my-date-picker-range', 'end_date'),
 )
-#strftime = formatta gli input del range di date nel formato data definito e restituisce l'html con la stringa del dato e del periodo
+#strftime = formats input of dates range into defined data format and returns html with a string containing data and period  
 def updateTitDato(dato, start_date, end_date): 
     inizio = pd.to_datetime(start_date).strftime("%d/%m/%Y")
     fine = pd.to_datetime(end_date).strftime("%d/%m/%Y")
@@ -159,10 +159,10 @@ def updateTitDato(dato, start_date, end_date):
     return x
   
 """
-CALLBACK PER SEZIONE CONFRONTO
+"FAI UN CONFRONTO" SECTION CALLBACK 
 """
 
-# UPDATE TITOLO CONFRONTO
+# "CONFRONTO" TITLE UPDATE
 
 @app.callback(
     Output("titolo-confronto", "children"),
@@ -190,7 +190,7 @@ def updateTitConfronto(dato1, dato2, nazione1, nazione2, start_date, end_date):
     return x
 
 
-# TABELLA RIASSUNTIVA DATO 1
+# SUM TABLE DATO 1
 
 @app.callback(
     Output("dati-nazione-1", "children"),
@@ -200,8 +200,8 @@ def updateTitConfronto(dato1, dato2, nazione1, nazione2, start_date, end_date):
     Input('date-confronto', 'end_date'),
 )
 def updateNazione(nazione, dato, start_date, end_date):
-    #istanzio la classe analisi passando nazione e il dataframe tot come parametro a costruttore 
-    #.df mi fa accedere al filtro per il valore nazione creato dal costruttore 
+    # stating analysis class giving as parameter to constructor "Nation" and the total dataframe
+    #.df gives me the access to the filter for the Nation value created by the constructor
     df = Analisi(nazione, dfTot).df
     periodo = (df["date"] > start_date) & (df["date"] <= end_date)
     datiCol = [dato]
@@ -210,12 +210,12 @@ def updateNazione(nazione, dato, start_date, end_date):
     titDato = dictDati[dato] + " - " + nazione
     outputNazione = dbc.ListGroup(
         [
-            #visualizzo titolo del dato 1 nel layout html di output
+            # displaying data 1 title in the layout html output 
             dbc.ListGroupItem(titDato,
                               color="primary",
                               className="bg-info"
                               ),
-            #elaboro media, massimo, minimo e le visualizzo 
+            # elaborating and displaying  mean, max, min  
             dbc.ListGroupItem(["Media", dbc.Badge(round(df[dato].mean(), 2), color="light", text_color="primary", className="ms-1"),],color="primary"),
             dbc.ListGroupItem(["Minimo", dbc.Badge(df[dato].min(), color="light", text_color="primary",
                                                   className="ms-1"), ], color="primary"),
@@ -227,7 +227,7 @@ def updateNazione(nazione, dato, start_date, end_date):
     return outputNazione
 
 
-# TABELLA RIASSUNTIVA DATO 2 
+#  DATA 2 SUM TABLE  
 
 @app.callback(
     Output("dati-nazione-2", "children"),
@@ -259,7 +259,7 @@ def updateNazione(nazione, dato, start_date, end_date):
     return outputNazione
 
 
-# GRAFICO CONFRONTO
+# "CONFRONTO" GRAPH 
 
 @app.callback(
     Output("fig-confronto", "figure"),
@@ -271,7 +271,7 @@ def updateNazione(nazione, dato, start_date, end_date):
     Input('date-confronto', 'end_date'),
 )
 def updateFigConfronto(nazione1, nazione2, datoInputOne, datoInputTwo, start_date, end_date):
-  #funzione per istanziare la classe Analisi e filtrarla in base ai valori di input di nazione e dato
+  # function to state analysis class and filter it according to input values  of the Nation and data 
     def generateDf(nazione, dato):
         df = Analisi(nazione, dfTot).df
         periodo = (df["date"] > start_date) & (df["date"] <= end_date)
@@ -283,7 +283,7 @@ def updateFigConfronto(nazione1, nazione2, datoInputOne, datoInputTwo, start_dat
     df1 = generateDf(nazione1, datoInputOne)
     df2 = generateDf(nazione2, datoInputTwo)
 
-    # Crea il grafico
+    # creating the graph 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df1["date"], y=df1[datoInputOne], name=dictDati[datoInputOne] + " - " + nazione1, fill='tonexty', connectgaps=True, line_color="rgb(52, 152, 219)"))
     fig.add_trace(go.Scatter(x=df2["date"], y=df2[datoInputTwo], name=dictDati[datoInputTwo] + " - " + nazione2, fill='tonexty', connectgaps=True, line_color="rgb(0, 188, 140)"))
@@ -305,10 +305,10 @@ def updateFigConfronto(nazione1, nazione2, datoInputOne, datoInputTwo, start_dat
     return fig
 
 """
-CALLBACK PER SEZIONE MACHINE LEARNING
+MACHINE LEARNING SECTION CALLBACK 
 """
 
-#UPDATE TITOLO MACHINE LEARNING
+# MACHINE LEARNING TITLE UPDATE
 
 @app.callback(
     Output("titolo-ML", "children"),
@@ -316,14 +316,14 @@ CALLBACK PER SEZIONE MACHINE LEARNING
     Input("input-nazione-ML", "value"),
 )
 def updateTitML(dato, nazione):
-    #istanzio la classe analisi definendo i parametri del costruttore filtrndo il dataframe
+    # stating analysis class defying parameters of the constructor and filtering the dataframe 
     df = Analisi(nazione, dfTot).df
-    #iloc = seleziona l'indice del dataframe filtrato
+    #iloc = selects filtered dataframe index 
     inizio = df["date"].iloc[0].strftime("%d/%m/%Y")
     fine = df["date"].iloc[-1].strftime("%d/%m/%Y")
     periodo = "Trend: " + inizio + " - " + fine + " | Proiezione: 100 giorni"
-    #dictDati = variabile globale. [dato] è la chiave del dizionario (chiave : valore )
-    #dictDati[dato] restituisce il valore in dictDati corrispondente alla chiave “dato”
+    #dictDati = global variable. [dato] is the key of the dictionary (key : values)
+    #dictDati[dato] return the value into dictDati which corresponds to the key  “dato”
     titDato = dictDati[dato] + " - " + nazione
     x = dbc.Row([
         dbc.Col(html.H3(children= titDato, className="fs-4 m-0"),
@@ -334,10 +334,10 @@ def updateTitML(dato, nazione):
                 md=6)
                  ],
     )
-    #restituisce quello che c'è dentro dbc.Row
+    # returning what is inside dbc.Row
     return x
 
-# GRAFICO ML 
+# ML GRAPH
 
 @app.callback(
     Output("fig-ML", "figure"),
@@ -348,23 +348,23 @@ def updateFigML(dato_input, nazione):
     #scikit learn
     from datetime import date as dt
     data = dfTot
-    #filtro il df e prendo solo le righe con la voce nazione
+    # filtering the df and considering only the rows with the value of the corresponding Nation 
     data = data[data["location"] == nazione]
     import numpy as np
-    #np.inf = va a sostituire gli infiniti con uno 0
-    #fillna = va a rimpiazzare il valore nan con 0
+    #np.inf = replaces infinity values with a 0
+    #fillna = replaces nan with 0
     data = data.fillna(0).replace(np.inf, 0) 
     dates = data['date']
-    #d =variabile che va ad indicare “ per ogni”
-    #for d in dates è iterabile ovvero posso iterare sulle sue righe 
-    #prendo le date che si trovano dentro la serie dates e le converto in datetime
+    #d =variable which indicates “for each”
+    #for d in dates can be iterated  and can be iterated for its rows  
+    # taking the dates inside dates' series and  converting them into datetime 
     date_format = [pd.to_datetime(d) for d in dates]
 
 
-    # preparo il modello
+    # preparing the model 
     X = date_format
-    #tolist = trasforma una serie in una lista
-    #[1:] toglie il primo elemento perché inizia dall’indice 1
+    #tolist =  converts a series into a list 
+    #[1:] removes the first element beacuse it starts form index 1 
     y = data[dato_input].tolist()[1:]
 
     starting_date = 1  
@@ -372,40 +372,40 @@ def updateFigML(dato_input, nazione):
     for i in range(1, len(X)):
         day_numbers.append([i])
     X = day_numbers
-    #vengono tolti i primi elemnti ad X ed Y fino al numero starting_date
+    # removing the first elements for X and Y up to the numbers starting_date
     X = X[starting_date:]
     y = y[starting_date:]
-    #viene istanziata la classe linear_regr (la regressione lineare approssima l'andamento del grafico con una retta)
+    # stating the class linear_regr (linear regression approximates the graph trend with a line)
     linear_regr = linear_model.LinearRegression()
 
-    #fit = facciamo il training set del modello 
+    #fit = do the training set of the model
     linear_regr.fit(X, y)
-    #predict ritorna valori predetti 
+    # predict return the predicted values  
     y_pred = linear_regr.predict(X)
-    #tiene in considerazione gli errori massimi e minimi per il modello della predizione 
+    # considering the maximun and minumum errors resulting from the predictive model 
     error = max_error(y, y_pred)
-    #comprende sia gli indici dei dati di origine che quelli di proiezione 
+    # includes both indexes of native data and the predictive ones   
     X_test = []
     future_days = 1000
     for i in range(starting_date, starting_date + future_days):
         X_test.append([i])
     
-    #elabora i valori effettivi della predizione 
+    # elaborate the actual values for the prediction 
     y_pred_linear = linear_regr.predict(X_test)
-    #considera gli errori massimi e minimi di predizione commessi dal modello
+    # considering the maximun and minumum errors resulting from the predictive model
     y_pred_max = []
     y_pred_min = []
     for i in range(0, len(y_pred_linear)):
         y_pred_max.append(y_pred_linear[i] + error)
         y_pred_min.append(y_pred_linear[i] - error)
     
-    #zip e list = prende quattro liste e restituisce un'unica lista ordinata in base agli indici di partenza
+    #zip e list = takes four lists and return a single organized list according to the starting indexes
     new_df = pd.DataFrame(list(zip(X_test, y_pred_max, y_pred_min, y_pred_linear)),
                           columns=['indice', 'massimo', "minimo", "predictions"])
 
     nuovo_indice = []
     date_indicizzate = []
-    #crea una colonna che trasforma gli indici in date 
+    # creates a column that converts indexes into dates  
     date_time_str = "2020-04-01"
     date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d') + timedelta(days=1)
     for i in range(0, len(new_df.indice)):
@@ -414,24 +414,24 @@ def updateFigML(dato_input, nazione):
     new_df["indice"] = date_indicizzate
 
     #prophet
-    #istanzio una copia del df filtrata per il dato di input 
+    # stating a copy of the filtered df for the input data 
     tmp = data
     keep = ["date", dato_input]
     tmp = tmp[keep]
-    #rinomina le colonne del df come "ds"(data) e "y"(valori) come richiesto da prophet
+    # renaming columns of the df as "ds"(dates) e "y"(values) as it is required by prophet
     tmp.columns = ['ds', 'y']
-    #converte la data nel formato datetamp
+    # converting the dates into datetamp format 
     tmp['ds'] = pd.to_datetime(tmp['ds']).dt.date
-    #istanzio oggetto prophet con stagionalità settimanale
+    # stating prophet object with a weekly seasonality (rate)
     m = Prophet.Prophet(weekly_seasonality=True)
-    #fit = facciamo il training set del modello
+    #fit = doing training set of the model 
     m.fit(tmp)
-    #include le date della storia per andare a creare il modello
+    # considering  the dates of the history to create the model 
     future = m.make_future_dataframe(periods=365)
-    #elabora i dati futuri
+    #elaborating future data 
     forecast = m.predict(future)
     
-    #grafico di sintesi ML regressione lineare e prophet
+    # ML sum graph linear regression and prophet
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(x=data["date"], y=data[dato_input], name=dictDati[dato_input] + " - " + nazione, connectgaps=True,
