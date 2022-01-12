@@ -1,4 +1,4 @@
-#aggiorna ogni giorno, alle 22:00 CET, il file owid-dataset.csv 
+# updating owid-dataset.csv file everyday at 10:00 p.m CET
 
 
 name: dataScraper
@@ -7,7 +7,7 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron:  '0 21 * * *'
-  workflow_dispatch:
+  workflow_dispatch: # adds a button in git-hub "Actions"
 
 jobs:
   build:
