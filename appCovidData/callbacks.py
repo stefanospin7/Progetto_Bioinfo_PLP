@@ -15,6 +15,10 @@ from sklearn.metrics import max_error
 import prophet as Prophet
 import json
 import math
+import locale
+from decimal import Decimal
+locale.setlocale(locale.LC_ALL, 'en_US')
+
 # setting token to access mapbox 
 px.set_mapbox_access_token(
         "pk.eyJ1IjoibWFuZnJlZG9mcmFjY29sYSIsImEiOiJja3hyd2JjbnEwNnVjMnBvNTZrbHBqdmwzIn0.YFYLdLUxoYC3gSpkcGplqQ")
@@ -215,11 +219,11 @@ def updateNazione(nazione, dato, start_date, end_date):
                               color="primary",
                               className="bg-info"
                               ),
-            # elaborating and displaying  mean, max, min  
-            dbc.ListGroupItem(["Media", dbc.Badge(round(df[dato].mean(), 2), color="light", text_color="primary", className="ms-1"),],color="primary"),
-            dbc.ListGroupItem(["Minimo", dbc.Badge(df[dato].min(), color="light", text_color="primary",
+            # elaborating and displaying  mean, max, min
+            dbc.ListGroupItem(["Media", dbc.Badge(locale.format_string('%.2f', round(df[dato].mean(), 2), grouping = True), color="light", text_color="primary", className="ms-1"),],color="primary"),
+            dbc.ListGroupItem(["Minimo", dbc.Badge(locale.format_string('%.0f', df[dato].min(), grouping = True), color="light", text_color="primary",
                                                   className="ms-1"), ], color="primary"),
-            dbc.ListGroupItem(["Massimo", dbc.Badge(df[dato].max(), color="light", text_color="primary",
+            dbc.ListGroupItem(["Massimo", dbc.Badge(locale.format_string('%.0f', df[dato].max(), grouping = True), color="light", text_color="primary",
                                                   className="ms-1"), ], color="primary"),
 
         ]
@@ -248,10 +252,10 @@ def updateNazione(nazione, dato, start_date, end_date):
             dbc.ListGroupItem(titDato,
                               color="primary",
                               className="bg-success"),
-            dbc.ListGroupItem(["Media", dbc.Badge(round(df[dato].mean(), 2), color="light", text_color="primary", className="ms-1"),],color="primary"),
-            dbc.ListGroupItem(["Minimo", dbc.Badge(df[dato].min(), color="light", text_color="primary",
+            dbc.ListGroupItem(["Media", dbc.Badge(locale.format_string('%.2f', round(df[dato].mean(), 2), grouping = True), color="light", text_color="primary", className="ms-1"),],color="primary"),
+            dbc.ListGroupItem(["Minimo", dbc.Badge(locale.format_string('%.0f', df[dato].min(), grouping = True), color="light", text_color="primary",
                                                   className="ms-1"), ], color="primary"),
-            dbc.ListGroupItem(["Massimo", dbc.Badge(df[dato].max(), color="light", text_color="primary",
+            dbc.ListGroupItem(["Massimo", dbc.Badge(locale.format_string('%.0f', df[dato].max(), grouping = True), color="light", text_color="primary",
                                                   className="ms-1"), ], color="primary"),
 
         ]
@@ -321,7 +325,7 @@ def updateTitML(dato, nazione):
     #iloc = selects filtered dataframe index 
     inizio = df["date"].iloc[0].strftime("%d/%m/%Y")
     fine = df["date"].iloc[-1].strftime("%d/%m/%Y")
-    periodo = "Trend: " + inizio + " - " + fine + " | Proiezione: 100 giorni"
+    periodo = "Trend: " + inizio + " - " + fine + " | Proiezione: 365 giorni"
     #dictDati = global variable. [dato] is the key of the dictionary (key : values)
     #dictDati[dato] return the value into dictDati which corresponds to the key  “dato”
     titDato = dictDati[dato] + " - " + nazione
@@ -346,11 +350,11 @@ def updateTitML(dato, nazione):
 )
 def updateFigML(dato_input, nazione):
     #scikit learn
-    from datetime import date as dt
+
     data = dfTot
     # filtering the df and considering only the rows with the value of the corresponding Nation 
     data = data[data["location"] == nazione]
-    import numpy as np
+
     #np.inf = replaces infinity values with a 0
     #fillna = replaces nan with 0
     data = data.fillna(0).replace(np.inf, 0) 
@@ -364,10 +368,10 @@ def updateFigML(dato_input, nazione):
     # preparing the model 
     X = date_format
     #tolist =  converts a series into a list 
-    #[1:] removes the first element beacuse it starts form index 1 
+    #[1:] removes the first element beacuse it starts from index 1
     y = data[dato_input].tolist()[1:]
 
-    starting_date = 1  
+    starting_date = 0
     day_numbers = []
     for i in range(1, len(X)):
         day_numbers.append([i])
@@ -386,7 +390,7 @@ def updateFigML(dato_input, nazione):
     error = max_error(y, y_pred)
     # includes both indexes of native data and the predictive ones   
     X_test = []
-    future_days = 1000
+    future_days = len(X) + 365
     for i in range(starting_date, starting_date + future_days):
         X_test.append([i])
     
@@ -403,25 +407,24 @@ def updateFigML(dato_input, nazione):
     new_df = pd.DataFrame(list(zip(X_test, y_pred_max, y_pred_min, y_pred_linear)),
                           columns=['indice', 'massimo', "minimo", "predictions"])
 
-    nuovo_indice = []
     date_indicizzate = []
     # creates a column that converts indexes into dates  
-    date_time_str = "2020-04-01"
-    date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d') + timedelta(days=1)
+    date_time_str = date_format[0]
+    #date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d') + timedelta(days=0)
     for i in range(0, len(new_df.indice)):
-        nuovo_indice.append(new_df.indice[i][0])
-        date_indicizzate.append(date_time_obj + timedelta(days=i))
+        date_indicizzate.append(date_time_str + timedelta(days=i))
     new_df["indice"] = date_indicizzate
 
     #prophet
     # stating a copy of the filtered df for the input data 
     tmp = data
-    keep = ["date", dato_input]
+    # converting the dates into datetamp format
+    tmp['date1'] = pd.to_datetime(tmp['date']).dt.date
+    keep = ["date1", dato_input]
     tmp = tmp[keep]
     # renaming columns of the df as "ds"(dates) e "y"(values) as it is required by prophet
     tmp.columns = ['ds', 'y']
-    # converting the dates into datetamp format 
-    tmp['ds'] = pd.to_datetime(tmp['ds']).dt.date
+
     # stating prophet object with a weekly seasonality (rate)
     m = Prophet.Prophet(weekly_seasonality=True)
     #fit = doing training set of the model 
