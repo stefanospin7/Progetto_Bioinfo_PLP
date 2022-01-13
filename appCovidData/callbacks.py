@@ -17,7 +17,7 @@ import json
 import math
 import locale
 from decimal import Decimal
-locale.setlocale(locale.LC_ALL, 'en_US')
+locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 # setting token to access mapbox 
 px.set_mapbox_access_token(
