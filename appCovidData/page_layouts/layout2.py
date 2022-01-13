@@ -84,12 +84,12 @@ dictDatiMondo = {
 LAYOUT HTML
 """
 
-intro = dbc.Container([
+intro =dbc.Container([
     dbc.Row([
         dbc.Col([
             html.P(children="A metà dicembre 2019 le autorità sanitarie della città di Wuhan riscontrarono i "
                             "primi casi di pazienti che mostravano i sintomi di una polmonite grave, così ha avuto "
-                            "inizio la pandemia che tutt’oggi stiamo ancora vivendo.. "),
+                            "inizio la pandemia che tutt’oggi stiamo ancora vivendo."),
             html.P(children="Il virus responsabile è stato "
                             "identificato e denominato nei primi giorni di gennaio 2020: Coronavirus 2 della Sindrome "
                             "Respiratoria Acuta Severa, abbreviato SARS-CoV-2. "),
@@ -98,52 +98,67 @@ intro = dbc.Container([
                             "tramite grafici, i dati provenienti da più dataset, facilitando quindi, la lettura di "
                             "questi ultimi."),
         ],
-        lg=6,
-        width=12),
+        lg=8,
+        width=12,
+        className="mx-auto"),
+    ])
+],
+className="mb-5")
+
+menu = dbc.Container([
+    dbc.Container([
+    dbc.Row([
         dbc.Col([
             dbc.Row([
-               dbc.Col([
+                dbc.Col([
                     html.I(className="fas fa-globe-europe fa-4x mb-3"),
-                    html.H3(children="World data", className="fs-5 bg-primary p-3 text-white"),
-                    html.P(children="visualizza una mappa del mondo con un range di colori in base al dato scelto e alla "
-                                    "variazione di quest’ultimo. ",
-                               className="text-start")
-               ],
-                   width=12,
-                   md=4,
-               ),
+                    dbc.Button(html.H3(children="World data", className="fs-5 text-white"),
+                               color="primary",
+                               className="w-100 mb-3"),
+                    html.P(
+                        children="Visualizza una mappa del mondo con un range di colori in base al dato scelto e alla "
+                                 "variazione di quest’ultimo. ",
+                        className="text-start")
+                ],
+                    width=12,
+                    md=4,
+                ),
                 dbc.Col([
                     html.I(className="fas fa-balance-scale-left fa-4x mb-3"),
-                    html.H3(children="Fai un confronto", className="fs-5 p-3 bg-primary text-white"),
-                    html.P(children="ti permette di mettere a confronto dati diversi di stati diversi andando a "
+                    dbc.Button(html.H3(children="Fai un confronto", className="fs-5 text-white"),
+                               color="primary",
+                               className="w-100 mb-3"),
+                    html.P(children="Ti permette di mettere a confronto dati diversi di stati diversi andando a "
                                     "scegliere i dati che si vogliono visualizzare.",
-                               className="text-start")
+                           className="text-start")
                 ],
                     width=12,
                     md=4,
                 ),
                 dbc.Col([
                     html.I(className="fas fa-chart-line fa-4x mb-3"),
-                    html.H3(children="Fai una proiezione", className="fs-5 p-3 bg-primary text-white"),
-                    html.P(children="ti permette di andare a prevedere l’andamento del dato selezionato in base "
+                    dbc.Button(html.H3(children="Fai una proiezione", className="fs-5 text-white"),
+                               color="primary",
+                               className="w-100 mb-3"),
+                    html.P(children="Ti permette di andare a prevedere l’andamento del dato selezionato in base "
                                     "all’utilizzo di due algoritmi per la previsione. ",
-                               className="text-start")
+                           className="text-start")
                 ],
                     width=12,
                     md=4,
                 ),
 
             ],
-            className="text-center"),
-
+                className="text-center"),
         ],
-        lg=6,
         width=12,
-        className="p-3 bg-dark"
-        ),
-    ])
+        lg=8,
+        className="mx-auto")
+    ]),
 ],
-className="mb-5")
+    fluid=False)],
+    fluid=True,
+    className="bg-dark py-5 my-5")
 
 
 # World Data section 
@@ -322,7 +337,7 @@ analisiCovid = dbc.Container([
                                             'autosizable': True
                                         },
                                         style={
-                                            'height': '200px'
+                                            'height': '350px'
                                         },
                                     )],
                                             type="default")
@@ -428,7 +443,7 @@ machineLearning = dbc.Container([
                                 'autosizable': True
                             },
                             style={
-                                'height': '250px'
+                                'height': '350px'
                             },
                         ),
                     ]),
@@ -454,6 +469,7 @@ def make_layout():
     return html.Div(id='parent', children=[
         header,
         intro,
+        menu,
         mondo,
         analisiCovid,
         machineLearning,

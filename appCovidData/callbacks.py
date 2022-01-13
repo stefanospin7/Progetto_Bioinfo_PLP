@@ -14,9 +14,7 @@ from sklearn import linear_model
 from sklearn.metrics import max_error
 import prophet as Prophet
 import json
-import math
 import locale
-from decimal import Decimal
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 # setting token to access mapbox 
@@ -289,21 +287,23 @@ def updateFigConfronto(nazione1, nazione2, datoInputOne, datoInputTwo, start_dat
 
     # creating the graph 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df1["date"], y=df1[datoInputOne], name=dictDati[datoInputOne] + " - " + nazione1, fill='tonexty', connectgaps=True, line_color="rgb(52, 152, 219)"))
-    fig.add_trace(go.Scatter(x=df2["date"], y=df2[datoInputTwo], name=dictDati[datoInputTwo] + " - " + nazione2, fill='tonexty', connectgaps=True, line_color="rgb(0, 188, 140)"))
+    fig.add_trace(go.Scatter(x=df1["date"], y=df1[datoInputOne], name=dictDati[datoInputOne] + " - " + nazione1, fill='tonexty', connectgaps=True, line_color="rgb(52, 152, 219)", hovertemplate="%{y}%{_xother}"))
+    fig.add_trace(go.Scatter(x=df2["date"], y=df2[datoInputTwo], name=dictDati[datoInputTwo] + " - " + nazione2, fill='tonexty', connectgaps=True, line_color="rgb(0, 188, 140)", hovertemplate="%{y}%{_xother}"))
     fig.update_yaxes(type="log")
     fig.update_layout(
+        hovermode="x unified",
         paper_bgcolor='rgba(255,255,255,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font_color='#fff',
         legend=dict(
-            yanchor="top",
-            y=0.97,
+            yanchor="bottom",
+            y=-0.4,
             xanchor="left",
             bgcolor="Black",
-            x=0.01),
+            x=0
+        ),
         margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
-        showlegend=True
+        showlegend=True,
     )
     fig.update_xaxes(range=[start_date, end_date])
     return fig
@@ -438,24 +438,26 @@ def updateFigML(dato_input, nazione):
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(x=data["date"], y=data[dato_input], name=dictDati[dato_input] + " - " + nazione, connectgaps=True,
-                   fill='tozeroy', line_color = "rgb(55, 90, 127)"))
+                   fill='tozeroy', line_color = "rgb(55, 90, 127)", hovertemplate="%{y}%{_xother}"))
     fig.add_trace(go.Scatter(x=new_df.indice, y=new_df["predictions"],
                              name=dictDati[dato_input] + " Machine Learning SciKit Learn" + " - " + nazione,
-                             connectgaps=True, line_color = "rgb(52, 152, 219)"))
+                             connectgaps=True, line_color = "rgb(52, 152, 219)", hovertemplate="%{y}%{_xother}"))
     fig.add_trace(go.Scatter(x=forecast["ds"], y=forecast["yhat"],
                              name=dictDati[dato_input] + " Machine Learning Prophet" + " - " + nazione,
-                             connectgaps=True, line_color = "rgb(0, 188, 140)"))
+                             connectgaps=True, line_color = "rgb(0, 188, 140)", hovertemplate="%{y}%{_xother}"))
     
     fig.update_layout(
+        hovermode="x unified",
         paper_bgcolor='rgba(255,255,255,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font_color='#fff',
         legend=dict(
-            yanchor="top",
-            y=0.97,
+            yanchor="bottom",
+            y=-0.4,
             xanchor="left",
             bgcolor="Black",
-            x=0.01),
+            x=0
+        ),
         margin={'l': 0, 'r': 0, 't': 0, 'b': 0},
         showlegend=True
     )
