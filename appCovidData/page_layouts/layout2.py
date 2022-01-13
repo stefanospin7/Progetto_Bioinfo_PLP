@@ -112,7 +112,7 @@ menu = dbc.Container([
             dbc.Row([
                 dbc.Col([
                     html.I(className="fas fa-globe-europe fa-4x mb-3"),
-                    dbc.Button(html.H3(children="World data", className="fs-5 text-white"),
+                    dbc.Button(html.H3(children=html.A(children="World data", href="#world-section", className="text-white text-decoration-none"), className="fs-5 text-white mb-0 py-2"),
                                color="primary",
                                className="w-100 mb-3"),
                     html.P(
@@ -125,7 +125,7 @@ menu = dbc.Container([
                 ),
                 dbc.Col([
                     html.I(className="fas fa-balance-scale-left fa-4x mb-3"),
-                    dbc.Button(html.H3(children="Fai un confronto", className="fs-5 text-white"),
+                    dbc.Button(html.H3(children=html.A(children="Fai un confronto", href="#compare-section", className="text-white text-decoration-none"), className="fs-5 text-white mb-0 py-2"),
                                color="primary",
                                className="w-100 mb-3"),
                     html.P(children="Ti permette di mettere a confronto dati diversi di stati diversi andando a "
@@ -137,7 +137,7 @@ menu = dbc.Container([
                 ),
                 dbc.Col([
                     html.I(className="fas fa-chart-line fa-4x mb-3"),
-                    dbc.Button(html.H3(children="Fai una proiezione", className="fs-5 text-white"),
+                    dbc.Button(html.H3(children=html.A(children="Fai una proiezione", href="#ML-section", className="text-white text-decoration-none"), className="fs-5 text-white mb-0 py-2"),
                                color="primary",
                                className="w-100 mb-3"),
                     html.P(children="Ti permette di andare a prevedere l’andamento del dato selezionato in base "
@@ -246,7 +246,8 @@ mondo = dbc.Container([
     className="rounded"),
 ],
     className="p-0 mb-5",
-    fluid=False
+    fluid=False,
+    id="world-section"
 )
 
 # "confronto" (comparison) section 
@@ -380,7 +381,8 @@ analisiCovid = dbc.Container([
     ]),
 ],
     fluid=False,
-    className="p-0"
+    className="p-0",
+    id="compare-section"
 )
 
 
@@ -461,7 +463,8 @@ machineLearning = dbc.Container([
     ]),
 ],
     fluid=False,
-    className="p-0 rounded shadow bg-black my-5"
+    className="p-0 rounded shadow bg-black my-5",
+    id = "ML-section"
 )
 
 # defying function to create layout made of header, footer and the other sections 
