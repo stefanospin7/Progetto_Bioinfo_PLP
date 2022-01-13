@@ -61,6 +61,7 @@ The following are screenshots for the app in this repo:
 ## Credits
 
 University course project
+
 MSc in Bioinformatics, University of Tor Vergata, Rome, Italy
 
 Students:
