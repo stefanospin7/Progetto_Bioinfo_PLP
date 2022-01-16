@@ -183,10 +183,10 @@ def updateTitConfronto(dato1, dato2, nazione1, nazione2, start_date, end_date):
     x = dbc.Row([
         dbc.Col(html.H3(children= titDato, className="fs-4 m-0"),
                 width=12,
-                md=6),
+                md=8),
         dbc.Col(html.P(children= periodo, className="text-md-end m-0"),
                 width=12,
-                md=6)
+                md=4)
                  ],
     )
     return x
