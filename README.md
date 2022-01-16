@@ -1,6 +1,7 @@
 [![dataScraper](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml/badge.svg)](https://github.com/stefanospin7/Progetto_Bioinfo_PLP/actions/workflows/dataScraper.yml)
 
 # COVVID - A COVID-19 dashboard
+[Live app on Heroku](https://progetto-plp.herokuapp.com/)
 
 This is a web app, developed with Dash interactive Python framework, to analize COVID-19 data from OWID - Our World in Data dataset.
 
