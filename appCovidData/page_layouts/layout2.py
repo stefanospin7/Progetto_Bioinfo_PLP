@@ -20,8 +20,8 @@ oggi = date.today()
 minDate = date(2020, 1, 1)
 maxDate = oggi
 monthVisible = oggi
-startDate = oggi - datetime.timedelta(days=60)
-endDate = oggi
+startDate = date(2020, 4, 1)
+endDate = date(2022, 1, 1)
 startDateMondo = date(2020, 3, 1)
 endDateMondo = date(2020, 5, 1)
 
