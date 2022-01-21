@@ -3,13 +3,14 @@ import dash_bootstrap_components as dbc
 from dash.long_callback import CeleryLongCallbackManager
 from celery import Celery
 import os
+from urllib.parse import urlparse
 import redis
 
-r = redis.from_url(os.environ.get("REDIS_URL"))
-CELERY_BROKER_URL = os.environ.get("REDIS_URL")
+url = urlparse(os.environ.get("REDIS_URL"))
+r = redis.Redis(host=url.hostname, port=url.port, username=url.username, password=url.password, ssl=True, ssl_cert_reqs=None)
 
 celery_app = Celery(
-    __name__, broker=CELERY_BROKER_URL, backend=CELERY_BROKER_URL
+    __name__, broker=url, backend=url
 )
 long_callback_manager = CeleryLongCallbackManager(celery_app)
 
