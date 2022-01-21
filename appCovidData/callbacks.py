@@ -15,7 +15,7 @@ from sklearn.metrics import max_error
 import prophet as Prophet
 import json
 import locale
-locale.setlocale(locale.LC_ALL, 'en_US.utf8')
+#locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 # setting token to access mapbox 
 px.set_mapbox_access_token(
@@ -64,7 +64,7 @@ WORLD DATA GRAPH CALLBACK
 # GRAPH UPDATE
 
 #@ decorator of the library which describes the default of input and output 
-@app.callback(
+@app.long_callback(
     Output("fig-mondo", "figure"),
     Input("dato-input", "value"),
     Input('my-date-picker-range', 'start_date'),

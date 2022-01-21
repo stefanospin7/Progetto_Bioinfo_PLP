@@ -7,3 +7,4 @@ dash_bootstrap_components~=1.0.2
 prophet~=1.0.1
 scikit-learn~=1.0.2
 numpy~=1.21.5
+redis~=4.1.1

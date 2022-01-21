@@ -1,8 +1,21 @@
 import dash  
 import dash_bootstrap_components as dbc
+from dash.long_callback import CeleryLongCallbackManager
+from celery import Celery
+import os
+import redis
+
+r = redis.from_url(os.environ.get("REDIS_URL"))
+CELERY_BROKER_URL = os.environ.get("REDIS_URL")
+
+celery_app = Celery(
+    __name__, broker=CELERY_BROKER_URL, backend=CELERY_BROKER_URL
+)
+long_callback_manager = CeleryLongCallbackManager(celery_app)
 
 # creating dash web app 
 app = dash.Dash(__name__,
+                long_callback_manager=long_callback_manager,
                 title="COWID - a COVID-19 dashboard",
                 suppress_callback_exceptions=True,
                 meta_tags=[
