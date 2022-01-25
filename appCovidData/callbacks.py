@@ -82,6 +82,10 @@ def update_figMondo(input_dato, start_date, end_date):
     # definition of the time period and filtering of dataframe according to the user input 
     periodo = (df['date'] >= start_date) & (df['date'] <= end_date)
     df = df.loc[periodo]
+
+    #Groupby week to shrink the elaboration time
+    df = df.groupby(['location', 'iso_code', pd.Grouper(key='date', freq='W-MON')])[input_dato].mean().reset_index()
+
     # convert the column "date" into a string 
     df['date'] = df['date'].dt.date.astype(str)
 
